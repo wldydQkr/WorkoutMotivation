@@ -75,7 +75,7 @@ struct PushSettingHeaderView: View {
     var body: some View {
         HStack {
             Text("알림 간격 설정")
-                .foregroundColor(CustomColor.SwiftUI.customGreen)
+                .foregroundColor(CustomColor.SwiftUI.customBlack)
                 .font(.largeTitle)
                 .fontWeight(.bold)
                 .padding()

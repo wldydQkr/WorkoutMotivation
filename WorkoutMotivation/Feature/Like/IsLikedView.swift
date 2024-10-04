@@ -108,7 +108,7 @@ struct IsLikedView: View {
               let window = windowScene.windows.first,
               let rootViewController = window.rootViewController else { return }
 
-        let vc = MotivationDetailView(title: motivation.title, name: motivation.name, motivation: motivation, viewModel: motivationViewModel) // ViewModel 전달
+        let vc = MotivationDetailView(title: motivation.title, name: motivation.name, motivation: motivation, viewModel: motivationViewModel)
         let hostingController = UIHostingController(rootView: vc)
         rootViewController.present(hostingController, animated: true, completion: nil)
     }
