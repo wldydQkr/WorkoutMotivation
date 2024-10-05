@@ -86,8 +86,13 @@ struct MotivationDetailView: View {
     
     private var shareButton: some View {
         Button(action: {
+            // shareContent 설정
             shareContent = viewModel.getMotivationDetails(motivation)
-            isShareSheetPresented = true
+            print("shareContent: \(shareContent)")
+            // 상태 업데이트 후 시트 표시
+            DispatchQueue.main.async {
+                isShareSheetPresented = true
+            }
         }) {
             HStack {
                 Image(systemName: "square.and.arrow.up")
@@ -115,6 +120,7 @@ struct MotivationDetailView: View {
         }
     }
 }
+
 #Preview {
     MotivationDetailView(title: "Sample", name: "Sample", motivation: Motivation(id: 1, title: "s", name: "s"), viewModel: MotivationViewModel())
 }

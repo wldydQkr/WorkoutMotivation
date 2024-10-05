@@ -12,7 +12,7 @@ struct MotivationItemView: View {
     @ObservedObject var viewModel: MotivationViewModel
     @Binding var isShareSheetPresented: Bool
     @Binding var shareContent: String
-    
+
     var body: some View {
         NavigationLink(destination: MotivationDetailView(title: motivation.title, name: motivation.name, motivation: motivation, viewModel: MotivationViewModel())) {
             VStack {
@@ -26,7 +26,6 @@ struct MotivationItemView: View {
                         .foregroundStyle(CustomColor.SwiftUI.customBlack)
                         .padding()
                 }
-//                .frame(alignment: .center)
                 HStack {
                     Button(action: {
                         viewModel.toggleLike(for: motivation)
@@ -50,11 +49,15 @@ struct MotivationItemView: View {
             .background(CustomColor.SwiftUI.customGreen3)
             .cornerRadius(8)
             .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 5)
-//            .padding(5)
             .contextMenu {
                 Button(action: {
+                    // 먼저 shareContent를 설정한 후, 비동기로 시트를 열기
                     shareContent = viewModel.getMotivationDetails(motivation)
-                    isShareSheetPresented = true
+                    
+                    // 상태가 업데이트된 후 시트를 띄우기 위해 비동기로 처리
+                    DispatchQueue.main.async {
+                        isShareSheetPresented = true
+                    }
                 }) {
                     Label("공유", systemImage: "square.and.arrow.up")
                 }
@@ -62,7 +65,6 @@ struct MotivationItemView: View {
         }
     }
 }
-
 //#Preview {
 //    MotivationItemView()
 //}
