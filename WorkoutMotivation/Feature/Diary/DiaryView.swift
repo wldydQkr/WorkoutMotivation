@@ -19,7 +19,8 @@ struct DiaryView: View {
         NavigationView {
             ZStack {
                 VStack {
-                    DiaryHeaderView(viewModel: viewModel, isEditing: $isEditing, selectedDiaries: $selectedDiaries)
+//                    DiaryHeaderView(viewModel: viewModel, isEditing: $isEditing, selectedDiaries: $selectedDiaries)
+                    CustomHeaderView(title: "나의 다짐")
                     
                     ScrollView {
                         if viewModel.diaries.isEmpty {

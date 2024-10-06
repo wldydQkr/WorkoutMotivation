@@ -77,6 +77,7 @@
 		C0A01EE22C770BE3001923E8 /* MailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A01EE12C770BE3001923E8 /* MailView.swift */; };
 		C0A01EE42C7DEEE6001923E8 /* PushSettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A01EE32C7DEEE6001923E8 /* PushSettingView.swift */; };
 		C0A01EE62C7DEF3D001923E8 /* PushSettingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A01EE52C7DEF3D001923E8 /* PushSettingViewModel.swift */; };
+		C0DA0A282CB2C93700804BC1 /* CustomHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0DA0A272CB2C93700804BC1 /* CustomHeaderView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -175,6 +176,7 @@
 		C0A01EE12C770BE3001923E8 /* MailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MailView.swift; sourceTree = "<group>"; };
 		C0A01EE32C7DEEE6001923E8 /* PushSettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushSettingView.swift; sourceTree = "<group>"; };
 		C0A01EE52C7DEF3D001923E8 /* PushSettingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushSettingViewModel.swift; sourceTree = "<group>"; };
+		C0DA0A272CB2C93700804BC1 /* CustomHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomHeaderView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -470,6 +472,7 @@
 		C08DC2F22C0AE5FB00CCB2BE /* Feature */ = {
 			isa = PBXGroup;
 			children = (
+				C0DA0A262CB2C91D00804BC1 /* Header */,
 				C08DC2FD2C0B62EF00CCB2BE /* Onboarding */,
 				C08DC31D2C0CA5C700CCB2BE /* Home */,
 				C08DC31C2C0CA51600CCB2BE /* Motivation */,
@@ -577,6 +580,14 @@
 				C095CDE62CA91C6D00E83305 /* ImagePicker.swift */,
 			);
 			path = ImagePicker;
+			sourceTree = "<group>";
+		};
+		C0DA0A262CB2C91D00804BC1 /* Header */ = {
+			isa = PBXGroup;
+			children = (
+				C0DA0A272CB2C93700804BC1 /* CustomHeaderView.swift */,
+			);
+			path = Header;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -751,6 +762,7 @@
 				C044052F2C12A83E00E4C764 /* MotivationViewModel.swift in Sources */,
 				C061B4BB2C1B351E00FFD7C5 /* SampleView.swift in Sources */,
 				C061B4D12C1C973A00FFD7C5 /* DiaryDetailView.swift in Sources */,
+				C0DA0A282CB2C93700804BC1 /* CustomHeaderView.swift in Sources */,
 				C08DC2FC2C0B62EB00CCB2BE /* OnboardingViewModel.swift in Sources */,
 				C04405382C12B95B00E4C764 /* TimerViewModel.swift in Sources */,
 				C04405472C134B0C00E4C764 /* ShareSheet.swift in Sources */,

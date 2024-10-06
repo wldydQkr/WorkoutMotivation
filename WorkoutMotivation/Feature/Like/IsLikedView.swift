@@ -21,7 +21,8 @@ struct IsLikedView: View {
         NavigationView {
             VStack {
                 if headerVisible {
-                    IsLikedHeaderView()
+//                    IsLikedHeaderView()
+                    CustomHeaderView(title: "좋아하는 명언")
                         .transition(.move(edge: .top)) // 자연스러운 애니메이션 적용
                 }
 

@@ -14,7 +14,8 @@ struct MyPageView: View {
     var body: some View {
         NavigationView {
             VStack {
-                CustomHeader()
+//                CustomHeader()
+                CustomHeaderView(title: "설정")
                 
                 List(viewModel.items) { item in
                     if item.title == "앱 버전" {
