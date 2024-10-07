@@ -15,7 +15,9 @@ struct PushSettingView: View {
     var body: some View {
         NavigationView {
             VStack {
-                PushSettingHeaderView()
+                CustomHeaderView(title: "알림 간격 설정") {
+                    EmptyView()
+                }
                 
                 // 알림 활성화/비활성화 토글
                 Toggle(isOn: $pushSettingViewModel.isNotificationEnabled) {
@@ -67,42 +69,6 @@ struct PushSettingView: View {
         .navigationBarHidden(true)
     }
 }
-
-
-struct PushSettingHeaderView: View {
-    @Environment(\.presentationMode) var presentationMode
-    
-    var body: some View {
-        HStack {
-            Text("알림 간격 설정")
-                .foregroundColor(CustomColor.SwiftUI.customBlack)
-                .font(.largeTitle)
-                .fontWeight(.bold)
-                .padding()
-            
-            Spacer() // 제목을 왼쪽에 고정
-            
-            //            Button(action: {
-            //                presentationMode.wrappedValue.dismiss()
-            //                print("뒤로가기 클릭")
-            //            }) {
-            //                HStack {
-            //                    Text("Back")
-            //                        .foregroundColor(CustomColor.SwiftUI.customGreen)
-            //                    Image(systemName: "chevron.right")
-            //                        .foregroundColor(CustomColor.SwiftUI.customGreen)
-            //                }
-            //            }
-            //            .padding(.trailing)
-        }
-        .background(CustomColor.SwiftUI.customBackgrond)
-    }
-}
-
-#Preview {
-    PushSettingHeaderView()
-}
-
 
 #Preview {
     PushSettingView()

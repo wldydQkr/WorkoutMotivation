@@ -33,7 +33,9 @@ struct TimerView: View {
     fileprivate var body: some View {
       VStack {
 //        TitleView()
-          CustomHeaderView(title: "타이머")
+          CustomHeaderView(title: "타이머") {
+              EmptyView()
+          }
           
 //        Spacer()
 //          .frame(height: 50)

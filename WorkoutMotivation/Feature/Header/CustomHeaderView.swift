@@ -7,12 +7,13 @@
 
 import SwiftUI
 
-struct CustomHeaderView: View {
+struct CustomHeaderView<Content: View>: View {
     var title: String
-    var buttonTitle: String?
-    var buttonImage: Image? // 이미지 추가
-    var buttonAction: (() -> Void)?
-    
+    var buttonTitle: String? = nil // 텍스트 버튼 기본값 nil
+    var buttonImage: Image? = nil  // 이미지 버튼 기본값 nil
+    var buttonAction: (() -> Void)? = nil // 버튼 액션 기본값 nil
+    @ViewBuilder var buttonContent: () -> Content // 커스텀 버튼 뷰
+
     var body: some View {
         HStack {
             Text(title)
@@ -25,7 +26,7 @@ struct CustomHeaderView: View {
                         // 이미지 버튼
                         buttonImage
                             .resizable()
-                            .frame(width: 24, height: 24) // 이미지 크기 조정
+                            .frame(width: 24, height: 24)
                     } else if let buttonTitle = buttonTitle {
                         // 텍스트 버튼
                         Text(buttonTitle)
@@ -35,6 +36,8 @@ struct CustomHeaderView: View {
                             .foregroundColor(CustomColor.SwiftUI.customBlack)
                     }
                 }
+            } else {
+                buttonContent() // 커스텀 버튼 뷰를 표시
             }
         }
         .padding()
@@ -45,6 +48,6 @@ struct CustomHeaderView: View {
 
 #Preview {
     CustomHeaderView(title: "Title", buttonImage: Image(systemName: "person.crop.circle")) {
-        print("button clicked")
+        EmptyView()
     }
 }

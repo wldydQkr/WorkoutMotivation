@@ -14,8 +14,9 @@ struct MyPageView: View {
     var body: some View {
         NavigationView {
             VStack {
-//                CustomHeader()
-                CustomHeaderView(title: "설정")
+                CustomHeaderView(title: "설정") {
+                    EmptyView()
+                }
                 
                 List(viewModel.items) { item in
                     if item.title == "앱 버전" {
@@ -50,21 +51,6 @@ struct MyPageView: View {
                 ShareSheet(activityItems: viewModel.activityItems)  // 공유할 아이템 전달
             }
         }
-    }
-}
-
-struct CustomHeader: View {
-    var body: some View {
-        HStack {
-            Text("마이페이지")
-                .foregroundStyle(CustomColor.SwiftUI.customBlack)
-                .font(.largeTitle)
-                .fontWeight(.bold)
-                .padding()
-            Spacer()
-        }
-        .background(CustomColor.SwiftUI.customBackgrond)
-        .foregroundColor(.white)
     }
 }
 

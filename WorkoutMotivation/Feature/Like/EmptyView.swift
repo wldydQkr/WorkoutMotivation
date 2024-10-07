@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct EmptyView: View {
+struct EmptyIsLikedView: View {
     var body: some View {
         Text("좋아요 한 명언이 없습니다.")
             .foregroundColor(CustomColor.SwiftUI.customGreen)
@@ -18,5 +18,5 @@ struct EmptyView: View {
 }
 
 #Preview {
-    EmptyView()
+    EmptyIsLikedView()
 }

@@ -26,7 +26,9 @@ struct MotivationView: View {
         NavigationView {
             VStack {
                 if headerVisible {
-                    CustomHeaderView(title: "동기부여 명언")
+                    CustomHeaderView(title: "동기부여 명언") {
+                        EmptyView()
+                    }
                         .transition(.move(edge: .top))
                 }
 

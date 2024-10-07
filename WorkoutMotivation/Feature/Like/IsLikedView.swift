@@ -22,7 +22,9 @@ struct IsLikedView: View {
             VStack {
                 if headerVisible {
 //                    IsLikedHeaderView()
-                    CustomHeaderView(title: "좋아하는 명언")
+                    CustomHeaderView(title: "좋아하는 명언") {
+                        DelButton()
+                    }
                         .transition(.move(edge: .top)) // 자연스러운 애니메이션 적용
                 }
 
