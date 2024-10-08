@@ -78,6 +78,7 @@
 		C0A01EE42C7DEEE6001923E8 /* PushSettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A01EE32C7DEEE6001923E8 /* PushSettingView.swift */; };
 		C0A01EE62C7DEF3D001923E8 /* PushSettingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A01EE52C7DEF3D001923E8 /* PushSettingViewModel.swift */; };
 		C0DA0A282CB2C93700804BC1 /* CustomHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0DA0A272CB2C93700804BC1 /* CustomHeaderView.swift */; };
+		C0DA0A2A2CB55E1800804BC1 /* MotivationCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0DA0A292CB55E1800804BC1 /* MotivationCardView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -177,6 +178,7 @@
 		C0A01EE32C7DEEE6001923E8 /* PushSettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushSettingView.swift; sourceTree = "<group>"; };
 		C0A01EE52C7DEF3D001923E8 /* PushSettingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushSettingViewModel.swift; sourceTree = "<group>"; };
 		C0DA0A272CB2C93700804BC1 /* CustomHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomHeaderView.swift; sourceTree = "<group>"; };
+		C0DA0A292CB55E1800804BC1 /* MotivationCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MotivationCardView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -246,6 +248,7 @@
 				C04405242C120AC300E4C764 /* MotivationSectionHeader.swift */,
 				C044054A2C134CD600E4C764 /* MotivationItemView.swift */,
 				C08DC31A2C0CA4F700CCB2BE /* MotivationView.swift */,
+				C0DA0A292CB55E1800804BC1 /* MotivationCardView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -736,6 +739,7 @@
 				C044051E2C10BC9000E4C764 /* HomeResponse.swift in Sources */,
 				C08DC31B2C0CA4F700CCB2BE /* MotivationView.swift in Sources */,
 				C04405562C157FC400E4C764 /* MyPageItem.swift in Sources */,
+				C0DA0A2A2CB55E1800804BC1 /* MotivationCardView.swift in Sources */,
 				C061B4C82C1C71B200FFD7C5 /* IsLikedHeaderView.swift in Sources */,
 				C044053E2C12B9CF00E4C764 /* Time.swift in Sources */,
 				C061B4D52C1C988700FFD7C5 /* Date+.swift in Sources */,

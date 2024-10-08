@@ -14,6 +14,7 @@ struct MotivationView: View {
     @State private var headerVisible = true
     @State private var lastScrollPosition: CGFloat = 0.0
     @State private var currentScrollOffset: CGFloat = 0.0
+    @State private var showMotivationCardView = false // MotivationCardView 표시 상태 변수 추가
 
     let columns = [
         GridItem(.flexible(), spacing: 10),
@@ -23,15 +24,21 @@ struct MotivationView: View {
     let threshold: CGFloat = 70.0
 
     var body: some View {
-        NavigationView {
-            VStack {
-                if headerVisible {
-                    CustomHeaderView(title: "동기부여 명언") {
-                        EmptyView()
-                    }
-                        .transition(.move(edge: .top))
+        VStack {
+            if headerVisible {
+                CustomHeaderView(title: "동기부여 명언", buttonImage: Image(systemName: "person.crop.circle"), buttonAction: {
+                    // MotivationCardView 표시 상태를 토글
+                    showMotivationCardView.toggle()
+                }) {
+                    EmptyView()
                 }
+                .transition(.move(edge: .top))
+            }
 
+            if showMotivationCardView {
+                // MotivationCardView로 전환
+                MotivationCardView(showMotivationCardView: $showMotivationCardView) // 바인딩 추가
+            } else {
                 ScrollView {
                     GeometryReader { geometry in
                         Color.clear
@@ -103,8 +110,8 @@ struct MotivationView: View {
                     viewModel.loadLikedMotivations() // 좋아요 상태 갱신
                 }
             }
-            .background(CustomColor.SwiftUI.customBackgrond)
         }
+        .background(CustomColor.SwiftUI.customBackgrond)
     }
 }
 
