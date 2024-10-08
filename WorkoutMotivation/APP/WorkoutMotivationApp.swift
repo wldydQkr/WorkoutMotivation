@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import TipKit
 
 @main
 struct WorkoutMotivationApp: App {
@@ -15,5 +16,10 @@ struct WorkoutMotivationApp: App {
         WindowGroup {
             OnboardingView()
         }
+    }
+    
+    init() {
+        /// Load and configure the state of all the tips of the app
+        try? Tips.configure()
     }
 }
