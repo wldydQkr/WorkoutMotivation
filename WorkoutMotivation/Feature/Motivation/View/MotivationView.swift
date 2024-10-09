@@ -14,7 +14,7 @@ struct MotivationView: View {
     @State private var headerVisible = true
     @State private var lastScrollPosition: CGFloat = 0.0
     @State private var currentScrollOffset: CGFloat = 0.0
-    @State private var showMotivationCardView = false // MotivationCardView 표시 상태 변수 추가
+    @State private var showMotivationCardView = false // MotivationCardView 상태
 
     let columns = [
         GridItem(.flexible(), spacing: 10),
@@ -24,94 +24,96 @@ struct MotivationView: View {
     let threshold: CGFloat = 70.0
 
     var body: some View {
-        VStack {
-            if headerVisible {
-                CustomHeaderView(title: "동기부여 명언", buttonImage: Image(systemName: "person.crop.circle"), buttonAction: {
-                    // MotivationCardView 표시 상태를 토글
-                    showMotivationCardView.toggle()
-                }) {
-                    EmptyView()
-                }
-                .transition(.move(edge: .top))
-            }
-
-            if showMotivationCardView {
-                // MotivationCardView로 전환
-                MotivationCardView(showMotivationCardView: $showMotivationCardView) // 바인딩 추가
-            } else {
-                ScrollView {
-                    GeometryReader { geometry in
-                        Color.clear
-                            .onAppear {
-                                self.lastScrollPosition = geometry.frame(in: .global).minY
-                            }
-                            .onChange(of: geometry.frame(in: .global).minY) { value in
-                                let scrollOffset = value - self.lastScrollPosition
-                                self.currentScrollOffset += scrollOffset
-
-                                if self.currentScrollOffset > threshold {
-                                    withAnimation {
-                                        self.headerVisible = true
-                                    }
-                                } else if self.currentScrollOffset < -threshold {
-                                    withAnimation {
-                                        self.headerVisible = false
-                                    }
-                                }
-
-                                if geometry.frame(in: .global).minY >= 0 {
-                                    withAnimation {
-                                        self.headerVisible = true
-                                    }
-                                }
-
-                                if abs(self.currentScrollOffset) > threshold {
-                                    self.currentScrollOffset = 0
-                                }
-
-                                self.lastScrollPosition = value
-                            }
-                    }
-                    .frame(height: 0)
-
-                    if viewModel.isLoading {
-                        LottieView("skeletonView")
-                            .frame(width: 400, height: 400)
-                        LottieView("skeletonView")
-                            .frame(width: 400, height: 400)
-                    } else {
-                        LazyVGrid(columns: columns, spacing: 10) {
-                            if let errorMessage = viewModel.errorMessage {
-                                Text(errorMessage)
-                                    .foregroundColor(.red)
-                                    .padding()
-                            } else {
-                                ForEach(viewModel.motivations) { motivation in
-                                    MotivationItemView(
-                                        motivation: motivation,
-                                        viewModel: viewModel,
-                                        isShareSheetPresented: $isShareSheetPresented,
-                                        shareContent: $shareContent
-                                    )
-                                }
-                            }
+        NavigationView {
+            VStack {
+                if headerVisible {
+                    CustomHeaderView(title: "동기부여 명언", buttonImage: Image("memo"), buttonAction: {
+                        withAnimation {
+                            showMotivationCardView.toggle() // 버튼 클릭 시 MotivationCardView 표시 전환
                         }
-                        .padding([.horizontal, .bottom], 10)
+                    }) {
+                        EmptyView()
+                    }
+                    .transition(.move(edge: .top))
+                }
+
+                if showMotivationCardView {
+                    MotivationCardView(showMotivationCardView: $showMotivationCardView) // MotivationCardView 표시
+                } else {
+                    ScrollView {
+                        GeometryReader { geometry in
+                            Color.clear
+                                .onAppear {
+                                    self.lastScrollPosition = geometry.frame(in: .global).minY
+                                }
+                                .onChange(of: geometry.frame(in: .global).minY) { value in
+                                    let scrollOffset = value - self.lastScrollPosition
+                                    self.currentScrollOffset += scrollOffset
+
+                                    if self.currentScrollOffset > threshold {
+                                        withAnimation {
+                                            self.headerVisible = true
+                                        }
+                                    } else if self.currentScrollOffset < -threshold {
+                                        withAnimation {
+                                            self.headerVisible = false
+                                        }
+                                    }
+
+                                    if geometry.frame(in: .global).minY >= 0 {
+                                        withAnimation {
+                                            self.headerVisible = true
+                                        }
+                                    }
+
+                                    if abs(self.currentScrollOffset) > threshold {
+                                        self.currentScrollOffset = 0
+                                    }
+
+                                    self.lastScrollPosition = value
+                                }
+                        }
+                        .frame(height: 0)
+
+                        if viewModel.isLoading {
+                            LottieView("skeletonView")
+                                .frame(width: 400, height: 400)
+                            LottieView("skeletonView")
+                                .frame(width: 400, height: 400)
+                        } else {
+                            LazyVGrid(columns: columns, spacing: 10) {
+                                if let errorMessage = viewModel.errorMessage {
+                                    Text(errorMessage)
+                                        .foregroundColor(.red)
+                                        .padding()
+                                } else {
+                                    ForEach(viewModel.motivations) { motivation in
+                                        MotivationItemView(
+                                            motivation: motivation,
+                                            viewModel: viewModel,
+                                            isShareSheetPresented: $isShareSheetPresented,
+                                            shareContent: $shareContent
+                                        )
+                                    }
+                                }
+                            }
+                            .padding([.horizontal, .bottom], 10)
+                        }
+                    }
+                    .background(CustomColor.SwiftUI.customBackgrond)
+                    .sheet(isPresented: $isShareSheetPresented) {
+                        ShareSheet(activityItems: [shareContent])
+                    }
+                    .refreshable {
+                        await viewModel.reload()
+                    }
+                    .onAppear {
+                        viewModel.loadLikedMotivations() // 좋아요 상태 갱신
                     }
                 }
-                .background(CustomColor.SwiftUI.customBackgrond)
-                .sheet(isPresented: $isShareSheetPresented) {
-                    ShareSheet(activityItems: [shareContent])
-                }
-                .refreshable {
-                    await viewModel.reload()
-                }
-                .onAppear {
-                    viewModel.loadLikedMotivations() // 좋아요 상태 갱신
-                }
             }
+            .background(CustomColor.SwiftUI.customBackgrond)
         }
-        .background(CustomColor.SwiftUI.customBackgrond)
     }
 }
 

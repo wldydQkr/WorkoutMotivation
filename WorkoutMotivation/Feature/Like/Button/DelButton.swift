@@ -20,10 +20,11 @@ struct DelButton: View {
                 }
             }
         }) {
-            Image(systemName: isEditing ? "checkmark" : "trash")
-                .font(.title)
+            Image(isEditing ? "trash" : "trash")
+                .resizable()
+                .frame(width: 30, height: 30)
                 .foregroundColor(CustomColor.SwiftUI.customBlack)
-                .padding(.trailing, 10)
+//                .padding(.trailing, 10)
         }
     }
 }

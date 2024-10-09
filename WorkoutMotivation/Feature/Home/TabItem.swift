@@ -18,6 +18,7 @@ struct TabItem: View {
     var body: some View {
         VStack {
             Image(systemName: tab.systemImage)
+//                .resizable()
                 .font(.title2)
                 .foregroundColor(selectedTab == tab ? CustomColor.SwiftUI.customBlack : inactiveTint)
                 .frame(width: selectedTab == tab ? 58 : 35, height: selectedTab == tab ? 58 : 35)

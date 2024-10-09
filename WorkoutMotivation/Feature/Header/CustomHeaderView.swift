@@ -26,7 +26,7 @@ struct CustomHeaderView<Content: View>: View {
                         // 이미지 버튼
                         buttonImage
                             .resizable()
-                            .frame(width: 24, height: 24)
+                            .frame(width: 30, height: 30)
                     } else if let buttonTitle = buttonTitle {
                         // 텍스트 버튼
                         Text(buttonTitle)

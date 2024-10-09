@@ -8,7 +8,7 @@
 import SwiftUI
 import TipKit
 
-//MARK: TIPView
+//MARK: TIPKit
 struct MotivationCardView: View {
     @State private var quotes: [String] = [
         "The best way to get started is to quit talking and begin doing.",
@@ -19,37 +19,42 @@ struct MotivationCardView: View {
     
     @State private var currentIndex: Int = 0
     @State private var isFavorited: Bool = false
-    @State private var showTip: Bool = true // 팁 뷰의 표시 상태
+    @State private var showTip: Bool = true
     @Binding var showMotivationCardView: Bool
     let inlineFavoriteTip = AddToFavoriteTip()
     
     var body: some View {
         VStack {
-            // TipKit 팁 뷰
             if showTip {
                 if #available(iOS 18.0, *) {
                     TipView(inlineFavoriteTip)
                         .foregroundStyle(.customBlack)
                         .padding()
-//                        .transition(.slide)
-                        .onAppear {
-                            // 3초 후에 팁 뷰 사라짐
-//                            DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
-//                                withAnimation {
-//                                    showTip = false
-//                                }
-//                            }
+                        .onDisappear() {
+                            showTip = false
                         }
                 } else {
-                    // Fallback on earlier versions
+                    
                 }
             }
             
-            Text(quotes[currentIndex])
-                .font(.title)
-                .fontWeight(.bold)
-                .multilineTextAlignment(.center)
-                .padding()
+            VStack {
+                Text(quotes[currentIndex])
+                    .font(.title)
+                    .fontWeight(.bold)
+                    .multilineTextAlignment(.center)
+                    .lineLimit(nil)
+                    .fixedSize(horizontal: false, vertical: true) // 세로로만 확장 가능
+                    .padding()
+                
+                Text("김현수")
+                    .font(.title3)
+                    .fontWeight(.bold)
+                    .foregroundStyle(CustomColor.SwiftUI.customBlack2)
+                    .multilineTextAlignment(.center)
+                    .padding()
+            }
+            .padding(.bottom, 50) // 텍스트 그룹 전체에 여백을 추가하여 여유 공간 확보
             
             Spacer()
             
@@ -61,8 +66,7 @@ struct MotivationCardView: View {
                         .foregroundColor(isFavorited ? .red : .gray)
                         .font(.title)
                 }
-                
-                Spacer()
+                .padding()
                 
                 Button(action: {
                     shareQuote(quote: quotes[currentIndex])
@@ -72,24 +76,22 @@ struct MotivationCardView: View {
                         .foregroundColor(.blue)
                 }
             }
-            .padding(.horizontal)
-            .padding(.bottom, 50)
+            .padding(.bottom, 50) // 버튼들 아래에 여유 공간을 추가하여 확장 시 여유 공간 확보
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color.white)
-        .cornerRadius(20)
-        .shadow(radius: 10)
-        .padding()
+        .cornerRadius(8)
+        .shadow(color: Color.black.opacity(0.1), radius: 10, x: 0, y: 10)
+        .padding(.horizontal, 10)
+        .padding(.bottom, 25)
         .gesture(
             DragGesture(minimumDistance: 50)
                 .onEnded { value in
                     if value.translation.height < 0 {
-                        // 아래서 위로 Swipe 했을 때 다음 명언으로 넘어감
                         withAnimation {
                             currentIndex = (currentIndex + 1) % quotes.count
                         }
                     } else if value.translation.height > 0 {
-                        // 위에서 아래로 Swipe 했을 때 이전 명언으로 돌아감
                         withAnimation {
                             currentIndex = (currentIndex - 1 + quotes.count) % quotes.count
                         }
@@ -101,7 +103,6 @@ struct MotivationCardView: View {
     func shareQuote(quote: String) {
         let activityController = UIActivityViewController(activityItems: [quote], applicationActivities: nil)
         
-        // UIKit과 연동
         if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene {
             windowScene.windows.first?.rootViewController?.present(activityController, animated: true, completion: nil)
         }
@@ -110,16 +111,17 @@ struct MotivationCardView: View {
 
 struct AddToFavoriteTip: Tip {
     var title: Text {
-        Text("아래에서 위로 쓸어 넘기세요!")
+        Text("아래서 위로 쓸어 넘기세요!")
     }
     var message: Text? {
         Text("이전 글귀를 볼려면 위에서 아래로 쓸어 넘기세요!")
     }
     var image: Image? {
-        Image(systemName: "arrow.up.arrow.down")
+        Image("sort-alt")
     }
 }
 
+//MARK: CustomView
 //struct MotivationCardView: View {
 //    @State private var quotes: [String] = [
 //        "The best way to get started is to quit talking and begin doing.",
@@ -217,6 +219,6 @@ struct AddToFavoriteTip: Tip {
 //    }
 //}
 
-//#Preview {
-//    MotivationCardView(showMotivationCardView: <#Binding<Bool>#>)
-//}
+#Preview {
+    MotivationCardView(showMotivationCardView: .constant(true))
+}
