@@ -27,9 +27,9 @@ struct MotivationView: View {
         NavigationView {
             VStack {
                 if headerVisible {
-                    CustomHeaderView(title: "동기부여 명언", buttonImage: Image("memo"), buttonAction: {
+                    CustomHeaderView(title: "동기부여", buttonImage: Image("memo"), buttonAction: {
                         withAnimation {
-                            showMotivationCardView.toggle() // 버튼 클릭 시 MotivationCardView 표시 전환
+                            showMotivationCardView.toggle()
                         }
                     }) {
                         EmptyView()
@@ -38,7 +38,11 @@ struct MotivationView: View {
                 }
 
                 if showMotivationCardView {
-                    MotivationCardView(showMotivationCardView: $showMotivationCardView) // MotivationCardView 표시
+                    MotivationCardView(
+                        motivations: viewModel.motivations,
+                        viewModel: viewModel, // ViewModel 전달
+                        showMotivationCardView: $showMotivationCardView
+                    )
                 } else {
                     ScrollView {
                         GeometryReader { geometry in
@@ -46,8 +50,8 @@ struct MotivationView: View {
                                 .onAppear {
                                     self.lastScrollPosition = geometry.frame(in: .global).minY
                                 }
-                                .onChange(of: geometry.frame(in: .global).minY) { value in
-                                    let scrollOffset = value - self.lastScrollPosition
+                                .onChange(of: geometry.frame(in: .global).minY) { newValue, oldValue in
+                                    let scrollOffset = newValue - (oldValue)
                                     self.currentScrollOffset += scrollOffset
 
                                     if self.currentScrollOffset > threshold {
@@ -70,7 +74,7 @@ struct MotivationView: View {
                                         self.currentScrollOffset = 0
                                     }
 
-                                    self.lastScrollPosition = value
+                                    self.lastScrollPosition = newValue
                                 }
                         }
                         .frame(height: 0)

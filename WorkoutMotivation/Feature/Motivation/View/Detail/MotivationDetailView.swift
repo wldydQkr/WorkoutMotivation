@@ -13,7 +13,7 @@ struct MotivationDetailView: View {
     let motivation: Motivation
     
     @Environment(\.presentationMode) var presentationMode
-    @ObservedObject var viewModel: MotivationViewModel // 동일한 viewModel 사용
+    @ObservedObject var viewModel: MotivationViewModel
     @State private var shareContent: String = ""
     @State private var isShareSheetPresented = false
     

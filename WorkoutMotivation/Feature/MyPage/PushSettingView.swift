@@ -27,7 +27,7 @@ struct PushSettingView: View {
                 }
                 .padding()
                 .onChange(of: pushSettingViewModel.isNotificationEnabled) { newValue in
-                    pushSettingViewModel.saveNotificationSetting(newValue) // 토글 상태를 저장
+                    pushSettingViewModel.saveNotificationSetting(newValue) // 변경된 토글 상태를 저장
                 }
                 
                 // 알림이 켜져 있을 때만 간격 선택 가능

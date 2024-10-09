@@ -15,21 +15,20 @@ struct IsLikedView: View {
     @State private var lastScrollPosition: CGFloat = 0.0
     @State private var currentScrollOffset: CGFloat = 0.0
 
-    let threshold: CGFloat = 70.0
+    let threshold: CGFloat = 70.0 // 스크롤 민감도
 
     var body: some View {
         NavigationView {
             VStack {
                 if headerVisible {
-//                    IsLikedHeaderView()
                     CustomHeaderView(title: "좋아하는 명언") {
                         DelButton()
                     }
-                        .transition(.move(edge: .top)) // 자연스러운 애니메이션 적용
+                        .transition(.move(edge: .top))
                 }
 
                 List {
-                    // GeometryReader를 List 내부에 삽입하여 스크롤 위치를 추적
+                    //MARK: 스크롤 시 헤더 숨기기
 //                    GeometryReader { geometry in
 //                        Color.clear // 보이지 않게 처리
 //                            .frame(height: 1) // 최소 크기로 설정하여 이상한 빈 공간 방지
@@ -105,7 +104,7 @@ struct IsLikedView: View {
             }
         }
     }
-
+    
     private func navigateToDetailView(for motivation: Motivation) {
         guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
               let window = windowScene.windows.first,
@@ -120,28 +119,10 @@ struct IsLikedView: View {
         let idsToRemove = offsets.map { motivationViewModel.motivations.filter { motivationViewModel.isLiked($0) }[$0].id }
         motivationViewModel.likedMotivations.removeAll(where: { idsToRemove.contains($0) })
     }
+
+    
 }
 
 #Preview {
     IsLikedView(motivationViewModel: MotivationViewModel(), viewModel: IsLikedViewModel())
-}
-
-struct NavigationBarModifier: ViewModifier {
-    var backgroundColor: UIColor?
-    
-    init(backgroundColor: UIColor?) {
-        self.backgroundColor = backgroundColor
-        let coloredAppearance = UINavigationBarAppearance()
-        coloredAppearance.configureWithOpaqueBackground()
-        coloredAppearance.backgroundColor = backgroundColor
-        coloredAppearance.titleTextAttributes = [.foregroundColor: UIColor.white]
-        coloredAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
-        
-        UINavigationBar.appearance().standardAppearance = coloredAppearance
-        UINavigationBar.appearance().scrollEdgeAppearance = coloredAppearance
-    }
-    
-    func body(content: Content) -> some View {
-        content
-    }
 }

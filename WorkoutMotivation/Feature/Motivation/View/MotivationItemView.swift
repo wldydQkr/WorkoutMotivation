@@ -65,6 +65,17 @@ struct MotivationItemView: View {
         }
     }
 }
-//#Preview {
-//    MotivationItemView()
-//}
+
+#Preview {
+    @Previewable @State var shareContent = ""
+    @Previewable @State var isShareSheetPresented = false
+    let sampleMotivation = Motivation(id: 1, title: "Stay Focused", name: "John Doe")
+    
+    MotivationItemView(
+        motivation: sampleMotivation,
+        viewModel: MotivationViewModel(),
+        isShareSheetPresented: $isShareSheetPresented,
+        shareContent: $shareContent
+    )
+    .previewLayout(.sizeThatFits) // 프리뷰 레이아웃 설정
+}

@@ -19,7 +19,6 @@ struct DiaryView: View {
         NavigationView {
             ZStack {
                 VStack {
-//                    DiaryHeaderView(viewModel: viewModel, isEditing: $isEditing, selectedDiaries: $selectedDiaries)
                     CustomHeaderView(title: "나의 다짐") {
                         EmptyView()
                     }
@@ -70,29 +69,6 @@ struct DiaryView: View {
     private func deleteItems(at offsets: IndexSet) {
         offsets.map { viewModel.diaries[$0] }.forEach { diary in
             viewModel.deleteDiary(id: Int64(diary.id))
-        }
-    }
-}
-
-struct AddDiaryButton: View {
-    @StateObject var viewModel: DiaryViewModel
-    
-    var body: some View {
-        VStack {
-            Spacer()
-            HStack {
-                Spacer()
-                NavigationLink(destination: DiaryCreateView(viewModel: viewModel)) {
-                    Image(systemName: "plus")
-                        .font(.title)
-                        .foregroundColor(CustomColor.SwiftUI.customBlack)
-                        .padding()
-                        .background(CustomColor.SwiftUI.customGreen2)
-                        .clipShape(Circle())
-                        .shadow(radius: 10)
-                        .padding()
-                }
-            }
         }
     }
 }

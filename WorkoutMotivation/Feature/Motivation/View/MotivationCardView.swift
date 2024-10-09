@@ -8,21 +8,16 @@
 import SwiftUI
 import TipKit
 
-//MARK: TIPKit
 struct MotivationCardView: View {
-    @State private var quotes: [String] = [
-        "The best way to get started is to quit talking and begin doing.",
-        "The pessimist sees difficulty in every opportunity. The optimist sees opportunity in every difficulty.",
-        "Don't let yesterday take up too much of today.",
-        "You learn more from failure than from success. Don’t let it stop you. Failure builds character."
-    ]
-    
+    let motivations: [Motivation]
+    @ObservedObject var viewModel: MotivationViewModel // ViewModel을 받아옵니다.
+    @Binding var showMotivationCardView: Bool // MotivationCardView의 표시 상태를 제어하는 바인딩 변수
+
     @State private var currentIndex: Int = 0
-    @State private var isFavorited: Bool = false
-    @State private var showTip: Bool = true
-    @Binding var showMotivationCardView: Bool
+    @State private var showTip: Bool = true // Tip 표시 여부
+
     let inlineFavoriteTip = AddToFavoriteTip()
-    
+
     var body: some View {
         VStack {
             if showTip {
@@ -33,50 +28,49 @@ struct MotivationCardView: View {
                         .onDisappear() {
                             showTip = false
                         }
-                } else {
-                    
                 }
             }
-            
+
             VStack {
-                Text(quotes[currentIndex])
+                Text(motivations[currentIndex].title)
                     .font(.title)
                     .fontWeight(.bold)
                     .multilineTextAlignment(.center)
                     .lineLimit(nil)
-                    .fixedSize(horizontal: false, vertical: true) // 세로로만 확장 가능
+                    .fixedSize(horizontal: false, vertical: true)
                     .padding()
-                
-                Text("김현수")
+
+                Text(motivations[currentIndex].name)
                     .font(.title3)
                     .fontWeight(.bold)
                     .foregroundStyle(CustomColor.SwiftUI.customBlack2)
                     .multilineTextAlignment(.center)
                     .padding()
             }
-            .padding(.bottom, 50) // 텍스트 그룹 전체에 여백을 추가하여 여유 공간 확보
-            
+            .padding(.bottom, 50)
+
             Spacer()
-            
+
             HStack {
                 Button(action: {
-                    isFavorited.toggle()
+                    viewModel.toggleLike(for: motivations[currentIndex]) // 좋아요 토글
                 }) {
-                    Image(systemName: isFavorited ? "heart.fill" : "heart")
-                        .foregroundColor(isFavorited ? .red : .gray)
+                    Image(systemName: viewModel.isLiked(motivations[currentIndex]) ? "heart.fill" : "heart")
+                        .foregroundColor(viewModel.isLiked(motivations[currentIndex]) ? CustomColor.SwiftUI.customGreen : .gray)
                         .font(.title)
                 }
                 .padding()
-                
+
                 Button(action: {
-                    shareQuote(quote: quotes[currentIndex])
+//                    let shareContent = viewModel.getShareContent(for: motivations[currentIndex])
+//                    shareQuote(quote: shareContent)
                 }) {
                     Image(systemName: "square.and.arrow.up")
                         .font(.title)
                         .foregroundColor(.blue)
                 }
             }
-            .padding(.bottom, 50) // 버튼들 아래에 여유 공간을 추가하여 확장 시 여유 공간 확보
+            .padding(.bottom, 50)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color.white)
@@ -88,16 +82,25 @@ struct MotivationCardView: View {
             DragGesture(minimumDistance: 50)
                 .onEnded { value in
                     if value.translation.height < 0 {
+                        // 스와이프 업: 랜덤 인덱스 선택
                         withAnimation {
-                            currentIndex = (currentIndex + 1) % quotes.count
+                            currentIndex = Int.random(in: 0..<motivations.count)
                         }
                     } else if value.translation.height > 0 {
+                        // 스와이프 다운: 이전 인덱스 선택
                         withAnimation {
-                            currentIndex = (currentIndex - 1 + quotes.count) % quotes.count
+                            if currentIndex > 0 {
+                                currentIndex -= 1 // 이전 인덱스로 이동
+                            } else {
+                                currentIndex = motivations.count - 1 // 처음이면 마지막으로 이동
+                            }
                         }
                     }
                 }
         )
+        .onDisappear {
+            showMotivationCardView = false // MotivationCardView가 사라질 때 상태 업데이트
+        }
     }
     
     func shareQuote(quote: String) {
@@ -108,6 +111,7 @@ struct MotivationCardView: View {
         }
     }
 }
+
 
 struct AddToFavoriteTip: Tip {
     var title: Text {
@@ -219,6 +223,14 @@ struct AddToFavoriteTip: Tip {
 //    }
 //}
 
-#Preview {
-    MotivationCardView(showMotivationCardView: .constant(true))
-}
+//struct MotivationCardView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        // 임시 Motivation 인스턴스 생성
+//        let sampleMotivation = Motivation(id: 1, title: "Stay Positive!", name: "John Doe")
+//        
+//        // MotivationCardView 프리뷰
+//        MotivationCardView(motivations: sampleMotivation, showMotivationCardView: .constant(true))
+//            .previewLayout(.sizeThatFits) // 프리뷰 크기 조정
+//            .padding()
+//    }
+//}

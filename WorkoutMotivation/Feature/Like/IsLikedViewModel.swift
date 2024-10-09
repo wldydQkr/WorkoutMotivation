@@ -9,5 +9,6 @@ import Foundation
 import SwiftUI
 
 final class IsLikedViewModel: ObservableObject {
-    
+//    private var motivationViewModel: MotivationViewModel
+        
 }
