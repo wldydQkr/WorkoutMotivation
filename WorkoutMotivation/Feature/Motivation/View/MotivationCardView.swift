@@ -56,8 +56,9 @@ struct MotivationCardView: View {
                     viewModel.toggleLike(for: motivations[currentIndex]) // 좋아요 토글
                 }) {
                     Image(systemName: viewModel.isLiked(motivations[currentIndex]) ? "heart.fill" : "heart")
-                        .foregroundColor(viewModel.isLiked(motivations[currentIndex]) ? CustomColor.SwiftUI.customGreen : .gray)
-                        .font(.title)
+                        .resizable()
+                        .frame(width: 30, height: 30)
+                        .foregroundColor(viewModel.isLiked(motivations[currentIndex]) ? CustomColor.SwiftUI.customGreen : CustomColor.SwiftUI.customBlack)
                 }
                 .padding()
 
@@ -65,8 +66,9 @@ struct MotivationCardView: View {
 //                    let shareContent = viewModel.getShareContent(for: motivations[currentIndex])
 //                    shareQuote(quote: shareContent)
                 }) {
-                    Image(systemName: "square.and.arrow.up")
-                        .font(.title)
+                    Image("paper-plane")
+                        .resizable()
+                        .frame(width: 30, height: 30)
                         .foregroundColor(.blue)
                 }
             }
