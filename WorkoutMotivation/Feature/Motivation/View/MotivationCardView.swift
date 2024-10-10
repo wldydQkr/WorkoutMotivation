@@ -10,7 +10,7 @@ import TipKit
 
 struct MotivationCardView: View {
     let motivations: [Motivation]
-    @ObservedObject var viewModel: MotivationViewModel // ViewModel을 받아옵니다.
+    @ObservedObject var viewModel: MotivationViewModel
     @Binding var showMotivationCardView: Bool // MotivationCardView의 표시 상태를 제어하는 바인딩 변수
 
     @State private var currentIndex: Int = 0
@@ -39,6 +39,7 @@ struct MotivationCardView: View {
                     .lineLimit(nil)
                     .fixedSize(horizontal: false, vertical: true)
                     .padding()
+                    .padding(.top, 20)
 
                 Text(motivations[currentIndex].name)
                     .font(.title3)

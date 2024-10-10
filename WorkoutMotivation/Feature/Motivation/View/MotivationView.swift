@@ -50,26 +50,31 @@ struct MotivationView: View {
                                 .onAppear {
                                     self.lastScrollPosition = geometry.frame(in: .global).minY
                                 }
-                                .onChange(of: geometry.frame(in: .global).minY) { newValue, oldValue in
-                                    let scrollOffset = newValue - (oldValue)
+                                .onChange(of: geometry.frame(in: .global).minY) { newValue in
+                                    let scrollOffset = newValue - self.lastScrollPosition
                                     self.currentScrollOffset += scrollOffset
 
-                                    if self.currentScrollOffset > threshold {
-                                        withAnimation {
-                                            self.headerVisible = true
-                                        }
-                                    } else if self.currentScrollOffset < -threshold {
-                                        withAnimation {
+                                    // 임계값을 넘었을 때만 애니메이션 트리거
+                                    if scrollOffset < 0 && self.currentScrollOffset < -threshold && self.headerVisible {
+                                        // 헤더 감추기
+                                        withAnimation(.easeInOut(duration: 0.3)) {
                                             self.headerVisible = false
                                         }
-                                    }
-
-                                    if geometry.frame(in: .global).minY >= 0 {
-                                        withAnimation {
+                                    } else if scrollOffset > 0 && self.currentScrollOffset > threshold && !self.headerVisible {
+                                        // 헤더 보이기
+                                        withAnimation(.easeInOut(duration: 0.3)) {
                                             self.headerVisible = true
                                         }
                                     }
 
+                                    // 스크롤이 끝까지 내려갔을 때, 헤더 다시 보이기
+                                    if geometry.frame(in: .global).minY >= 0 && !self.headerVisible {
+                                        withAnimation(.easeInOut(duration: 0.3)) {
+                                            self.headerVisible = true
+                                        }
+                                    }
+
+                                    // currentScrollOffset이 너무 커지지 않도록 리셋
                                     if abs(self.currentScrollOffset) > threshold {
                                         self.currentScrollOffset = 0
                                     }
