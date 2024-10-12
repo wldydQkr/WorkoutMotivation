@@ -25,6 +25,12 @@ final class MotivationViewModel: ObservableObject {
         loadLikedMotivations()
     }
     
+    private var itemHeights: [Int: CGFloat] = [:]  // 각 Motivation의 id(Int)로 높이를 관리
+
+    func updateItemHeight(motivation: Motivation, height: CGFloat) {
+        itemHeights[motivation.id] = height  // Motivation의 id(Int)로 높이 저장
+    }
+    
     func loadMotivations() {
         guard let url = Bundle.main.url(forResource: "Motivation", withExtension: "json") else {
             errorMessage = "JSON 파일을 찾을 수 없습니다."

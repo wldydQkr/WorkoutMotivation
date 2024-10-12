@@ -14,7 +14,7 @@ struct MotivationView: View {
     @State private var headerVisible = true
     @State private var lastScrollPosition: CGFloat = 0.0
     @State private var currentScrollOffset: CGFloat = 0.0
-    @State private var showMotivationCardView = false // MotivationCardView 상태
+    @State private var showMotivationCardView = false
 
     let columns = [
         GridItem(.flexible(), spacing: 10),
@@ -40,7 +40,7 @@ struct MotivationView: View {
                 if showMotivationCardView {
                     MotivationCardView(
                         motivations: viewModel.motivations,
-                        viewModel: viewModel, // ViewModel 전달
+                        viewModel: viewModel,
                         showMotivationCardView: $showMotivationCardView
                     )
                 } else {
@@ -53,28 +53,23 @@ struct MotivationView: View {
                                 .onChange(of: geometry.frame(in: .global).minY) { newValue in
                                     let scrollOffset = newValue - self.lastScrollPosition
                                     self.currentScrollOffset += scrollOffset
-
-                                    // 임계값을 넘었을 때만 애니메이션 트리거
+                                    
                                     if scrollOffset < 0 && self.currentScrollOffset < -threshold && self.headerVisible {
-                                        // 헤더 감추기
                                         withAnimation(.easeInOut(duration: 0.3)) {
                                             self.headerVisible = false
                                         }
                                     } else if scrollOffset > 0 && self.currentScrollOffset > threshold && !self.headerVisible {
-                                        // 헤더 보이기
                                         withAnimation(.easeInOut(duration: 0.3)) {
                                             self.headerVisible = true
                                         }
                                     }
 
-                                    // 스크롤이 끝까지 내려갔을 때, 헤더 다시 보이기
                                     if geometry.frame(in: .global).minY >= 0 && !self.headerVisible {
                                         withAnimation(.easeInOut(duration: 0.3)) {
                                             self.headerVisible = true
                                         }
                                     }
 
-                                    // currentScrollOffset이 너무 커지지 않도록 리셋
                                     if abs(self.currentScrollOffset) > threshold {
                                         self.currentScrollOffset = 0
                                     }
@@ -102,6 +97,17 @@ struct MotivationView: View {
                                             viewModel: viewModel,
                                             isShareSheetPresented: $isShareSheetPresented,
                                             shareContent: $shareContent
+                                        )
+                                        .padding(.vertical, 5)
+                                        .background(
+                                            GeometryReader { geo in
+                                                Color.clear
+                                                    .onAppear {
+                                                        // 각 Motivation의 id를 사용하여 높이 관리
+                                                        let height = geo.size.height
+                                                        viewModel.updateItemHeight(motivation: motivation, height: height)
+                                                    }
+                                            }
                                         )
                                     }
                                 }
