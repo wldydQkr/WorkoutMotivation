@@ -25,8 +25,8 @@ struct MotivationItemView: View {
                         .font(.system(size: 20, weight: .semibold))
                         .multilineTextAlignment(.center)
                         .foregroundStyle(CustomColor.SwiftUI.customBlack)
-                        .padding(.top, 20) // 상단 간격을 일정하게 유지
-                        .padding([.leading, .trailing], 16) // 좌우 간격도 추가
+                        .padding(.top, 20)
+                        .padding([.leading, .trailing], 16)
                 }
                 HStack {
                     Button(action: {
@@ -53,10 +53,7 @@ struct MotivationItemView: View {
             .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 5)
             .contextMenu {
                 Button(action: {
-                    // 먼저 shareContent를 설정한 후, 비동기로 시트를 열기
                     shareContent = viewModel.getMotivationDetails(motivation)
-                    
-                    // 상태가 업데이트된 후 시트를 띄우기 위해 비동기로 처리
                     DispatchQueue.main.async {
                         isShareSheetPresented = true
                     }
@@ -65,10 +62,9 @@ struct MotivationItemView: View {
                 }
             }
         }
-        .fixedSize(horizontal: false, vertical: true)  // 세로 크기를 텍스트에 맞춰 유동적으로
+        .fixedSize(horizontal: false, vertical: true)
     }
 
-    // 텍스트 길이에 맞는 높이를 계산하는 함수
     private func calculateHeightForText(_ text: String) -> CGFloat {
         let font = UIFont.systemFont(ofSize: 20, weight: .semibold)
         let textSize = text.boundingRect(
@@ -77,7 +73,7 @@ struct MotivationItemView: View {
             attributes: [NSAttributedString.Key.font: font],
             context: nil
         )
-        return max(100, textSize.height + 60) // 상단 패딩을 포함해 충분한 높이를 설정
+        return max(100, textSize.height + 60) // 상단 패딩을 포함한 높이
     }
 }
 

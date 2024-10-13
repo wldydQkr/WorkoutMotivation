@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Motivation: Codable, Identifiable {
+struct Motivation: Codable, Identifiable, Hashable {
     let id: Int
     let title: String
     let name: String

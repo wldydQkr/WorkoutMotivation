@@ -18,6 +18,10 @@ extension CustomColor {
         static let customGreen: UIColor = UIColor (named: "customGreen")!
         static let customGreen2: UIColor = UIColor (named: "customGreen2")!
         static let customGreen3: UIColor = UIColor (named: "customGreen3")!
+        static let customWhite: UIColor = UIColor (named: "customWhite")!
+        static let customBlack: UIColor = UIColor (named: "customBlack")!
+        static let customBlack2: UIColor = UIColor (named: "customBlack2")!
+        static let customBlack3: UIColor = UIColor (named: "customBlack3")!
     }
 }
 

@@ -16,12 +16,11 @@ struct MotivationView: View {
     @State private var currentScrollOffset: CGFloat = 0.0
     @State private var showMotivationCardView = false
 
+    let threshold: CGFloat = 70.0
     let columns = [
         GridItem(.flexible(), spacing: 10),
         GridItem(.flexible(), spacing: 10)
     ]
-
-    let threshold: CGFloat = 70.0
 
     var body: some View {
         NavigationView {
@@ -44,7 +43,7 @@ struct MotivationView: View {
                         showMotivationCardView: $showMotivationCardView
                     )
                 } else {
-                    ScrollView {
+                    ScrollView(showsIndicators: false) {
                         GeometryReader { geometry in
                             Color.clear
                                 .onAppear {
@@ -85,34 +84,17 @@ struct MotivationView: View {
                             LottieView("skeletonView")
                                 .frame(width: 400, height: 400)
                         } else {
-                            LazyVGrid(columns: columns, spacing: 10) {
-                                if let errorMessage = viewModel.errorMessage {
-                                    Text(errorMessage)
-                                        .foregroundColor(.red)
-                                        .padding()
-                                } else {
-                                    ForEach(viewModel.motivations) { motivation in
-                                        MotivationItemView(
-                                            motivation: motivation,
-                                            viewModel: viewModel,
-                                            isShareSheetPresented: $isShareSheetPresented,
-                                            shareContent: $shareContent
-                                        )
-                                        .padding(.vertical, 5)
-                                        .background(
-                                            GeometryReader { geo in
-                                                Color.clear
-                                                    .onAppear {
-                                                        // 각 Motivation의 id를 사용하여 높이 관리
-                                                        let height = geo.size.height
-                                                        viewModel.updateItemHeight(motivation: motivation, height: height)
-                                                    }
-                                            }
-                                        )
-                                    }
+                            MasonryVStack(columns: 2, spacing: 10) {
+                                ForEach(viewModel.motivations, id: \.id) { motivation in
+                                    MotivationItemView(
+                                        motivation: motivation,
+                                        viewModel: viewModel,
+                                        isShareSheetPresented: $isShareSheetPresented,
+                                        shareContent: $shareContent
+                                    )
                                 }
                             }
-                            .padding([.horizontal, .bottom], 10)
+                            .padding(.horizontal, 10)
                         }
                     }
                     .background(CustomColor.SwiftUI.customBackgrond)
@@ -135,4 +117,3 @@ struct MotivationView: View {
 #Preview {
     MotivationView(viewModel: MotivationViewModel())
 }
-
