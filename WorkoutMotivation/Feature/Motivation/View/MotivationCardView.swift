@@ -15,6 +15,7 @@ struct MotivationCardView: View {
 
     @State private var currentIndex: Int = 0
     @State private var showTip: Bool = true
+    @State private var cardTransition: AnyTransition = .identity // 전환 애니메이션 상태
 
     let inlineFavoriteTip = AddToFavoriteTip()
 
@@ -31,7 +32,6 @@ struct MotivationCardView: View {
                 }
             }
 
-            // 배열이 비어있지 않을 때만 접근하도록 조건 추가
             if !motivations.isEmpty {
                 VStack {
                     Text(motivations[currentIndex].title)
@@ -51,6 +51,8 @@ struct MotivationCardView: View {
                         .padding()
                 }
                 .padding(.bottom, 50)
+                .transition(cardTransition) // 카드 전환 애니메이션 적용
+                .animation(.easeInOut(duration: 0.5), value: currentIndex) // 애니메이션 추가
 
                 Spacer()
 
@@ -91,35 +93,25 @@ struct MotivationCardView: View {
             DragGesture(minimumDistance: 50)
                 .onEnded { value in
                     if !motivations.isEmpty {
-                        if value.translation.height < 0 {
-                            // 스와이프 업: 랜덤 인덱스 선택
-                            withAnimation {
-                                currentIndex = Int.random(in: 0..<motivations.count)
-                            }
-                        } else if value.translation.height > 0 {
-                            // 스와이프 다운: 이전 인덱스 선택
-                            withAnimation {
-                                if currentIndex > 0 {
-                                    currentIndex -= 1
-                                } else {
-                                    currentIndex = motivations.count - 1
+                        if abs(value.translation.height) > abs(value.translation.width) {
+                            // 상하 스와이프만 감지
+                            if value.translation.height < 0 {
+                                // 스와이프 업: 다음 카드로 이동
+                                withAnimation {
+                                    cardTransition = .asymmetric(insertion: .move(edge: .bottom), removal: .move(edge: .top))
+                                    currentIndex = (currentIndex + 1) % motivations.count
+                                }
+                            } else if value.translation.height > 0 {
+                                // 스와이프 다운: 이전 카드로 이동
+                                withAnimation {
+                                    cardTransition = .asymmetric(insertion: .move(edge: .top), removal: .move(edge: .bottom))
+                                    currentIndex = (currentIndex - 1 + motivations.count) % motivations.count
                                 }
                             }
                         }
                     }
                 }
         )
-//        .onDisappear {
-//            showMotivationCardView = false
-//        }
-    }
-
-    func shareQuote(quote: String) {
-        let activityController = UIActivityViewController(activityItems: [quote], applicationActivities: nil)
-
-        if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene {
-            windowScene.windows.first?.rootViewController?.present(activityController, animated: true, completion: nil)
-        }
     }
 }
 
