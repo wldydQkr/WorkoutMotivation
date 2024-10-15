@@ -11,10 +11,10 @@ import TipKit
 struct MotivationCardView: View {
     let motivations: [Motivation]
     @ObservedObject var viewModel: MotivationViewModel
-    @Binding var showMotivationCardView: Bool // MotivationCardView의 표시 상태를 제어하는 바인딩 변수
+    @Binding var showMotivationCardView: Bool
 
     @State private var currentIndex: Int = 0
-    @State private var showTip: Bool = true // Tip 표시 여부
+    @State private var showTip: Bool = true
 
     let inlineFavoriteTip = AddToFavoriteTip()
 
@@ -25,55 +25,61 @@ struct MotivationCardView: View {
                     TipView(inlineFavoriteTip)
                         .foregroundStyle(.customBlack)
                         .padding()
-                        .onDisappear() {
+                        .onDisappear {
                             showTip = false
                         }
                 }
             }
 
-            VStack {
-                Text(motivations[currentIndex].title)
+            // 배열이 비어있지 않을 때만 접근하도록 조건 추가
+            if !motivations.isEmpty {
+                VStack {
+                    Text(motivations[currentIndex].title)
+                        .font(.title)
+                        .fontWeight(.bold)
+                        .multilineTextAlignment(.center)
+                        .lineLimit(nil)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .padding()
+                        .padding(.top, 20)
+
+                    Text(motivations[currentIndex].name)
+                        .font(.title3)
+                        .fontWeight(.bold)
+                        .foregroundStyle(CustomColor.SwiftUI.customBlack2)
+                        .multilineTextAlignment(.center)
+                        .padding()
+                }
+                .padding(.bottom, 50)
+
+                Spacer()
+
+                HStack {
+                    Button(action: {
+                        viewModel.toggleLike(for: motivations[currentIndex])
+                    }) {
+                        Image(systemName: viewModel.isLiked(motivations[currentIndex]) ? "heart.fill" : "heart")
+                            .resizable()
+                            .frame(width: 30, height: 30)
+                            .foregroundColor(viewModel.isLiked(motivations[currentIndex]) ? CustomColor.SwiftUI.customGreen : CustomColor.SwiftUI.customBlack)
+                    }
+                    .padding()
+
+                    Button(action: {
+                        // 공유 기능을 비활성화
+                    }) {
+                        Image("paper-plane")
+                            .resizable()
+                            .frame(width: 30, height: 30)
+                            .foregroundColor(.blue)
+                    }
+                }
+                .padding(.bottom, 50)
+            } else {
+                Text("동기부여 내용이 없습니다.")
                     .font(.title)
-                    .fontWeight(.bold)
-                    .multilineTextAlignment(.center)
-                    .lineLimit(nil)
-                    .fixedSize(horizontal: false, vertical: true)
-                    .padding()
-                    .padding(.top, 20)
-
-                Text(motivations[currentIndex].name)
-                    .font(.title3)
-                    .fontWeight(.bold)
-                    .foregroundStyle(CustomColor.SwiftUI.customBlack2)
-                    .multilineTextAlignment(.center)
                     .padding()
             }
-            .padding(.bottom, 50)
-
-            Spacer()
-
-            HStack {
-                Button(action: {
-                    viewModel.toggleLike(for: motivations[currentIndex]) // 좋아요 토글
-                }) {
-                    Image(systemName: viewModel.isLiked(motivations[currentIndex]) ? "heart.fill" : "heart")
-                        .resizable()
-                        .frame(width: 30, height: 30)
-                        .foregroundColor(viewModel.isLiked(motivations[currentIndex]) ? CustomColor.SwiftUI.customGreen : CustomColor.SwiftUI.customBlack)
-                }
-                .padding()
-
-                Button(action: {
-//                    let shareContent = viewModel.getShareContent(for: motivations[currentIndex])
-//                    shareQuote(quote: shareContent)
-                }) {
-                    Image("paper-plane")
-                        .resizable()
-                        .frame(width: 30, height: 30)
-                        .foregroundColor(.blue)
-                }
-            }
-            .padding(.bottom, 50)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color.white)
@@ -84,31 +90,33 @@ struct MotivationCardView: View {
         .gesture(
             DragGesture(minimumDistance: 50)
                 .onEnded { value in
-                    if value.translation.height < 0 {
-                        // 스와이프 업: 랜덤 인덱스 선택
-                        withAnimation {
-                            currentIndex = Int.random(in: 0..<motivations.count)
-                        }
-                    } else if value.translation.height > 0 {
-                        // 스와이프 다운: 이전 인덱스 선택
-                        withAnimation {
-                            if currentIndex > 0 {
-                                currentIndex -= 1 // 이전 인덱스로 이동
-                            } else {
-                                currentIndex = motivations.count - 1 // 처음이면 마지막으로 이동
+                    if !motivations.isEmpty {
+                        if value.translation.height < 0 {
+                            // 스와이프 업: 랜덤 인덱스 선택
+                            withAnimation {
+                                currentIndex = Int.random(in: 0..<motivations.count)
+                            }
+                        } else if value.translation.height > 0 {
+                            // 스와이프 다운: 이전 인덱스 선택
+                            withAnimation {
+                                if currentIndex > 0 {
+                                    currentIndex -= 1
+                                } else {
+                                    currentIndex = motivations.count - 1
+                                }
                             }
                         }
                     }
                 }
         )
-        .onDisappear {
-            showMotivationCardView = false // MotivationCardView가 사라질 때 상태 업데이트
-        }
+//        .onDisappear {
+//            showMotivationCardView = false
+//        }
     }
-    
+
     func shareQuote(quote: String) {
         let activityController = UIActivityViewController(activityItems: [quote], applicationActivities: nil)
-        
+
         if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene {
             windowScene.windows.first?.rootViewController?.present(activityController, animated: true, completion: nil)
         }

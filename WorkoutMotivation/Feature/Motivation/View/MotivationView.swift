@@ -14,14 +14,14 @@ struct MotivationView: View {
     @State private var headerVisible = true
     @State private var lastScrollPosition: CGFloat = 0.0
     @State private var currentScrollOffset: CGFloat = 0.0
-    @State private var showMotivationCardView = false
+    @State private var showMotivationCardView = true  // 초기 값을 true로 설정하여 MotivationCardView가 먼저 보이도록 설정
 
     let threshold: CGFloat = 70.0
     let columns = [
         GridItem(.flexible(), spacing: 10),
         GridItem(.flexible(), spacing: 10)
     ]
-
+    
     var body: some View {
         NavigationView {
             VStack {
@@ -35,7 +35,8 @@ struct MotivationView: View {
                     }
                     .transition(.move(edge: .top))
                 }
-
+                
+                // MotivationCardView를 기본으로 보여주고, MasonryVStack은 조건에 따라 토글
                 if showMotivationCardView {
                     MotivationCardView(
                         motivations: viewModel.motivations,
@@ -49,7 +50,7 @@ struct MotivationView: View {
                                 .onAppear {
                                     self.lastScrollPosition = geometry.frame(in: .global).minY
                                 }
-                                .onChange(of: geometry.frame(in: .global).minY) { newValue in
+                                .onChange(of: geometry.frame(in: .global).minY) { oldValue, newValue in
                                     let scrollOffset = newValue - self.lastScrollPosition
                                     self.currentScrollOffset += scrollOffset
                                     
@@ -62,22 +63,22 @@ struct MotivationView: View {
                                             self.headerVisible = true
                                         }
                                     }
-
+                                    
                                     if geometry.frame(in: .global).minY >= 0 && !self.headerVisible {
                                         withAnimation(.easeInOut(duration: 0.3)) {
                                             self.headerVisible = true
                                         }
                                     }
-
+                                    
                                     if abs(self.currentScrollOffset) > threshold {
                                         self.currentScrollOffset = 0
                                     }
-
+                                    
                                     self.lastScrollPosition = newValue
                                 }
                         }
                         .frame(height: 0)
-
+                        
                         if viewModel.isLoading {
                             LottieView("skeletonView")
                                 .frame(width: 400, height: 400)
@@ -94,7 +95,7 @@ struct MotivationView: View {
                                     )
                                 }
                             }
-                            .padding(.horizontal, 10)
+                            .padding([.horizontal, .bottom], 10)
                         }
                     }
                     .background(CustomColor.SwiftUI.customBackgrond)
