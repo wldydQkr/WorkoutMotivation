@@ -27,7 +27,7 @@ struct DiaryView: View {
                         if viewModel.diaries.isEmpty {
                             EmptyView()
                         } else {
-                            ForEach(viewModel.diaries) { diary in
+                            ForEach(viewModel.diaries.sorted(by: { $0.date > $1.date })) { diary in
                                 DiaryCardView(
                                     diary: diary,
                                     isEditing: $isEditing,
@@ -40,13 +40,14 @@ struct DiaryView: View {
                                 .onTapGesture {
                                     navigateToDetailView(for: diary)
                                 }
-                                .listRowSeparator(.hidden) // 구분선 숨기기
+                                .listRowSeparator(.hidden)
                             }
                             .onDelete(perform: deleteItems)
                         }
                     }
+                    
                 }
-                .background(CustomColor.SwiftUI.customBackgrond) // 전체 배경 색상 설정
+                .background(CustomColor.SwiftUI.customBackgrond)
                 .navigationBarHidden(true)
                 
                 AddDiaryButton(viewModel: viewModel)

@@ -29,6 +29,8 @@ struct MotivationCardView: View {
                         .onDisappear {
                             showTip = false
                         }
+                } else {
+                    // iOS18 미만 버전...
                 }
             }
 
@@ -63,12 +65,12 @@ struct MotivationCardView: View {
                         Image(systemName: viewModel.isLiked(motivations[currentIndex]) ? "heart.fill" : "heart")
                             .resizable()
                             .frame(width: 30, height: 30)
-                            .foregroundColor(viewModel.isLiked(motivations[currentIndex]) ? CustomColor.SwiftUI.customGreen : CustomColor.SwiftUI.customBlack)
+                            .foregroundColor(viewModel.isLiked(motivations[currentIndex]) ? .pink : CustomColor.SwiftUI.customBlack)
                     }
                     .padding()
 
                     Button(action: {
-                        // 공유 기능을 비활성화
+                        
                     }) {
                         Image("paper-plane")
                             .resizable()
@@ -84,9 +86,9 @@ struct MotivationCardView: View {
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(Color.white)
+        .background(CustomColor.SwiftUI.customBackgrond)
         .cornerRadius(8)
-        .shadow(color: Color.black.opacity(0.1), radius: 10, x: 0, y: 10)
+        .shadow(color: Color.black.opacity(0.2), radius: 10, x: 0, y: 10)
         .padding(.horizontal, 10)
         .padding(.bottom, 25)
         .gesture(

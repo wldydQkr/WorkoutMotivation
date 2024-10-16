@@ -26,13 +26,13 @@ struct IsLikedMotivationItemView: View {
                     
                     Spacer()
                     Image(systemName: viewModel.isLiked(motivation) ? "heart.fill" : "heart")
-                        .foregroundColor(CustomColor.SwiftUI.customBackgrond)
+                        .foregroundColor(viewModel.isLiked(motivation) ? .pink : CustomColor.SwiftUI.customBlack)
                         .padding(.leading)
                 }
             }
             .padding()
         }
-        .background(CustomColor.SwiftUI.customGreen3)
+        .background(CustomColor.SwiftUI.customBackgrond)
         .cornerRadius(8)
         .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 5)
         .padding(.horizontal, -8)

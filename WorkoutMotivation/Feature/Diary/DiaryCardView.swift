@@ -19,7 +19,7 @@ struct DiaryCardView: View {
                 ZStack {
                     // 기본 배경
                     Rectangle()
-                        .fill(Color.gray.opacity(0.3))
+                        .fill(Color.gray.opacity(0.2))
                         .frame(height: 200)
                         .cornerRadius(10)
                         .padding(.top, 8)
@@ -68,7 +68,7 @@ struct DiaryCardView: View {
             .padding(.bottom, 8)
             
         }
-        .background(CustomColor.SwiftUI.customGreen3)
+        .background(CustomColor.SwiftUI.customBackgrond)
         .cornerRadius(8)
         .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 5)
         .padding(.horizontal, 12)  // 양옆 간격 8 적용

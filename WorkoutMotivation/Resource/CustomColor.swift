@@ -31,6 +31,7 @@ extension CustomColor {
         static let customGreen: Color = .init("customGreen")
         static let customGreen2: Color = .init("customGreen2")
         static let customGreen3: Color = .init("customGreen3")
+        static let customGreen4: Color = .init("customGreen4")
         static let customWhite: Color = .init("customWhite")
         static let customBlack: Color = .init("customBlack")
         static let customBlack2: Color = .init("customBlack2")

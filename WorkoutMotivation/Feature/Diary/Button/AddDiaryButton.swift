@@ -20,7 +20,7 @@ struct AddDiaryButton: View {
                         .font(.title)
                         .foregroundColor(CustomColor.SwiftUI.customBlack)
                         .padding()
-                        .background(CustomColor.SwiftUI.customGreen2)
+                        .background(CustomColor.SwiftUI.customGreen)
                         .clipShape(Circle())
                         .shadow(radius: 10)
                         .padding()

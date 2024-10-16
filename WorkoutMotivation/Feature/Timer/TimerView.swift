@@ -130,7 +130,7 @@ struct TimerView: View {
                 .frame(width: 140, height: 60)
                 .font(.system(size: 18, weight: .bold))
                 .foregroundColor(CustomColor.SwiftUI.customBlack)
-                .background(CustomColor.SwiftUI.customGreen3)
+                .background(CustomColor.SwiftUI.customGreen)
                 .cornerRadius(40)
         }
       )
@@ -186,7 +186,7 @@ struct TimerView: View {
                 .padding(.horizontal, 22)
                 .background(
                   Circle()
-                    .fill(CustomColor.SwiftUI.customGreen3)
+                    .fill(CustomColor.SwiftUI.customGreen)
                 )
             }
           )
@@ -205,7 +205,7 @@ struct TimerView: View {
                 .padding(.horizontal, 7)
                 .background(
                   Circle()
-                    .fill(CustomColor.SwiftUI.customGreen3)
+                    .fill(CustomColor.SwiftUI.customGreen)
                 )
             }
           )

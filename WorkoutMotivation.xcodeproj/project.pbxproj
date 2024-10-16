@@ -471,6 +471,7 @@
 				C0DA0A262CB2C91D00804BC1 /* Header */,
 				C08DC2FD2C0B62EF00CCB2BE /* Onboarding */,
 				C08DC31D2C0CA5C700CCB2BE /* Home */,
+				C08DC3182C0CA0FE00CCB2BE /* HomeViewModel.swift */,
 				C08DC31C2C0CA51600CCB2BE /* Motivation */,
 				C04405282C120DC600E4C764 /* Like */,
 				C04405302C12B5BF00E4C764 /* Timer */,
@@ -549,7 +550,6 @@
 			isa = PBXGroup;
 			children = (
 				C08DC30E2C0B671400CCB2BE /* HomeView.swift */,
-				C08DC3182C0CA0FE00CCB2BE /* HomeViewModel.swift */,
 				C037DD262C7EEE3100C4EDF1 /* CustomTabBar.swift */,
 				C037DD282C81D64C00C4EDF1 /* TabItem.swift */,
 			);

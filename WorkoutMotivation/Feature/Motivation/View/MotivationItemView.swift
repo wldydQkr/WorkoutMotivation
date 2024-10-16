@@ -18,7 +18,7 @@ struct MotivationItemView: View {
             VStack {
                 ZStack(alignment: .topLeading) {
                     Rectangle()
-                        .fill(CustomColor.SwiftUI.customGreen3)
+                        .fill(CustomColor.SwiftUI.customBackgrond)
                         .frame(height: calculateHeightForText(motivation.title))
                     
                     Text(motivation.title)
@@ -36,19 +36,19 @@ struct MotivationItemView: View {
                             .resizable()
                             .aspectRatio(contentMode: .fit)
                             .frame(width: 20, height: 20)
-                            .foregroundColor(viewModel.isLiked(motivation) ? CustomColor.SwiftUI.customGreen : CustomColor.SwiftUI.customBlack)
+                            .foregroundColor(viewModel.isLiked(motivation) ? .pink : CustomColor.SwiftUI.customGreen3)
                             .padding(.leading)
                     }
                     Spacer()
                     Text(motivation.name)
                         .fontWeight(.regular)
                         .lineLimit(1)
-                        .foregroundStyle(CustomColor.SwiftUI.customBlack)
+                        .foregroundStyle(CustomColor.SwiftUI.customBlack2)
                         .padding(.trailing)
                 }
                 Spacer()
             }
-            .background(CustomColor.SwiftUI.customGreen3)
+            .background(CustomColor.SwiftUI.customBackgrond)
             .cornerRadius(8)
             .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 5)
             .contextMenu {

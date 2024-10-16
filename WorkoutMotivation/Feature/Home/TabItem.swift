@@ -24,7 +24,7 @@ struct TabItem: View {
                 .frame(width: selectedTab == tab ? 58 : 35, height: selectedTab == tab ? 58 : 35)
                 .background {
                     if selectedTab == tab {
-                        Circle().fill(CustomColor.SwiftUI.customGreen2.gradient)
+                        Circle().fill(CustomColor.SwiftUI.customGreen.gradient)
                             .matchedGeometryEffect(id: "ACTIVETAB", in: animation)
                     }
                 }

@@ -22,7 +22,8 @@ struct IsLikedView: View {
             VStack {
                 if headerVisible {
                     CustomHeaderView(title: "좋아하는 명언") {
-                        DelButton()
+//                        DelButton()
+                        EmptyView()
                     }
                         .transition(.move(edge: .top))
                 }
@@ -93,9 +94,9 @@ struct IsLikedView: View {
                 }
                 .listStyle(PlainListStyle())
                 .background(CustomColor.SwiftUI.customBackgrond)
-                .refreshable {
-                    await motivationViewModel.reload() // 새로고침 시 호출할 함수
-                }
+//                .refreshable {
+//                    await motivationViewModel.reload() // 새로고침 시 호출할 함수
+//                }
             }
             .background(CustomColor.SwiftUI.customBackgrond)
             .navigationBarHidden(true) // 네비게이션 바 숨기기

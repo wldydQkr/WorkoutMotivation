@@ -27,6 +27,7 @@ struct CustomHeaderView<Content: View>: View {
                         buttonImage
                             .resizable()
                             .frame(width: 30, height: 30)
+                            .foregroundStyle(CustomColor.SwiftUI.customBlack)
                     } else if let buttonTitle = buttonTitle {
                         // 텍스트 버튼
                         Text(buttonTitle)
@@ -38,6 +39,7 @@ struct CustomHeaderView<Content: View>: View {
                 }
             } else {
                 buttonContent() // 커스텀 버튼 뷰를 표시
+                    .foregroundStyle(CustomColor.SwiftUI.customBlack)
             }
         }
         .padding()
