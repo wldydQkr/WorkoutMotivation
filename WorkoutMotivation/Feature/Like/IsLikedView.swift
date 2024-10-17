@@ -95,11 +95,11 @@ struct IsLikedView: View {
                 .listStyle(PlainListStyle())
                 .background(CustomColor.SwiftUI.customBackgrond)
 //                .refreshable {
-//                    await motivationViewModel.reload() // 새로고침 시 호출할 함수
+//                    await motivationViewModel.reload()
 //                }
             }
             .background(CustomColor.SwiftUI.customBackgrond)
-            .navigationBarHidden(true) // 네비게이션 바 숨기기
+            .navigationBarHidden(true)
             .onAppear {
                 motivationViewModel.loadLikedMotivations() // 좋아요 상태 갱신
             }

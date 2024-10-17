@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Diary: Identifiable {
+struct Diary: Identifiable, Equatable {
     let id: Int
     var title: String
     var content: String

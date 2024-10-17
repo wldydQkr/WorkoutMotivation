@@ -19,12 +19,14 @@ struct TabItem: View {
         VStack {
             Image(systemName: tab.systemImage)
 //                .resizable()
+//                .aspectRatio(contentMode: .fit)
                 .font(.title2)
                 .foregroundColor(selectedTab == tab ? CustomColor.SwiftUI.customBlack : inactiveTint)
                 .frame(width: selectedTab == tab ? 58 : 35, height: selectedTab == tab ? 58 : 35)
+//                .padding(50)
                 .background {
                     if selectedTab == tab {
-                        Circle().fill(CustomColor.SwiftUI.customGreen.gradient)
+                        Circle().fill(CustomColor.SwiftUI.customBackgrond.gradient)
                             .matchedGeometryEffect(id: "ACTIVETAB", in: animation)
                     }
                 }

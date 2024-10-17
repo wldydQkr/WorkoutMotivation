@@ -50,10 +50,10 @@ class DiaryViewModel: ObservableObject {
             diary.title = title
             diary.content = content
             diary.image = image // 이미지가 선택되지 않으면 nil이 전달될 수 있음
-//            diary.date = Date()
             
             saveContext()
             fetchDiaries() // 데이터 업데이트 후 fetch
+            objectWillChange.send() // 상태 변경 알림
         }
     }
     
@@ -62,16 +62,18 @@ class DiaryViewModel: ObservableObject {
             context.delete(diary)
             saveContext()
             fetchDiaries() // 삭제 후 fetch
+            objectWillChange.send() // 상태 변경 알림
         }
     }
     
-    private func fetchDiaries() {
+    func fetchDiaries() {
         let fetchRequest: NSFetchRequest<DiaryEntity> = DiaryEntity.fetchRequest()
         
         do {
             let fetchedDiaries = try context.fetch(fetchRequest)
             // Diary 객체 생성 시 이미지 포함
             self.diaries = fetchedDiaries.map { Diary(id: Int($0.id), title: $0.title ?? "", content: $0.content ?? "", image: $0.image ?? Data(), date: $0.date ?? Date()) }
+            objectWillChange.send() // 변경 사항 알림 트리거
         } catch {
             print("Failed to fetch diaries: \(error)")
         }
@@ -88,5 +90,21 @@ class DiaryViewModel: ObservableObject {
     func reload() async {
         fetchDiaries() // 데이터를 새로 고침
         objectWillChange.send() // 데이터 변경 알림
+    }
+    
+    func navigateToDetailView(for diary: Diary) {
+        guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+              let window = windowScene.windows.first,
+              let rootViewController = window.rootViewController else { return }
+        
+        let vc = DiaryDetailView(viewModel: DiaryViewModel(), diary: diary)
+        let hostingController = UIHostingController(rootView: vc)
+        rootViewController.present(hostingController, animated: true, completion: nil)
+    }
+    
+    func deleteItems(at offsets: IndexSet) {
+        offsets.map { self.diaries[$0] }.forEach { diary in
+            self.deleteDiary(id: Int64(diary.id))
+        }
     }
 }

@@ -10,6 +10,8 @@ struct DiaryView: View {
     @StateObject private var viewModel: DiaryViewModel
     @State private var isEditing = false
     @State private var selectedDiaries = Set<Int>()
+    @State private var selectedDiary: Diary? = nil
+    @State private var isDetailViewPresented = false
     
     init() {
         _viewModel = StateObject(wrappedValue: DiaryViewModel(context: PersistenceController.shared.viewContext))
@@ -20,12 +22,12 @@ struct DiaryView: View {
             ZStack {
                 VStack {
                     CustomHeaderView(title: "나의 다짐") {
-                        EmptyView()
+                        EmptyView() // 헤더 설정
                     }
                     
                     ScrollView {
                         if viewModel.diaries.isEmpty {
-                            EmptyView()
+                            EmptyView() // 다이어리가 없을 때
                         } else {
                             ForEach(viewModel.diaries.sorted(by: { $0.date > $1.date })) { diary in
                                 DiaryCardView(
@@ -34,42 +36,34 @@ struct DiaryView: View {
                                     selectedDiaries: $selectedDiaries,
                                     onDelete: {
                                         viewModel.deleteDiary(id: Int64(diary.id))
+                                        viewModel.fetchDiaries() // 삭제 후 리스트 갱신
                                     }
                                 )
                                 .contentShape(Rectangle()) // 전체 영역이 탭 가능하도록 설정
                                 .onTapGesture {
-                                    navigateToDetailView(for: diary)
+                                    viewModel.navigateToDetailView(for: diary)
                                 }
                                 .listRowSeparator(.hidden)
                             }
-                            .onDelete(perform: deleteItems)
                         }
                     }
-                    
                 }
                 .background(CustomColor.SwiftUI.customBackgrond)
                 .navigationBarHidden(true)
+                .sheet(isPresented: $isDetailViewPresented, onDismiss: {
+                    // DetailView가 닫힐 때 데이터를 갱신
+                    viewModel.fetchDiaries()
+                }) {
+                    if let selectedDiary = selectedDiary {
+                        DiaryDetailView(viewModel: viewModel, diary: selectedDiary)
+                    }
+                }
                 
                 AddDiaryButton(viewModel: viewModel)
             }
-        }
-    }
-    
-    //TODO: ViewModel로 분리할 예정
-    private func navigateToDetailView(for diary: Diary) {
-        guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-              let window = windowScene.windows.first,
-              let rootViewController = window.rootViewController else { return }
-        
-        let vc = DiaryDetailView(viewModel: DiaryViewModel(), diary: diary)
-        let hostingController = UIHostingController(rootView: vc)
-        rootViewController.present(hostingController, animated: true, completion: nil)
-    }
-    
-    //TODO: ViewModel로 분리할 예정
-    private func deleteItems(at offsets: IndexSet) {
-        offsets.map { viewModel.diaries[$0] }.forEach { diary in
-            viewModel.deleteDiary(id: Int64(diary.id))
+            .onAppear {
+                viewModel.fetchDiaries() // 뷰가 나타날 때 다이어리 로드
+            }
         }
     }
 }

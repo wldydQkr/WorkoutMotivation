@@ -88,7 +88,7 @@ struct DiaryDetailView: View {
 
             Button("삭제") {
                 viewModel.deleteDiary(id: Int64(diary.id))
-                presentationMode.wrappedValue.dismiss()
+                presentationMode.wrappedValue.dismiss() // 삭제 후 화면 닫기
             }
             .foregroundColor(.red)
             .padding()

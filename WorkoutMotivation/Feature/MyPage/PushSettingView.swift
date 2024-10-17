@@ -27,14 +27,14 @@ struct PushSettingView: View {
                 }
                 .padding()
                 .onChange(of: pushSettingViewModel.isNotificationEnabled) { newValue in
-                    pushSettingViewModel.saveNotificationSetting(newValue) // 변경된 토글 상태를 저장
+                    pushSettingViewModel.saveNotificationSetting(newValue)
                 }
                 
                 // 알림이 켜져 있을 때만 간격 선택 가능
                 Stepper("간격: \(pushSettingViewModel.interval / 3600, specifier: "%.0f") 시간", value: $pushSettingViewModel.interval, in: 3600...(24 * 3600), step: 3600)
                     .padding()
-                    .disabled(!pushSettingViewModel.isNotificationEnabled) // 알림 꺼져 있으면 비활성화
-
+                    .disabled(!pushSettingViewModel.isNotificationEnabled)
+                
                 // 알림 설정 버튼
                 Button(action: {
                     if pushSettingViewModel.isNotificationEnabled {
@@ -51,7 +51,8 @@ struct PushSettingView: View {
                         .cornerRadius(10)
                 }
                 .padding()
-                .disabled(!pushSettingViewModel.isNotificationEnabled) // 알림이 꺼져 있으면 버튼도 비활성화
+                // 버튼 활성화: 설정이 변경되었을 때만 활성화
+                .disabled(!pushSettingViewModel.hasSettingsChanged())
                 
                 Spacer()
                 
@@ -69,7 +70,6 @@ struct PushSettingView: View {
         .navigationBarHidden(true)
     }
 }
-
 #Preview {
     PushSettingView()
 }
