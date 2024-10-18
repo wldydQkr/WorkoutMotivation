@@ -28,7 +28,7 @@ struct DiaryCardView: View {
                     // 다이어리 이미지
                     Image(uiImage: uiImage)
                         .resizable()
-                        .scaledToFit()
+                        .scaledToFill()
                         .frame(height: 200)
                         .cornerRadius(10)
                         .clipped() // 이미지가 frame을 넘으면 잘라냄

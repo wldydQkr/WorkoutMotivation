@@ -11,15 +11,14 @@ import UserNotifications
 final class PushSettingViewModel: ObservableObject {
     @Published var selectedTime: Date = Date()
     @Published var interval: TimeInterval = 3600 // 기본 1시간
-    @Published var isNotificationEnabled: Bool = false
+    @Published var isNotificationEnabled: Bool = false // 기본값은 false로 설정
     @Published var isNotificationScheduled: Bool = false
     
-    // 초기 설정값 저장
-    private var initialNotificationEnabled: Bool = false
-    private var initialInterval: TimeInterval = 3600
+    private var motivationViewModel: MotivationViewModel // MotivationViewModel 참조 추가
     
-    init() {
-        loadSettings()
+    init(motivationViewModel: MotivationViewModel) { // 초기화 시 MotivationViewModel 주입
+        self.motivationViewModel = motivationViewModel
+        loadSettings() // 앱 실행 시 저장된 알림 설정을 불러옴
         requestNotificationPermission()
     }
     
@@ -30,10 +29,7 @@ final class PushSettingViewModel: ObservableObject {
                 if let error = error {
                     print("알림 권한 요청 중 오류 발생: \(error.localizedDescription)")
                 } else {
-                    self.isNotificationEnabled = granted && self.loadNotificationSetting()
-                    // 초기 상태 저장
-                    self.initialNotificationEnabled = self.isNotificationEnabled
-                    self.initialInterval = self.interval
+                    self.isNotificationEnabled = granted && self.loadNotificationSetting() // 저장된 알림 설정을 반영
                 }
             }
         }
@@ -51,39 +47,29 @@ final class PushSettingViewModel: ObservableObject {
     
     // 알림 상태 및 기타 설정을 불러옴
     func loadSettings() {
-        isNotificationEnabled = loadNotificationSetting()
-        // 초기 상태 저장
-        initialNotificationEnabled = isNotificationEnabled
-        initialInterval = interval
+        isNotificationEnabled = loadNotificationSetting() // 알림 활성화 상태 불러오기
     }
     
-    // 기존 상태와 현재 상태 비교
-    func hasSettingsChanged() -> Bool {
-        return isNotificationEnabled != initialNotificationEnabled || interval != initialInterval
-    }
-    
-    // 푸시 알림 예약
-    func scheduleRandomNotification(with motivations: [Motivation]) {
+    // 랜덤 알림 예약
+    func scheduleRandomNotification() {
         guard isNotificationEnabled else {
             print("알림 권한이 없습니다.")
             return
         }
         
-        guard !motivations.isEmpty else {
+        guard !motivationViewModel.motivations.isEmpty else {
             print("모티베이션 목록이 비어 있습니다.")
             return
         }
         
-        clearExistingNotifications() // 기존 알림을 먼저 삭제
-        
-        let randomMotivation = motivations.randomElement()!
+        let randomMotivation = motivationViewModel.motivations.randomElement()!
         
         let content = UNMutableNotificationContent()
         content.title = "WorkoutMotivation"
         content.body = "\(randomMotivation.title) \n- \(randomMotivation.name)"
         content.sound = .default
         
-        // 알림 트리거: 반복하지 않고 한 번만 실행되도록 설정
+        // 알림 트리거 설정 (선택한 시간 간격)
         let trigger = UNTimeIntervalNotificationTrigger(timeInterval: interval, repeats: false)
         
         let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
@@ -94,12 +80,7 @@ final class PushSettingViewModel: ObservableObject {
                     print("알림 예약 중 오류 발생: \(error.localizedDescription)")
                 } else {
                     self.isNotificationScheduled = true
-                    print("알림이 예약되었습니다. \(self.interval)초 후에 실행됩니다.")
-                    
-                    // 알림이 실행된 후 새로운 알림 예약 (다음 알림 예약)
-                    DispatchQueue.main.asyncAfter(deadline: .now() + self.interval) {
-                        self.scheduleRandomNotification(with: motivations)
-                    }
+                    print("알림이 예약되었습니다.")
                 }
             }
         }
@@ -108,6 +89,21 @@ final class PushSettingViewModel: ObservableObject {
     // 기존 알림 삭제
     func clearExistingNotifications() {
         UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
+    }
+    
+    // 백그라운드 작업 실행 시 알림 예약
+    func scheduleNextNotification() {
+        // 1. 기존 알림 삭제
+        clearExistingNotifications()
+
+        // 2. 새로운 알림 예약
+        scheduleRandomNotification()
+    }
+
+    // 알림 설정 변경 확인
+    func hasSettingsChanged() -> Bool {
+        let savedSetting = loadNotificationSetting()
+        return savedSetting != isNotificationEnabled || (interval != 3600)
     }
 }
     

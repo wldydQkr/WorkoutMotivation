@@ -9,7 +9,14 @@ import SwiftUI
 
 struct PushSettingView: View {
     @StateObject private var motivationViewModel = MotivationViewModel()
-    @StateObject private var pushSettingViewModel = PushSettingViewModel()
+    @StateObject private var pushSettingViewModel: PushSettingViewModel
+    
+    // 초기화 시 MotivationViewModel을 PushSettingViewModel에 주입
+    init() {
+        let motivationViewModel = MotivationViewModel()
+        _pushSettingViewModel = StateObject(wrappedValue: PushSettingViewModel(motivationViewModel: motivationViewModel))
+    }
+    
     @Environment(\.presentationMode) var presentationMode
     
     var body: some View {
@@ -38,9 +45,9 @@ struct PushSettingView: View {
                 // 알림 설정 버튼
                 Button(action: {
                     if pushSettingViewModel.isNotificationEnabled {
-                        pushSettingViewModel.scheduleRandomNotification(with: motivationViewModel.motivations)
+                        pushSettingViewModel.scheduleNextNotification() // 새로운 알림 예약
                     } else {
-                        pushSettingViewModel.clearExistingNotifications()
+                        pushSettingViewModel.clearExistingNotifications() // 기존 알림 삭제
                     }
                     presentationMode.wrappedValue.dismiss()
                 }) {
@@ -51,8 +58,7 @@ struct PushSettingView: View {
                         .cornerRadius(10)
                 }
                 .padding()
-                // 버튼 활성화: 설정이 변경되었을 때만 활성화
-                .disabled(!pushSettingViewModel.hasSettingsChanged())
+                .disabled(!pushSettingViewModel.hasSettingsChanged()) // 설정이 변경된 경우에만 활성화
                 
                 Spacer()
                 
@@ -62,7 +68,7 @@ struct PushSettingView: View {
             }
             .background(CustomColor.SwiftUI.customBackgrond)
             .onAppear {
-                // 알림 설정 상태 로드
+                // 알림 설정 상태 및 모티베이션 로드
                 pushSettingViewModel.loadSettings()
                 motivationViewModel.loadMotivations()
             }
@@ -70,6 +76,7 @@ struct PushSettingView: View {
         .navigationBarHidden(true)
     }
 }
+
 #Preview {
     PushSettingView()
 }
