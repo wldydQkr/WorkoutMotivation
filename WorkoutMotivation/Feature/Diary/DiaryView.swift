@@ -22,7 +22,7 @@ struct DiaryView: View {
             ZStack {
                 VStack {
                     CustomHeaderView(title: "나의 다짐") {
-                        EmptyView() // 헤더 설정
+                        EmptyView()
                     }
                     
                     ScrollView {
@@ -31,7 +31,7 @@ struct DiaryView: View {
                         } else {
                             ForEach(viewModel.diaries.sorted(by: { $0.date > $1.date })) { diary in
                                 DiaryCardView(
-                                    diary: diary,
+                                    diary: diary, viewModel: viewModel,
                                     isEditing: $isEditing,
                                     selectedDiaries: $selectedDiaries,
                                     onDelete: {

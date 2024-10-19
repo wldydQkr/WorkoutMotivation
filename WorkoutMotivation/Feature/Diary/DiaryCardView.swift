@@ -9,9 +9,11 @@ import SwiftUI
 
 struct DiaryCardView: View {
     var diary: Diary
+    @StateObject var viewModel: DiaryViewModel
     @Binding var isEditing: Bool
     @Binding var selectedDiaries: Set<Int>
     var onDelete: () -> Void
+    @State private var showingDeleteAlert = false
     
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
@@ -22,8 +24,6 @@ struct DiaryCardView: View {
                         .fill(Color.gray.opacity(0.2))
                         .frame(height: 200)
                         .cornerRadius(10)
-                        .padding(.top, 8)
-                        .padding(.horizontal, 8)
                     
                     // 다이어리 이미지
                     Image(uiImage: uiImage)
@@ -31,9 +31,8 @@ struct DiaryCardView: View {
                         .scaledToFill()
                         .frame(height: 200)
                         .cornerRadius(10)
-                        .clipped() // 이미지가 frame을 넘으면 잘라냄
-                        .padding(.top, 8)
-                        .padding(.horizontal, 8)
+                        .clipped()
+
                 }
             } else { // 이미지가 없을 때 Spacer로 양 옆 간격을 유지
                 Rectangle()
@@ -59,11 +58,6 @@ struct DiaryCardView: View {
                 
                 Spacer() // 오른쪽 정렬을 위해 Spacer 사용
                 
-                Text(diary.date.formatted())
-                    .font(.system(size: 14))
-                    .foregroundColor(CustomColor.SwiftUI.customBlack3)
-                    .padding(.trailing, 8)
-                    .frame(maxHeight: .infinity, alignment: .bottom) // 높이 맞춤
             }
             .padding(.bottom, 8)
             
@@ -71,9 +65,44 @@ struct DiaryCardView: View {
         .background(CustomColor.SwiftUI.customBackgrond)
         .cornerRadius(8)
         .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 5)
-        .padding(.horizontal, 12)  // 양옆 간격 8 적용
+        .padding(.horizontal, 12)
         .padding(.vertical, 4)
+        HStack {
+            VStack(alignment: .leading) {
+                Text(diary.date.formatted())
+                    .font(.system(size: 14))
+                    .foregroundColor(CustomColor.SwiftUI.customBlack3)
+                    .padding(.top, 0.5)
+                    .padding(.bottom, 2)
+                    .padding(.leading, 16)
+                    .frame(maxHeight: .infinity, alignment: .bottom)
+            }
+            
+            Spacer()
+
+            Button(action: {
+                showingDeleteAlert = true
+                print("Ellipsis button tapped")
+            }) {
+                Image(systemName: "ellipsis")
+                    .padding(.top, 0.5)
+                    .padding(.bottom, 2)
+                    .padding(.trailing, 16)
+                    .foregroundColor(CustomColor.SwiftUI.customBlack3)
+            }
+            .alert("삭제하시겠습니까?", isPresented: $showingDeleteAlert) {
+                Button("취소", role: .cancel) {
+                    // 취소 버튼 클릭 시 동작할 코드
+                }
+                Button("삭제", role: .destructive) {
+                    viewModel.deleteDiary(id: Int64(diary.id))
+                    print("삭제되었습니다.")
+                }
+            }
+        }
+        
     }
+    
 }
 
 #Preview {
@@ -88,7 +117,7 @@ struct DiaryCardView: View {
     )
     
     DiaryCardView(
-        diary: sampleDiary,
+        diary: sampleDiary, viewModel: DiaryViewModel(),
         isEditing: $isEditing,
         selectedDiaries: $selectedDiaries,
         onDelete: {
