@@ -28,7 +28,7 @@ struct IsLikedView: View {
                         .transition(.move(edge: .top))
                 }
 
-                List {
+                List() {
                     //MARK: 스크롤 시 헤더 숨기기
 //                    GeometryReader { geometry in
 //                        Color.clear // 보이지 않게 처리
@@ -74,9 +74,7 @@ struct IsLikedView: View {
                         ProgressView("로딩 중...")
                             .padding()
                     } else if motivationViewModel.likedMotivations.isEmpty {
-                        Text("아직 좋아요를 누른 항목이 없습니다.")
-                            .foregroundColor(.gray)
-                            .padding()
+                        EmptyIsLikedView()
                     } else {
                         ForEach(motivationViewModel.motivations.filter { motivationViewModel.isLiked($0) }) { motivation in
                             IsLikedMotivationItemView(
@@ -87,7 +85,7 @@ struct IsLikedView: View {
                             .onTapGesture {
                                 navigateToDetailView(for: motivation)
                             }
-                            .listRowSeparator(.hidden) // 구분선 숨기기
+                            .listRowSeparator(.hidden)
                         }
                         .onDelete(perform: deleteItems)
                     }
@@ -99,6 +97,7 @@ struct IsLikedView: View {
 //                }
             }
             .background(CustomColor.SwiftUI.customBackgrond)
+            .scrollIndicators(.hidden)
             .navigationBarHidden(true)
             .onAppear {
                 motivationViewModel.loadLikedMotivations() // 좋아요 상태 갱신

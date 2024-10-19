@@ -7,6 +7,7 @@
 
 import Foundation
 import UserNotifications
+import BackgroundTasks
 
 final class PushSettingViewModel: ObservableObject {
     @Published var selectedTime: Date = Date()
@@ -50,30 +51,46 @@ final class PushSettingViewModel: ObservableObject {
         isNotificationEnabled = loadNotificationSetting() // 알림 활성화 상태 불러오기
     }
     
+    // 백그라운드 작업 예약 함수 (AppDelegate에서 호출되는 것과 동일)
+    func scheduleNextBackgroundTask() {
+        let request = BGProcessingTaskRequest(identifier: "co.kr.jiyongppark.WorkoutMotivation.notification")
+        request.requiresNetworkConnectivity = false // 네트워크 필요 없음
+
+        // PushSettingViewModel의 interval 값을 사용하여 예약 시간 설정
+        let intervalInSeconds = self.interval
+        request.earliestBeginDate = Date(timeIntervalSinceNow: intervalInSeconds)
+
+        do {
+            try BGTaskScheduler.shared.submit(request)
+        } catch {
+            print("백그라운드 작업 예약 실패: \(error)")
+        }
+    }
+    
     // 랜덤 알림 예약
     func scheduleRandomNotification() {
         guard isNotificationEnabled else {
             print("알림 권한이 없습니다.")
             return
         }
-        
+
         guard !motivationViewModel.motivations.isEmpty else {
             print("모티베이션 목록이 비어 있습니다.")
             return
         }
-        
+
         let randomMotivation = motivationViewModel.motivations.randomElement()!
-        
+
         let content = UNMutableNotificationContent()
         content.title = "WorkoutMotivation"
         content.body = "\(randomMotivation.title) \n- \(randomMotivation.name)"
         content.sound = .default
-        
+
         // 알림 트리거 설정 (선택한 시간 간격)
-        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: interval, repeats: true)
-        
+        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: interval, repeats: false) // repeats: false로 수정
+
         let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
-        
+
         UNUserNotificationCenter.current().add(request) { error in
             DispatchQueue.main.async {
                 if let error = error {
@@ -81,6 +98,9 @@ final class PushSettingViewModel: ObservableObject {
                 } else {
                     self.isNotificationScheduled = true
                     print("알림이 예약되었습니다.")
+                    
+                    // 다음 백그라운드 작업 예약
+                    self.scheduleNextBackgroundTask()  // 알림을 받을 때마다 다음 알림 예약
                 }
             }
         }
