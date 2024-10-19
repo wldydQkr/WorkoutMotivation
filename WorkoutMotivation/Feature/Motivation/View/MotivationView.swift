@@ -36,7 +36,6 @@ struct MotivationView: View {
                     .transition(.move(edge: .top))
                 }
                 
-                // MotivationCardView를 기본으로 보여주고, MasonryVStack은 조건에 따라 토글
                 if showMotivationCardView {
                     MotivationCardView(
                         motivations: viewModel.motivations,

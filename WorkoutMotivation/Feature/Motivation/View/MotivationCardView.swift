@@ -13,9 +13,12 @@ struct MotivationCardView: View {
     @ObservedObject var viewModel: MotivationViewModel
     @Binding var showMotivationCardView: Bool
 
-    @State private var currentIndex: Int = 0
+    @State private var currentIndex: Int = Int.random(in: 0..<1)
+    @State private var indexHistory: [Int] = [] // 인덱스 히스토리
     @State private var showTip: Bool = true
     @State private var cardTransition: AnyTransition = .identity // 전환 애니메이션 상태
+    @State private var isAnimating: Bool = false // 애니메이션 상태
+    @State private var showParticles: Bool = false // 폭죽 애니메이션 상태
 
     let inlineFavoriteTip = AddToFavoriteTip()
 
@@ -58,27 +61,48 @@ struct MotivationCardView: View {
 
                 Spacer()
 
-                HStack {
-                    Button(action: {
-                        viewModel.toggleLike(for: motivations[currentIndex])
-                    }) {
-                        Image(systemName: viewModel.isLiked(motivations[currentIndex]) ? "heart.fill" : "heart")
-                            .resizable()
-                            .frame(width: 30, height: 30)
-                            .foregroundColor(viewModel.isLiked(motivations[currentIndex]) ? .pink : CustomColor.SwiftUI.customBlack)
+                ZStack {
+                    // 폭죽 애니메이션을 위한 파티클 뷰
+                    if showParticles {
+                        ParticleEffect()
+                            .frame(width: 100, height: 100)
+                            .offset(x: 0, y: -50)
+                            .animation(.easeOut(duration: 0.5))
                     }
-                    .padding()
 
-                    Button(action: {
-                        
-                    }) {
-                        Image("paper-plane")
-                            .resizable()
-                            .frame(width: 30, height: 30)
-                            .foregroundColor(.blue)
+                    HStack {
+                        Button(action: {
+                            withAnimation(.easeInOut(duration: 0.5)) {
+                                viewModel.toggleLike(for: motivations[currentIndex])
+                                isAnimating = true
+                                showParticles = true
+                            }
+                            // 애니메이션이 끝난 후 리셋
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                                isAnimating = false
+                                showParticles = false
+                            }
+                        }) {
+                            Image(systemName: viewModel.isLiked(motivations[currentIndex]) ? "heart.fill" : "heart")
+                                .resizable()
+                                .frame(width: 30, height: 30)
+                                .foregroundColor(viewModel.isLiked(motivations[currentIndex]) ? .pink : CustomColor.SwiftUI.customBlack)
+                                .scaleEffect(isAnimating ? 1.3 : 1.0) // 크기 변화 애니메이션
+                                .opacity(isAnimating ? 0.7 : 1.0) // 투명도 변화 애니메이션
+                        }
+                        .padding()
+
+                        Button(action: {
+                            
+                        }) {
+                            Image("paper-plane")
+                                .resizable()
+                                .frame(width: 30, height: 30)
+                                .foregroundColor(.blue)
+                        }
                     }
+                    .padding(.bottom, 50)
                 }
-                .padding(.bottom, 50)
             } else {
                 Text("동기부여 내용이 없습니다.")
                     .font(.title)
@@ -96,18 +120,20 @@ struct MotivationCardView: View {
                 .onEnded { value in
                     if !motivations.isEmpty {
                         if abs(value.translation.height) > abs(value.translation.width) {
-                            // 상하 스와이프만 감지
                             if value.translation.height < 0 {
-                                // 스와이프 업: 다음 카드로 이동
+                                // 스와이프 업: 다음 카드로 이동 (랜덤)
                                 withAnimation {
                                     cardTransition = .asymmetric(insertion: .move(edge: .bottom), removal: .move(edge: .top))
-                                    currentIndex = (currentIndex + 1) % motivations.count
+                                    indexHistory.append(currentIndex) // 현재 인덱스를 히스토리에 추가
+                                    currentIndex = Int.random(in: 0..<motivations.count)
                                 }
                             } else if value.translation.height > 0 {
-                                // 스와이프 다운: 이전 카드로 이동
-                                withAnimation {
-                                    cardTransition = .asymmetric(insertion: .move(edge: .top), removal: .move(edge: .bottom))
-                                    currentIndex = (currentIndex - 1 + motivations.count) % motivations.count
+                                // 스와이프 다운: 이전 카드로 이동 (히스토리에서)
+                                if let previousIndex = indexHistory.popLast() {
+                                    withAnimation {
+                                        cardTransition = .asymmetric(insertion: .move(edge: .top), removal: .move(edge: .bottom))
+                                        currentIndex = previousIndex // 히스토리에서 이전 인덱스 사용
+                                    }
                                 }
                             }
                         }
@@ -116,7 +142,6 @@ struct MotivationCardView: View {
         )
     }
 }
-
 
 struct AddToFavoriteTip: Tip {
     var title: Text {
@@ -130,7 +155,7 @@ struct AddToFavoriteTip: Tip {
     }
 }
 
-//MARK: CustomView
+//MARK: CustomView UIKit
 //struct MotivationCardView: View {
 //    @State private var quotes: [String] = [
 //        "The best way to get started is to quit talking and begin doing.",
@@ -138,12 +163,12 @@ struct AddToFavoriteTip: Tip {
 //        "Don't let yesterday take up too much of today.",
 //        "You learn more from failure than from success. Don’t let it stop you. Failure builds character."
 //    ]
-//    
+//
 //    @State private var currentIndex: Int = 0
 //    @State private var isFavorited: Bool = false
 //    @State private var showTipView: Bool = true // 팁 뷰의 표시 상태
 //    @Binding var showMotivationCardView: Bool
-//    
+//
 //    var body: some View {
 //        VStack {
 //            // 팁 뷰
@@ -164,15 +189,15 @@ struct AddToFavoriteTip: Tip {
 //                        }
 //                    }
 //            }
-//            
+//
 //            Text(quotes[currentIndex])
 //                .font(.title)
 //                .fontWeight(.bold)
 //                .multilineTextAlignment(.center)
 //                .padding()
-//            
+//
 //            Spacer()
-//            
+//
 //            HStack {
 //                Button(action: {
 //                    isFavorited.toggle()
@@ -181,9 +206,9 @@ struct AddToFavoriteTip: Tip {
 //                        .foregroundColor(isFavorited ? .red : .gray)
 //                        .font(.title)
 //                }
-//                
+//
 //                Spacer()
-//                
+//
 //                Button(action: {
 //                    shareQuote(quote: quotes[currentIndex])
 //                }) {
@@ -217,10 +242,10 @@ struct AddToFavoriteTip: Tip {
 //                }
 //        )
 //    }
-//    
+//
 //    func shareQuote(quote: String) {
 //        let activityController = UIActivityViewController(activityItems: [quote], applicationActivities: nil)
-//        
+//
 //        // UIKit과 연동
 //        if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene {
 //            windowScene.windows.first?.rootViewController?.present(activityController, animated: true, completion: nil)
@@ -232,7 +257,7 @@ struct AddToFavoriteTip: Tip {
 //    static var previews: some View {
 //        // 임시 Motivation 인스턴스 생성
 //        let sampleMotivation = Motivation(id: 1, title: "Stay Positive!", name: "John Doe")
-//        
+//
 //        // MotivationCardView 프리뷰
 //        MotivationCardView(motivations: sampleMotivation, showMotivationCardView: .constant(true))
 //            .previewLayout(.sizeThatFits) // 프리뷰 크기 조정

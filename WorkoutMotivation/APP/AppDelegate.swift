@@ -15,7 +15,6 @@ class AppDelegate: NSObject, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
         UNUserNotificationCenter.current().delegate = notificationDelegate
         
-        // PushSettingViewModel 초기화
         pushSettingViewModel = PushSettingViewModel(motivationViewModel: MotivationViewModel())
         
         // Background task 등록
@@ -47,8 +46,8 @@ class AppDelegate: NSObject, UIApplicationDelegate {
         request.requiresNetworkConnectivity = false // 네트워크 필요 없음
         
         // PushSettingViewModel의 interval 값을 사용하여 예약 시간 설정
-        let intervalInSeconds = pushSettingViewModel.interval // pushSettingViewModel에서 가져온 interval
-        request.earliestBeginDate = Date(timeIntervalSinceNow: intervalInSeconds) // 설정된 간격으로 예약
+        let intervalInSeconds = pushSettingViewModel.interval
+        request.earliestBeginDate = Date(timeIntervalSinceNow: intervalInSeconds)
         
         do {
             try BGTaskScheduler.shared.submit(request)

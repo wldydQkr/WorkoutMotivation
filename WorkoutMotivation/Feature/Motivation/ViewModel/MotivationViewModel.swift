@@ -57,6 +57,11 @@ final class MotivationViewModel: ObservableObject {
         }
     }
     
+    // 랜덤으로 Motivation을 반환하는 함수 추가
+    func getRandomMotivation() -> Motivation? {
+        return motivations.randomElement()
+    }
+
     func toggleLike(for motivation: Motivation) {
         if let index = likedMotivations.firstIndex(of: motivation.id) {
             likedMotivations.remove(at: index)
@@ -92,5 +97,4 @@ final class MotivationViewModel: ObservableObject {
         loadMotivations()
         objectWillChange.send() // 데이터 변경 알림
     }
-    
 }

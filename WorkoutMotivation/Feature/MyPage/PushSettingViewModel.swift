@@ -70,7 +70,7 @@ final class PushSettingViewModel: ObservableObject {
         content.sound = .default
         
         // 알림 트리거 설정 (선택한 시간 간격)
-        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: interval, repeats: false)
+        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: interval, repeats: true)
         
         let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
         
