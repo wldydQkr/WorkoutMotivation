@@ -4,7 +4,12 @@
 <dict>
 	<key>BGTaskSchedulerPermittedIdentifiers</key>
 	<array>
-		<string>co.kr.jiyongppark.WorkoutMotivation.notification</string>
+		<string>notification</string>
+	</array>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>processing</string>
+		<string>fetch</string>
 	</array>
 </dict>
 </plist>

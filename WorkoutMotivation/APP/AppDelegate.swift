@@ -17,14 +17,14 @@ class AppDelegate: NSObject, UIApplicationDelegate {
         
         pushSettingViewModel = PushSettingViewModel(motivationViewModel: MotivationViewModel())
         
-        // Background task 등록
-        BGTaskScheduler.shared.register(forTaskWithIdentifier: "co.kr.jiyongppark.WorkoutMotivation.notification", using: nil) { task in
-            // Background 작업을 실행
-            self.handleBackgroundTask(task: task as! BGProcessingTask)
-        }
-        
-        // 백그라운드 작업 예약
-        scheduleNextBackgroundTask()
+//        // Background task 등록
+//        BGTaskScheduler.shared.register(forTaskWithIdentifier: "notification", using: nil) { task in
+//            // Background 작업을 실행
+//            self.handleBackgroundTask(task: task as! BGProcessingTask)
+//        }
+//        
+//        // 백그라운드 작업 예약
+//        scheduleNextBackgroundTask()
         
         return true
     }
@@ -42,7 +42,7 @@ class AppDelegate: NSObject, UIApplicationDelegate {
     
     // 백그라운드 작업을 예약하는 함수
     func scheduleNextBackgroundTask() {
-        let request = BGProcessingTaskRequest(identifier: "co.kr.jiyongppark.WorkoutMotivation.notification")
+        let request = BGProcessingTaskRequest(identifier: "notification")
         request.requiresNetworkConnectivity = false // 네트워크 필요 없음
         
         // PushSettingViewModel의 interval 값을 사용하여 예약 시간 설정

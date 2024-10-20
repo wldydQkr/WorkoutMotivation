@@ -111,14 +111,28 @@ final class PushSettingViewModel: ObservableObject {
         UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
     }
     
-    // 백그라운드 작업 실행 시 알림 예약
     func scheduleNextNotification() {
-        // 1. 기존 알림 삭제
-        clearExistingNotifications()
+        UNUserNotificationCenter.current().getPendingNotificationRequests { requests in
+            let isAlreadyScheduled = requests.contains { $0.identifier == "nextNotification" }
 
-        // 2. 새로운 알림 예약
-        scheduleRandomNotification()
+            guard !isAlreadyScheduled else {
+                print("이미 예약된 알림이 있습니다.")
+                return
+            }
+
+            // 새로운 알림 예약
+            self.scheduleRandomNotification()
+        }
     }
+    
+//    // 백그라운드 작업 실행 시 알림 예약
+//    func scheduleNextNotification() {
+//        // 1. 기존 알림 삭제
+//        clearExistingNotifications()
+//
+//        // 2. 새로운 알림 예약
+//        scheduleRandomNotification()
+//    }
 
     // 알림 설정 변경 확인
     func hasSettingsChanged() -> Bool {
