@@ -30,9 +30,9 @@ struct DiaryCardView: View {
                         .resizable()
                         .scaledToFill()
                         .frame(height: 200)
+                        .frame(maxWidth: .infinity) // 가로를 꽉 채우고 초과분 자름
                         .cornerRadius(10)
                         .clipped()
-
                 }
             } else { // 이미지가 없을 때 Spacer로 양 옆 간격을 유지
                 Rectangle()
@@ -57,16 +57,15 @@ struct DiaryCardView: View {
                 }
                 
                 Spacer() // 오른쪽 정렬을 위해 Spacer 사용
-                
             }
             .padding(.bottom, 8)
-            
         }
         .background(CustomColor.SwiftUI.customBackgrond)
         .cornerRadius(8)
         .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 5)
         .padding(.horizontal, 12)
         .padding(.vertical, 4)
+        
         HStack {
             VStack(alignment: .leading) {
                 Text(diary.date.formatted())
@@ -100,9 +99,7 @@ struct DiaryCardView: View {
                 }
             }
         }
-        
     }
-    
 }
 
 #Preview {
