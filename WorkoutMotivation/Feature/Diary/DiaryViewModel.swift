@@ -14,7 +14,7 @@ class DiaryViewModel: ObservableObject {
     private var cancellables: Set<AnyCancellable> = []
     private let context: NSManagedObjectContext
     
-    init(context: NSManagedObjectContext = PersistenceController.shared.viewContext) {
+    init(context: NSManagedObjectContext = PersistenceController.shared.viewContext(for: "DiaryModel")) {
         self.context = context
         fetchDiaries()
     }

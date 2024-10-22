@@ -8,7 +8,7 @@
 import Foundation
 
 struct MyPageItem: Identifiable {
-    let id = UUID()
-    let title: String
-    let action: () -> Void
+    var id: UUID = UUID() // 각 항목에 대한 고유 ID
+    var title: String
+    var action: () -> Void
 }

@@ -29,12 +29,12 @@ struct DiaryCardView: View {
                     Image(uiImage: uiImage)
                         .resizable()
                         .scaledToFill()
-                        .frame(height: 200)
-                        .frame(maxWidth: .infinity) // 가로를 꽉 채우고 초과분 자름
+                        .frame(maxWidth: .infinity, maxHeight: 200, alignment: .center)
                         .cornerRadius(10)
                         .clipped()
                 }
-            } else { // 이미지가 없을 때 Spacer로 양 옆 간격을 유지
+                .frame(maxWidth: .infinity)
+            } else {
                 Rectangle()
                     .fill(Color.clear)
                     .frame(height: 0)
@@ -65,6 +65,7 @@ struct DiaryCardView: View {
         .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 5)
         .padding(.horizontal, 12)
         .padding(.vertical, 4)
+        .frame(maxWidth: .infinity) // 전체 VStack의 가로 크기를 제한
         
         HStack {
             VStack(alignment: .leading) {

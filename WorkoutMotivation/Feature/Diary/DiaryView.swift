@@ -14,7 +14,7 @@ struct DiaryView: View {
     @State private var isDetailViewPresented = false
     
     init() {
-        _viewModel = StateObject(wrappedValue: DiaryViewModel(context: PersistenceController.shared.viewContext))
+        _viewModel = StateObject(wrappedValue: DiaryViewModel(context: PersistenceController.shared.viewContext(for: "DiaryModel")))
     }
     
     var body: some View {
