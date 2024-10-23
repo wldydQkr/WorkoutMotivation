@@ -6,85 +6,113 @@
 //
 
 import Foundation
-import CoreData
 import UserNotifications
+import CoreData
 
 final class PushSettingViewModel: ObservableObject {
     @Published var alarmSettings: [AlarmSettingEntity] = []
     private var context: NSManagedObjectContext
+    private let motivationViewModel = MotivationViewModel() // MotivationViewModel 인스턴스 생성
+    @Published var isNotificationEnabled: Bool = false // 알림 활성화 여부 변수 추가
 
     init(context: NSManagedObjectContext = PersistenceController.shared.viewContext(for: "AlarmSetting")) {
         self.context = context
-        fetchAlarmSettings() // 초기 데이터 불러오기
+        loadAlarmSettings()
+        requestNotificationAuthorization() // 알림 권한 요청
     }
 
-    func fetchAlarmSettings() {
+    private func requestNotificationAuthorization() {
+        let center = UNUserNotificationCenter.current()
+        center.requestAuthorization(options: [.alert, .sound]) { [weak self] granted, error in
+            if let error = error {
+                print("알림 권한 요청 실패: \(error.localizedDescription)")
+            }
+            self?.isNotificationEnabled = granted // 알림 권한 상태 업데이트
+        }
+    }
+    
+    func createAlarm(time: Date, isEnabled: Bool = true, isRepeated: Bool = false) {
+        let newAlarm = AlarmSettingEntity(context: context) // CoreData Entity 생성
+        newAlarm.id = UUID() // UUID 생성
+        newAlarm.time = time // 알람 시간 설정
+        newAlarm.isEnabled = isEnabled // 기본적으로 활성화
+        newAlarm.isRepeated = isRepeated // 기본적으로 반복 안 함
+
+        saveContext() // CoreData 저장
+        scheduleNotification(for: newAlarm) // 알람에 대한 푸시 예약
+        loadAlarmSettings() // 알람 설정 갱신
+    }
+
+    func loadAlarmSettings() {
         let request: NSFetchRequest<AlarmSettingEntity> = AlarmSettingEntity.fetchRequest()
         do {
-            alarmSettings = try context.fetch(request)
-            print("Fetched alarms: \(alarmSettings.count)")
+            let results = try context.fetch(request)
+            alarmSettings = results
         } catch {
-            print("Failed to fetch alarm settings: \(error)")
+            print("알림 설정 로드 실패: \(error)")
         }
     }
 
-    func createAlarm(time: Date, isEnabled: Bool, isRepeated: Bool) {
-        let newAlarm = AlarmSettingEntity(context: context)
-        newAlarm.id = UUID()
-        newAlarm.time = time
-        newAlarm.isEnabled = isEnabled
-        newAlarm.isRepeated = isRepeated
-
-        scheduleNotification(for: newAlarm) // 푸시 알림 등록
-        saveContext() // CoreData 저장
-        fetchAlarmSettings() // 알람 목록 갱신
-    }
-
-    func scheduleNotification(for alarm: AlarmSettingEntity) {
-        let content = UNMutableNotificationContent()
-        content.title = "알람"
-        content.body = "랜덤 동기부여 메시지: \(getRandomMotivationMessage())" // 랜덤 메시지 가져오기
-        content.sound = .default
-        
-        // 알람 시간 설정
-        let triggerDate = Calendar.current.dateComponents([.hour, .minute], from: alarm.time ?? Date())
-        let trigger = UNCalendarNotificationTrigger(dateMatching: triggerDate, repeats: alarm.isRepeated)
-
-        // 요청 식별자
-        let request = UNNotificationRequest(identifier: alarm.id?.uuidString ?? UUID().uuidString, content: content, trigger: trigger)
-
-        UNUserNotificationCenter.current().add(request) { error in
-            if let error = error {
-                print("Error scheduling notification: \(error)")
-            }
-        }
-    }
-
-    func getRandomMotivationMessage() -> String {
-        // 랜덤으로 동기부여 메시지를 가져오는 로직 추가
-        // MotivationViewModel을 통해 메시지를 가져오는 코드 작성
-        let motivationViewModel = MotivationViewModel() // 새로운 인스턴스 생성 (이곳에서 데이터를 가져올 수 있음)
-        if let randomMotivation = motivationViewModel.getRandomMotivation() {
-            return randomMotivation.title // 메시지로 제목을 사용
-        }
-        return "시간이 되어 알림이 도착했습니다!" // 기본 메시지
-    }
-
-    func saveContext() {
-        if context.hasChanges {
-            do {
-                try context.save()
-                print("Context saved successfully.")
-            } catch {
-                print("Failed to save context: \(error.localizedDescription)")
-            }
+    func saveAlarmSetting(alarm: AlarmSettingEntity) {
+        do {
+            try context.save()
+            loadAlarmSettings() // 업데이트된 설정 불러오기
+        } catch {
+            print("알람 설정 저장 실패: \(error)")
         }
     }
 
     func deleteAlarmSetting(alarm: AlarmSettingEntity) {
         context.delete(alarm)
-        saveContext()
-        fetchAlarmSettings()
+        saveContext() // 컨텍스트 저장
+        loadAlarmSettings() // 업데이트된 설정 불러오기
+    }
+
+    func scheduleNotification(for alarm: AlarmSettingEntity) {
+        guard isNotificationEnabled else {
+            print("알림 권한이 없습니다.")
+            return
+        }
+
+        guard let randomMotivation = motivationViewModel.getRandomMotivation() else {
+            print("모티베이션 목록이 비어 있습니다.")
+            return
+        }
+
+        let content = UNMutableNotificationContent()
+        content.title = "Workout Motivation"
+        content.body = "\(randomMotivation.title) \n- \(randomMotivation.name)"
+        content.sound = .default
+
+        // 알림을 보낼 시간 설정
+        let triggerDate = Calendar.current.dateComponents([.hour, .minute], from: alarm.time ?? Date())
+        let trigger = UNCalendarNotificationTrigger(dateMatching: triggerDate, repeats: alarm.isRepeated)
+
+        // 알림 요청 만들기
+        let request = UNNotificationRequest(identifier: alarm.id!.uuidString, content: content, trigger: trigger)
+
+        // 알림 요청을 UNUserNotificationCenter에 추가
+        UNUserNotificationCenter.current().add(request) { error in
+            if let error = error {
+                print("알림 요청 추가 실패: \(error.localizedDescription)")
+            } else {
+                print("알림이 성공적으로 예약되었습니다.")
+            }
+        }
+    }
+
+    func cancelNotification(for alarm: AlarmSettingEntity) {
+        UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [alarm.id!.uuidString])
+    }
+
+    private func saveContext() {
+        if context.hasChanges {
+            do {
+                try context.save()
+            } catch {
+                print("컨텍스트 저장 실패: \(error.localizedDescription)")
+            }
+        }
     }
 }
 

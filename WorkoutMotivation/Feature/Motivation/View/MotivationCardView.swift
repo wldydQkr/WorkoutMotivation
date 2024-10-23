@@ -13,7 +13,7 @@ struct MotivationCardView: View {
     @ObservedObject var viewModel: MotivationViewModel
     @Binding var showMotivationCardView: Bool
 
-    @State private var currentIndex: Int = Int.random(in: 0..<1)
+    @State private var currentIndex: Int = 0 // 현재 인덱스를 0으로 초기화
     @State private var indexHistory: [Int] = [] // 인덱스 히스토리
     @State private var showTip: Bool = true
     @State private var cardTransition: AnyTransition = .identity // 전환 애니메이션 상태
@@ -33,7 +33,7 @@ struct MotivationCardView: View {
                             showTip = false
                         }
                 } else {
-                    // iOS18 미만 버전...
+                    // iOS 18 미만 버전...
                 }
             }
 
@@ -93,7 +93,7 @@ struct MotivationCardView: View {
                         .padding()
 
                         Button(action: {
-                            
+                            // 여기에 공유 기능 추가
                         }) {
                             Image("paper-plane")
                                 .resizable()

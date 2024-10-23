@@ -25,7 +25,7 @@ struct DiaryView: View {
                         EmptyView()
                     }
                     
-                    ScrollView {
+                    ScrollView(showsIndicators: false) {
                         if viewModel.diaries.isEmpty {
                             EmptyView() // 다이어리가 없을 때
                         } else {

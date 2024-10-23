@@ -9,56 +9,68 @@ import SwiftUI
 import CoreData
 
 struct PushSettingView: View {
-    @StateObject private var viewModel: PushSettingViewModel
+    @StateObject private var viewModel: PushSettingViewModel = PushSettingViewModel(context: PersistenceController.shared.viewContext(for: "AlarmSetting"))
     @Environment(\.managedObjectContext) private var viewContext
     @State private var selectedTime: Date = Date() // 선택된 시간 저장
-
-    init() {
-        _viewModel = StateObject(wrappedValue: PushSettingViewModel(context: PersistenceController.shared.viewContext(for: "AlarmSetting")))
-    }
 
     var body: some View {
         NavigationView {
             VStack {
+                CustomHeaderView(title: "알림 설정") {
+                    EmptyView()
+                }
+                
                 List {
                     ForEach(viewModel.alarmSettings, id: \.id) { alarm in
-                        HStack {
-                            Text("\(alarm.time ?? Date(), formatter: DateFormatter.shortTime)")
-                                .foregroundStyle(CustomColor.SwiftUI.customBlack)
-                            Toggle("Enabled", isOn: Binding(
-                                get: { alarm.isEnabled },
-                                set: { newValue in
-                                    alarm.isEnabled = newValue // Core Data에서 알람 업데이트
-                                    viewModel.saveContext() // 저장
-                                }
-                            ))
+                        if let alarmSetting = alarm as? AlarmSettingEntity {
+                            HStack {
+                                Text("\(alarmSetting.time ?? Date(), formatter: DateFormatter.shortTime)")
+                                    .foregroundColor(.black)
+
+                                Toggle(alarmSetting.isEnabled ? "활성" : "해제", isOn: Binding<Bool>(
+                                    get: { alarmSetting.isEnabled },
+                                    set: { newValue in
+                                        alarmSetting.isEnabled = newValue
+                                        viewModel.saveAlarmSetting(alarm: alarmSetting)
+                                        if newValue {
+                                            viewModel.scheduleNotification(for: alarmSetting)
+                                        } else {
+                                            viewModel.cancelNotification(for: alarmSetting)
+                                        }
+                                    }
+                                ))
+                                .toggleStyle(SwitchToggleStyle(tint: CustomColor.SwiftUI.customBlack)) // 스위치 스타일 설정
+                            }
                         }
                     }
                     .onDelete(perform: deleteAlarms)
                 }
+                .background(CustomColor.SwiftUI.customBackgrond)
+                .listStyle(.plain)
+                .scrollIndicators(.hidden)
 
-                // DatePicker 추가
-                DatePicker("Select Alarm Time", selection: $selectedTime, displayedComponents: .hourAndMinute)
+                DatePicker("알림 시간 설정", selection: $selectedTime, displayedComponents: .hourAndMinute)
                     .datePickerStyle(WheelDatePickerStyle())
                     .padding()
 
-                Button("Add Alarm") {
-                    viewModel.createAlarm(time: selectedTime, isEnabled: true, isRepeated: false) // 알람 추가
+                Button("알림 추가") {
+                    viewModel.createAlarm(time: selectedTime) // createAlarm 메서드 호출
                 }
-                .foregroundStyle(CustomColor.SwiftUI.customBlack)
+                .foregroundColor(.black)
                 .padding()
             }
-            .navigationTitle("Alarm Settings")
+            .navigationBarHidden(true)
             .onAppear {
-                viewModel.fetchAlarmSettings() // 알람 설정 불러오기
+                viewModel.loadAlarmSettings()
             }
         }
+        .navigationBarHidden(true)
     }
 
     private func deleteAlarms(at offsets: IndexSet) {
         for index in offsets {
             let alarm = viewModel.alarmSettings[index]
-            viewModel.deleteAlarmSetting(alarm: alarm) // 알람 삭제
+            viewModel.deleteAlarmSetting(alarm: alarm)
         }
     }
 }

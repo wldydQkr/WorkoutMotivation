@@ -19,21 +19,24 @@ struct MyPageView: View {
                 }
                 
                 List(viewModel.items) { item in
-                    if item.title == "앱 버전" {
+                    switch item.title {
+                    case "앱 버전":
                         NavigationLink(destination: AppVersionView()) {
                             Text(item.title)
                         }
-                    } else if item.title == "알림 설정" {
+                    case "알림 설정":
                         NavigationLink(destination: PushSettingView()) {
                             Text(item.title)
                         }
-                    } else {
+                    case "앱 공유":
                         Button(action: {
-                            if item.title == "앱 공유" {
-                                viewModel.shareApp()
-                            } else {
-                                item.action()
-                            }
+                            viewModel.shareApp()
+                        }) {
+                            Text(item.title)
+                        }
+                    default:
+                        Button(action: {
+                            item.action()
                         }) {
                             Text(item.title)
                         }

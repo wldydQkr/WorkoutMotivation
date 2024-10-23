@@ -36,7 +36,7 @@ final class MotivationViewModel: ObservableObject {
             errorMessage = "JSON 파일을 찾을 수 없습니다."
             return
         }
-        
+
         isLoading = true // 로딩 상태 시작
         DispatchQueue.global(qos: .background).async {
             do {
@@ -44,7 +44,8 @@ final class MotivationViewModel: ObservableObject {
                 let decoder = JSONDecoder()
                 let decodedData = try decoder.decode(MotivationsData.self, from: data)
                 DispatchQueue.main.async {
-                    self.motivations = decodedData.motivations
+                    // 데이터 로드 후 섞기
+                    self.motivations = decodedData.motivations.shuffled() // 랜덤으로 섞어서 저장
                     self.likedStatus = self.motivations.reduce(into: [:]) { $0[$1.id] = false } // 초기 좋아요 상태 설정
                     self.isLoading = false // 로딩 상태 종료
                 }

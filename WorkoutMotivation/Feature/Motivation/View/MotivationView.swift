@@ -44,6 +44,7 @@ struct MotivationView: View {
                     )
                 } else {
                     ScrollView(showsIndicators: false) {
+                        //MARK: 스크롤 시 헤더 숨김
                         GeometryReader { geometry in
                             Color.clear
                                 .onAppear {
