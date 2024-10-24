@@ -37,11 +37,18 @@ struct MotivationView: View {
                 }
                 
                 if showMotivationCardView {
-                    MotivationCardView(
-                        motivations: viewModel.motivations,
-                        viewModel: viewModel,
-                        showMotivationCardView: $showMotivationCardView
-                    )
+                    if viewModel.isLoading {
+                        LottieView("skeletonView")
+                            .frame(width: 400, height: 400)
+                        LottieView("skeletonView")
+                            .frame(width: 400, height: 400)
+                    } else {
+                        MotivationCardView(
+                            motivations: viewModel.motivations,
+                            viewModel: viewModel,
+                            showMotivationCardView: $showMotivationCardView
+                        )
+                    }
                 } else {
                     ScrollView(showsIndicators: false) {
                         //MARK: 스크롤 시 헤더 숨김

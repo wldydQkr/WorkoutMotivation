@@ -7,6 +7,7 @@
 
 import UIKit
 import BackgroundTasks
+import FirebaseCore
 
 class AppDelegate: NSObject, UIApplicationDelegate {
     var notificationDelegate = NotificationDelegate()
@@ -14,6 +15,8 @@ class AppDelegate: NSObject, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
         UNUserNotificationCenter.current().delegate = notificationDelegate
+        
+        FirebaseApp.configure()
         
 //        pushSettingViewModel = PushSettingViewModel(motivationViewModel: MotivationViewModel())
         

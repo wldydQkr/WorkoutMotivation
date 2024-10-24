@@ -22,7 +22,7 @@ struct DiaryView: View {
             ZStack {
                 VStack {
                     CustomHeaderView(title: "나의 다짐") {
-                        EmptyView()
+                        AddDiaryButton(viewModel: viewModel)
                     }
                     
                     ScrollView(showsIndicators: false) {
@@ -59,7 +59,7 @@ struct DiaryView: View {
                     }
                 }
                 
-                AddDiaryButton(viewModel: viewModel)
+//                AddDiaryButton(viewModel: viewModel)
             }
             .onAppear {
                 viewModel.fetchDiaries() // 뷰가 나타날 때 다이어리 로드
