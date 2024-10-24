@@ -11,13 +11,22 @@ import CoreData
 struct PushSettingView: View {
     @StateObject private var viewModel: PushSettingViewModel = PushSettingViewModel(context: PersistenceController.shared.viewContext(for: "AlarmSetting"))
     @Environment(\.managedObjectContext) private var viewContext
+    @State private var showDatePicker: Bool = false // DatePicker 플로팅을 제어하는 상태 변수
     @State private var selectedTime: Date = Date() // 선택된 시간 저장
 
     var body: some View {
         NavigationView {
             VStack {
                 CustomHeaderView(title: "알림 설정") {
-                    EmptyView()
+                    Button(action: {
+                        withAnimation(.easeInOut) { // 애니메이션 추가
+                            showDatePicker.toggle() // 플러스 버튼을 누르면 DatePicker 플로팅
+                        }
+                    }) {
+                        Image(systemName: "plus")
+                            .font(.title)
+                            .foregroundColor(.black)
+                    }
                 }
                 
                 List {
@@ -49,15 +58,24 @@ struct PushSettingView: View {
                 .listStyle(.plain)
                 .scrollIndicators(.hidden)
 
-                DatePicker("알림 시간 설정", selection: $selectedTime, displayedComponents: .hourAndMinute)
-                    .datePickerStyle(WheelDatePickerStyle())
-                    .padding()
-
-                Button("알림 추가") {
-                    viewModel.createAlarm(time: selectedTime) // createAlarm 메서드 호출
+                // 플로팅 형식의 DatePicker를 모달 형식으로 구현
+                if showDatePicker {
+                    DatePickerFloatingView(
+                        selectedTime: $selectedTime,
+                        onSave: {
+                            viewModel.createAlarm(time: selectedTime) // 알람 추가
+                            withAnimation(.easeInOut) { // 사라지는 애니메이션
+                                showDatePicker = false
+                            }
+                        },
+                        onCancel: {
+                            withAnimation(.easeInOut) { // 사라지는 애니메이션
+                                showDatePicker = false
+                            }
+                        }
+                    )
+                    .transition(.move(edge: .bottom)) // 아래에서 위로 올라오는 애니메이션
                 }
-                .foregroundColor(.black)
-                .padding()
             }
             .navigationBarHidden(true)
             .onAppear {
@@ -75,6 +93,46 @@ struct PushSettingView: View {
     }
 }
 
+// DatePicker를 플로팅 형식으로 분리한 뷰
+struct DatePickerFloatingView: View {
+    @Binding var selectedTime: Date
+    var onSave: () -> Void
+    var onCancel: () -> Void
+
+    var body: some View {
+        VStack {
+            Spacer()
+            VStack(spacing: 20) {
+                Text("알림 시간 설정")
+                    .padding(.top, 20)
+                    .font(.headline)
+
+                DatePicker("", selection: $selectedTime, displayedComponents: .hourAndMinute)
+                    .datePickerStyle(WheelDatePickerStyle())
+                    .labelsHidden()
+
+                HStack {
+                    Button(action: onCancel) {
+                        Text("취소")
+                            .foregroundColor(.red)
+                    }
+                    Spacer()
+                    Button(action: onSave) {
+                        Text("저장")
+                            .foregroundColor(.blue)
+                    }
+                }
+                .padding()
+            }
+            .background(RoundedRectangle(cornerRadius: 20).fill(Color.white.opacity(0.9))) // 배경 투명도 설정
+            .shadow(radius: 20)
+            .padding(.horizontal)
+        }
+        .padding(.bottom, 20)
+        .background(Color.clear.opacity(0.0))
+    }
+}
+
 extension DateFormatter {
     static var shortTime: DateFormatter {
         let formatter = DateFormatter()
@@ -82,76 +140,6 @@ extension DateFormatter {
         return formatter
     }
 }
-
-//struct PushSettingView: View {
-//    @StateObject private var motivationViewModel = MotivationViewModel()
-//    @StateObject private var pushSettingViewModel: PushSettingViewModel
-//    
-//    init() {
-//        let motivationViewModel = MotivationViewModel()
-//        _pushSettingViewModel = StateObject(wrappedValue: PushSettingViewModel(motivationViewModel: motivationViewModel))
-//    }
-//    
-//    @Environment(\.presentationMode) var presentationMode
-//    
-//    var body: some View {
-//        NavigationView {
-//            VStack {
-//                CustomHeaderView(title: "알림 간격 설정") {
-//                    EmptyView()
-//                }
-//                
-//                // 알림 활성화/비활성화 토글
-//                Toggle(isOn: $pushSettingViewModel.isNotificationEnabled) {
-//                    Text(pushSettingViewModel.isNotificationEnabled ? "알림 켜짐" : "알림 꺼짐")
-//                        .font(.headline)
-//                        .foregroundColor(pushSettingViewModel.isNotificationEnabled ? .green : .red)
-//                }
-//                .padding()
-//                .onChange(of: pushSettingViewModel.isNotificationEnabled) { newValue in
-//                    pushSettingViewModel.saveNotificationSetting(newValue)
-//                }
-//                
-//                // 알림 간격 설정 스텝퍼
-//                Stepper("간격: \(pushSettingViewModel.interval / 3600, specifier: "%.0f") 시간", value: $pushSettingViewModel.interval, in: 3600...7200, step: 3600)
-//                    .padding()
-//                    .disabled(!pushSettingViewModel.isNotificationEnabled) // 알림이 비활성화 상태일 때 비활성화
-//                
-//                // 알림 설정 버튼
-//                Button(action: {
-//                    if pushSettingViewModel.isNotificationEnabled {
-//                        pushSettingViewModel.scheduleRandomNotification() // 랜덤 알림 예약
-//                    } else {
-//                        pushSettingViewModel.clearExistingNotifications() // 기존 알림 삭제
-//                    }
-//                    presentationMode.wrappedValue.dismiss()
-//                }) {
-//                    Text("알림 설정")
-//                        .padding()
-//                        .background(pushSettingViewModel.isNotificationEnabled ? CustomColor.SwiftUI.customGreen : Color.gray)
-//                        .foregroundColor(.white)
-//                        .cornerRadius(10)
-//                }
-//                .padding()
-//                .disabled(!pushSettingViewModel.isNotificationEnabled) // 알림이 비활성화 상태일 때 비활성화
-//                
-//                Spacer()
-//                
-//                // 알림 예약 완료 알림
-//                .alert(isPresented: $pushSettingViewModel.isNotificationScheduled) {
-//                    Alert(title: Text("예약 완료!"), message: Text("알림이 예약되었습니다."), dismissButton: .default(Text("확인")))
-//                }
-//            }
-//            .background(CustomColor.SwiftUI.customBackgrond)
-//            .onAppear {
-//                // 알림 설정 상태 및 모티베이션 로드
-//                pushSettingViewModel.loadSettings()
-//                motivationViewModel.loadMotivations()
-//            }
-//        }
-//        .navigationBarHidden(true)
-//    }
-//}
 
 //#Preview {
 //    PushSettingView(context: <#NSManagedObjectContext#>)

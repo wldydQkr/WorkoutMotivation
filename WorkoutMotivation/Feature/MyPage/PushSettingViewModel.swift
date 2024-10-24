@@ -67,26 +67,35 @@ final class PushSettingViewModel: ObservableObject {
         saveContext() // 컨텍스트 저장
         loadAlarmSettings() // 업데이트된 설정 불러오기
     }
-
+    
     func scheduleNotification(for alarm: AlarmSettingEntity) {
         guard isNotificationEnabled else {
             print("알림 권한이 없습니다.")
             return
         }
 
-        guard let randomMotivation = motivationViewModel.getRandomMotivation() else {
-            print("모티베이션 목록이 비어 있습니다.")
-            return
-        }
-
+        // 알림 설정이 활성화되어 있고 반복 설정이 켜져 있다면 반복적으로 랜덤 모티베이션을 가져와 푸시를 설정
         let content = UNMutableNotificationContent()
         content.title = "Workout Motivation"
-        content.body = "\(randomMotivation.title) \n- \(randomMotivation.name)"
         content.sound = .default
 
         // 알림을 보낼 시간 설정
         let triggerDate = Calendar.current.dateComponents([.hour, .minute], from: alarm.time ?? Date())
         let trigger = UNCalendarNotificationTrigger(dateMatching: triggerDate, repeats: alarm.isRepeated)
+
+        // 랜덤 모티베이션 예약
+        scheduleRandomMotivation(content: content, trigger: trigger, alarm: alarm)
+    }
+
+    private func scheduleRandomMotivation(content: UNMutableNotificationContent, trigger: UNCalendarNotificationTrigger, alarm: AlarmSettingEntity) {
+        // 랜덤 모티베이션을 예약
+        guard let randomMotivation = motivationViewModel.getRandomMotivation() else {
+            print("모티베이션 목록이 비어 있습니다.")
+            return
+        }
+
+        // 랜덤 모티베이션을 사용하여 알림 내용 설정
+        content.body = "\(randomMotivation.title) \n- \(randomMotivation.name)"
 
         // 알림 요청 만들기
         let request = UNNotificationRequest(identifier: alarm.id!.uuidString, content: content, trigger: trigger)
@@ -96,10 +105,51 @@ final class PushSettingViewModel: ObservableObject {
             if let error = error {
                 print("알림 요청 추가 실패: \(error.localizedDescription)")
             } else {
-                print("알림이 성공적으로 예약되었습니다.")
+                print("랜덤 모티베이션 알림이 성공적으로 예약되었습니다.")
+            }
+        }
+
+        // 반복 알림인 경우, 다음 랜덤 알림을 위한 예약 추가 (특정 시간마다 반복)
+        if alarm.isRepeated {
+            // 알림이 반복될 때마다 계속 랜덤 모티베이션을 예약
+            DispatchQueue.main.asyncAfter(deadline: .now() + 60) { // 1분마다 갱신 (원하는 주기로 변경 가능)
+                self.scheduleRandomMotivation(content: content, trigger: trigger, alarm: alarm)
             }
         }
     }
+
+//    func scheduleNotification(for alarm: AlarmSettingEntity) {
+//        guard isNotificationEnabled else {
+//            print("알림 권한이 없습니다.")
+//            return
+//        }
+//
+//        guard let randomMotivation = motivationViewModel.getRandomMotivation() else {
+//            print("모티베이션 목록이 비어 있습니다.")
+//            return
+//        }
+//
+//        let content = UNMutableNotificationContent()
+//        content.title = "Workout Motivation"
+//        content.body = "\(randomMotivation.title) \n- \(randomMotivation.name)"
+//        content.sound = .default
+//
+//        // 알림을 보낼 시간 설정
+//        let triggerDate = Calendar.current.dateComponents([.hour, .minute], from: alarm.time ?? Date())
+//        let trigger = UNCalendarNotificationTrigger(dateMatching: triggerDate, repeats: alarm.isRepeated)
+//
+//        // 알림 요청 만들기
+//        let request = UNNotificationRequest(identifier: alarm.id!.uuidString, content: content, trigger: trigger)
+//
+//        // 알림 요청을 UNUserNotificationCenter에 추가
+//        UNUserNotificationCenter.current().add(request) { error in
+//            if let error = error {
+//                print("알림 요청 추가 실패: \(error.localizedDescription)")
+//            } else {
+//                print("알림이 성공적으로 예약되었습니다.")
+//            }
+//        }
+//    }
 
     func cancelNotification(for alarm: AlarmSettingEntity) {
         UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [alarm.id!.uuidString])
