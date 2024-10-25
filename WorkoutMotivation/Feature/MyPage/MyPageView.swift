@@ -10,6 +10,7 @@ import MessageUI
 
 struct MyPageView: View {
     @ObservedObject var viewModel = MyPageViewModel()
+    @State private var isShareSheetPresented = false
     
     var body: some View {
         NavigationView {
@@ -31,6 +32,7 @@ struct MyPageView: View {
                     case "앱 공유":
                         Button(action: {
                             viewModel.shareApp()
+                            isShareSheetPresented = true
                         }) {
                             Text(item.title)
                         }
@@ -51,7 +53,7 @@ struct MyPageView: View {
                 MailView(isShowing: $viewModel.isShowingMailView, result: $viewModel.mailResult)
             }
             .sheet(isPresented: $viewModel.isShowingShareSheet) {
-                ShareSheet(activityItems: viewModel.activityItems)  // 공유할 아이템 전달
+                ShareSheet(activityItems: viewModel.activityItems, isPresented: $isShareSheetPresented)  // 공유할 아이템 전달
             }
         }
     }

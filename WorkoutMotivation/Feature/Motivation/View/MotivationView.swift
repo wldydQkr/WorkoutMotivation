@@ -10,11 +10,11 @@ import SwiftUI
 struct MotivationView: View {
     @ObservedObject var viewModel: MotivationViewModel
     @State private var isShareSheetPresented = false
-    @State private var shareContent: String = ""
+    @State private var shareContent: String = "Hi"
     @State private var headerVisible = true
     @State private var lastScrollPosition: CGFloat = 0.0
     @State private var currentScrollOffset: CGFloat = 0.0
-    @State private var showMotivationCardView = true  // 초기 값을 true로 설정하여 MotivationCardView가 먼저 보이도록 설정
+    @State private var showMotivationCardView = true
 
     let threshold: CGFloat = 70.0
     let columns = [
@@ -46,8 +46,19 @@ struct MotivationView: View {
                         MotivationCardView(
                             motivations: viewModel.motivations,
                             viewModel: viewModel,
-                            showMotivationCardView: $showMotivationCardView
+                            showMotivationCardView: $showMotivationCardView,
+                            isShareSheetPresented: $isShareSheetPresented,
+                            shareContent: $shareContent
+                            
                         )
+                        .onChange(of: shareContent) { newValue in
+                            if !newValue.isEmpty {
+                                isShareSheetPresented = true
+                            }
+                        }
+                        .sheet(isPresented: $isShareSheetPresented) {
+                            ShareSheet(activityItems: [shareContent], isPresented: $isShareSheetPresented)
+                        }
                     }
                 } else {
                     ScrollView(showsIndicators: false) {
@@ -107,7 +118,12 @@ struct MotivationView: View {
                     }
                     .background(CustomColor.SwiftUI.customBackgrond)
                     .sheet(isPresented: $isShareSheetPresented) {
-                        ShareSheet(activityItems: [shareContent])
+                        ShareSheet(activityItems: [shareContent], isPresented: $isShareSheetPresented)
+                    }
+                    .onChange(of: shareContent) { newValue in
+                        if !newValue.isEmpty {
+                            isShareSheetPresented = true
+                        }
                     }
                     .refreshable {
                         await viewModel.reload()

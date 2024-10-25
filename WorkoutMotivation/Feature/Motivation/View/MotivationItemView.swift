@@ -54,6 +54,7 @@ struct MotivationItemView: View {
             .contextMenu {
                 Button(action: {
                     shareContent = viewModel.getMotivationDetails(motivation)
+                    print(shareContent)
                     DispatchQueue.main.async {
                         isShareSheetPresented = true
                     }

@@ -53,7 +53,7 @@ struct MotivationDetailView: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(CustomColor.SwiftUI.customBackgrond)
         .sheet(isPresented: $isShareSheetPresented) {
-            ShareSheet(activityItems: [shareContent])
+            ShareSheet(activityItems: [shareContent], isPresented: $isShareSheetPresented)
         }
     }
     
@@ -88,17 +88,22 @@ struct MotivationDetailView: View {
         Button(action: {
             // shareContent 설정
             shareContent = viewModel.getMotivationDetails(motivation)
-            print("shareContent: \(shareContent)")
             // 상태 업데이트 후 시트 표시
-            DispatchQueue.main.async {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
                 isShareSheetPresented = true
             }
+            print("shareContent: \(shareContent)")
         }) {
             HStack {
                 Image(systemName: "square.and.arrow.up")
                     .foregroundColor(CustomColor.SwiftUI.customBlack)
                 Text("공유하기")
                     .foregroundColor(CustomColor.SwiftUI.customBlack)
+            }
+            .onChange(of: shareContent) { newValue in
+                if !newValue.isEmpty { 
+                    isShareSheetPresented = true
+                }
             }
             .padding()
             .background(RoundedRectangle(cornerRadius: 30).stroke(CustomColor.SwiftUI.customGreen3, lineWidth: 2))

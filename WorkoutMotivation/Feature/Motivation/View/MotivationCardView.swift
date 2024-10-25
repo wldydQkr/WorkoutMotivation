@@ -12,13 +12,13 @@ struct MotivationCardView: View {
     let motivations: [Motivation]
     @ObservedObject var viewModel: MotivationViewModel
     @Binding var showMotivationCardView: Bool
+    @Binding var isShareSheetPresented: Bool
+    @Binding var shareContent: String
 
     @State private var currentIndex: Int = 0 // 현재 인덱스를 0으로 초기화
     @State private var indexHistory: [Int] = [] // 인덱스 히스토리
     @State private var showTip: Bool = true
     @State private var cardTransition: AnyTransition = .identity // 전환 애니메이션 상태
-    @State private var isAnimating: Bool = false // 애니메이션 상태
-    @State private var showParticles: Bool = false // 폭죽 애니메이션 상태
 
     let inlineFavoriteTip = AddToFavoriteTip()
 
@@ -57,52 +57,32 @@ struct MotivationCardView: View {
                 }
                 .padding(.bottom, 50)
                 .transition(cardTransition) // 카드 전환 애니메이션 적용
-                .animation(.easeInOut(duration: 0.5), value: currentIndex) // 애니메이션 추가
 
                 Spacer()
 
-                ZStack {
-                    // 폭죽 애니메이션을 위한 파티클 뷰
-                    if showParticles {
-                        ParticleEffect()
-                            .frame(width: 100, height: 100)
-                            .offset(x: 0, y: -50)
-                            .animation(.easeOut(duration: 0.5))
+                HStack {
+                    Button(action: {
+                        viewModel.toggleLike(for: motivations[currentIndex])
+                    }) {
+                        Image(systemName: viewModel.isLiked(motivations[currentIndex]) ? "heart.fill" : "heart")
+                            .resizable()
+                            .frame(width: 30, height: 30)
+                            .foregroundColor(viewModel.isLiked(motivations[currentIndex]) ? .pink : CustomColor.SwiftUI.customBlack)
                     }
+                    .padding()
 
-                    HStack {
-                        Button(action: {
-                            withAnimation(.easeInOut(duration: 0.5)) {
-                                viewModel.toggleLike(for: motivations[currentIndex])
-                                isAnimating = true
-                                showParticles = true
-                            }
-                            // 애니메이션이 끝난 후 리셋
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                                isAnimating = false
-                                showParticles = false
-                            }
-                        }) {
-                            Image(systemName: viewModel.isLiked(motivations[currentIndex]) ? "heart.fill" : "heart")
-                                .resizable()
-                                .frame(width: 30, height: 30)
-                                .foregroundColor(viewModel.isLiked(motivations[currentIndex]) ? .pink : CustomColor.SwiftUI.customBlack)
-                                .scaleEffect(isAnimating ? 1.3 : 1.0) // 크기 변화 애니메이션
-                                .opacity(isAnimating ? 0.7 : 1.0) // 투명도 변화 애니메이션
-                        }
-                        .padding()
-
-                        Button(action: {
-                            // 여기에 공유 기능 추가
-                        }) {
-                            Image("paper-plane")
-                                .resizable()
-                                .frame(width: 30, height: 30)
-                                .foregroundColor(.blue)
-                        }
+                    Button(action: {
+                        shareContent = "\(motivations[currentIndex].title) - \(motivations[currentIndex].name)"
+                        isShareSheetPresented = true
+                        print("Button Clicked")
+                    }) {
+                        Image("paper-plane")
+                            .resizable()
+                            .frame(width: 30, height: 30)
+                            .foregroundColor(.blue)
                     }
-                    .padding(.bottom, 50)
                 }
+                .padding(.bottom, 50)
             } else {
                 Text("동기부여 내용이 없습니다.")
                     .font(.title)
@@ -121,18 +101,16 @@ struct MotivationCardView: View {
                     if !motivations.isEmpty {
                         if abs(value.translation.height) > abs(value.translation.width) {
                             if value.translation.height < 0 {
-                                // 스와이프 업: 다음 카드로 이동 (랜덤)
                                 withAnimation {
                                     cardTransition = .asymmetric(insertion: .move(edge: .bottom), removal: .move(edge: .top))
-                                    indexHistory.append(currentIndex) // 현재 인덱스를 히스토리에 추가
+                                    indexHistory.append(currentIndex)
                                     currentIndex = Int.random(in: 0..<motivations.count)
                                 }
                             } else if value.translation.height > 0 {
-                                // 스와이프 다운: 이전 카드로 이동 (히스토리에서)
                                 if let previousIndex = indexHistory.popLast() {
                                     withAnimation {
                                         cardTransition = .asymmetric(insertion: .move(edge: .top), removal: .move(edge: .bottom))
-                                        currentIndex = previousIndex // 히스토리에서 이전 인덱스 사용
+                                        currentIndex = previousIndex
                                     }
                                 }
                             }
@@ -154,7 +132,6 @@ struct AddToFavoriteTip: Tip {
         Image("sort-alt")
     }
 }
-
 //MARK: CustomView UIKit
 //struct MotivationCardView: View {
 //    @State private var quotes: [String] = [

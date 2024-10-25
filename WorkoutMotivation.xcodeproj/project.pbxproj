@@ -34,6 +34,7 @@
 		C04A4F872CCA7581006288AA /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = C04A4F862CCA7581006288AA /* FirebaseStorage */; };
 		C04A4F892CCA763E006288AA /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = C04A4F882CCA763D006288AA /* GoogleService-Info.plist */; };
 		C04A4F8B2CCA78B4006288AA /* FirebaseDatabase in Frameworks */ = {isa = PBXBuildFile; productRef = C04A4F8A2CCA78B4006288AA /* FirebaseDatabase */; };
+		C04A4F8F2CCB7662006288AA /* ShareSheetManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C04A4F8E2CCB7658006288AA /* ShareSheetManager.swift */; };
 		C061B4A22C19C0F600FFD7C5 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C061B4A12C19C0F600FFD7C5 /* WidgetKit.framework */; };
 		C061B4A42C19C0F600FFD7C5 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C061B4A32C19C0F600FFD7C5 /* SwiftUI.framework */; };
 		C061B4A72C19C0F600FFD7C5 /* MotivationWidgetBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = C061B4A62C19C0F600FFD7C5 /* MotivationWidgetBundle.swift */; };
@@ -140,6 +141,7 @@
 		C04405592C176AD200E4C764 /* MotivationDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MotivationDetailViewModel.swift; sourceTree = "<group>"; };
 		C044055C2C17705A00E4C764 /* UserDefaultsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsManager.swift; sourceTree = "<group>"; };
 		C04A4F882CCA763D006288AA /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		C04A4F8E2CCB7658006288AA /* ShareSheetManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareSheetManager.swift; sourceTree = "<group>"; };
 		C061B49F2C19C0F600FFD7C5 /* MotivationWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = MotivationWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		C061B4A12C19C0F600FFD7C5 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
 		C061B4A32C19C0F600FFD7C5 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
@@ -317,6 +319,7 @@
 		C044054E2C1543F400E4C764 /* Share */ = {
 			isa = PBXGroup;
 			children = (
+				C04A4F8E2CCB7658006288AA /* ShareSheetManager.swift */,
 				C04405462C134B0C00E4C764 /* ShareSheet.swift */,
 			);
 			path = Share;
@@ -796,6 +799,7 @@
 				C08DC3172C0CA07700CCB2BE /* Tab.swift in Sources */,
 				C0AD142C2CC7C7DB00A1FCE4 /* AlarmSetting.swift in Sources */,
 				C08DC30D2C0B65D000CCB2BE /* PathType.swift in Sources */,
+				C04A4F8F2CCB7662006288AA /* ShareSheetManager.swift in Sources */,
 				C061B4BE2C1C6F6500FFD7C5 /* DiaryView.swift in Sources */,
 				C044051E2C10BC9000E4C764 /* HomeResponse.swift in Sources */,
 				C08DC31B2C0CA4F700CCB2BE /* MotivationView.swift in Sources */,
