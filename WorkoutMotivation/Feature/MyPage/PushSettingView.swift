@@ -9,23 +9,34 @@ import SwiftUI
 import CoreData
 
 struct PushSettingView: View {
+    @Environment(\.dismiss) private var dismiss // 뒤로 가기 제스처를 수동으로 제어하기 위한 환경 변수 추가
     @StateObject private var viewModel: PushSettingViewModel = PushSettingViewModel(context: PersistenceController.shared.viewContext(for: "AlarmSetting"))
     @Environment(\.managedObjectContext) private var viewContext
-    @State private var showDatePicker: Bool = false // DatePicker 플로팅을 제어하는 상태 변수
-    @State private var selectedTime: Date = Date() // 선택된 시간 저장
+    @State private var showDatePicker: Bool = false
+    @State private var selectedTime: Date = Date()
 
     var body: some View {
         NavigationView {
             VStack {
                 CustomHeaderView(title: "알림 설정") {
-                    Button(action: {
-                        withAnimation(.easeInOut) { // 애니메이션 추가
-                            showDatePicker.toggle() // 플러스 버튼을 누르면 DatePicker 플로팅
+                    HStack {
+                        Button(action: {
+                            withAnimation(.easeInOut) {
+                                showDatePicker.toggle()
+                            }
+                        }) {
+                            Image(systemName: "plus")
+                                .font(.title)
+                                .foregroundColor(.black)
                         }
-                    }) {
-                        Image(systemName: "plus")
-                            .font(.title)
-                            .foregroundColor(.black)
+                        .padding(.trailing, 10)
+                        
+                        Button(action: { dismiss() }) { // 뒤로 가기 버튼을 직접 추가
+                            Image(systemName: "chevron.left")
+                                .font(.title2)
+                                .foregroundColor(.black)
+                            Text("back")
+                        }
                     }
                 }
                 
@@ -48,7 +59,7 @@ struct PushSettingView: View {
                                         }
                                     }
                                 ))
-                                .toggleStyle(SwitchToggleStyle(tint: CustomColor.SwiftUI.customBlack)) // 스위치 스타일 설정
+                                .toggleStyle(SwitchToggleStyle(tint: CustomColor.SwiftUI.customBlack))
                             }
                         }
                     }
@@ -58,23 +69,22 @@ struct PushSettingView: View {
                 .listStyle(.plain)
                 .scrollIndicators(.hidden)
 
-                // 플로팅 형식의 DatePicker를 모달 형식으로 구현
                 if showDatePicker {
                     DatePickerFloatingView(
                         selectedTime: $selectedTime,
                         onSave: {
-                            viewModel.createAlarm(time: selectedTime) // 알람 추가
-                            withAnimation(.easeInOut) { // 사라지는 애니메이션
+                            viewModel.createAlarm(time: selectedTime)
+                            withAnimation(.easeInOut) {
                                 showDatePicker = false
                             }
                         },
                         onCancel: {
-                            withAnimation(.easeInOut) { // 사라지는 애니메이션
+                            withAnimation(.easeInOut) {
                                 showDatePicker = false
                             }
                         }
                     )
-                    .transition(.move(edge: .bottom)) // 아래에서 위로 올라오는 애니메이션
+                    .transition(.move(edge: .bottom))
                 }
             }
             .navigationBarHidden(true)

@@ -10,7 +10,7 @@ import SwiftUI
 struct MotivationView: View {
     @ObservedObject var viewModel: MotivationViewModel
     @State private var isShareSheetPresented = false
-    @State private var shareContent: String = "Hi"
+    @State private var shareContent: String = "Hello, world!"
     @State private var headerVisible = true
     @State private var lastScrollPosition: CGFloat = 0.0
     @State private var currentScrollOffset: CGFloat = 0.0
@@ -51,7 +51,7 @@ struct MotivationView: View {
                             shareContent: $shareContent
                             
                         )
-                        .onChange(of: shareContent) { newValue in
+                        .onChange(of: shareContent) { oldValue, newValue in
                             if !newValue.isEmpty {
                                 isShareSheetPresented = true
                             }
@@ -120,7 +120,7 @@ struct MotivationView: View {
                     .sheet(isPresented: $isShareSheetPresented) {
                         ShareSheet(activityItems: [shareContent], isPresented: $isShareSheetPresented)
                     }
-                    .onChange(of: shareContent) { newValue in
+                    .onChange(of: shareContent) { oldValue, newValue in
                         if !newValue.isEmpty {
                             isShareSheetPresented = true
                         }

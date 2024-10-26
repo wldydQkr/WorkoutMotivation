@@ -13,7 +13,7 @@ struct MyPageView: View {
     @State private var isShareSheetPresented = false
     
     var body: some View {
-        NavigationView {
+        NavigationView { // NavigationView를 NavigationStack으로 변경
             VStack {
                 CustomHeaderView(title: "설정") {
                     EmptyView()
@@ -53,7 +53,7 @@ struct MyPageView: View {
                 MailView(isShowing: $viewModel.isShowingMailView, result: $viewModel.mailResult)
             }
             .sheet(isPresented: $viewModel.isShowingShareSheet) {
-                ShareSheet(activityItems: viewModel.activityItems, isPresented: $isShareSheetPresented)  // 공유할 아이템 전달
+                ShareSheet(activityItems: viewModel.activityItems, isPresented: $isShareSheetPresented)
             }
         }
     }
