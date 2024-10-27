@@ -15,10 +15,13 @@ struct AppVersionView: View {
     }
     
     var body: some View {
-        Text(appVersion)
-            .font(.footnote)
-            .foregroundColor(.gray)
-            .padding()
+        NavigationView {
+            Text(appVersion)
+                .font(.footnote)
+                .foregroundColor(.gray)
+                .padding()
+        }
+        .navigationBarBackButtonHidden(false)
     }
 }
 

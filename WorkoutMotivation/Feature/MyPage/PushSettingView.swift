@@ -9,7 +9,7 @@ import SwiftUI
 import CoreData
 
 struct PushSettingView: View {
-    @Environment(\.dismiss) private var dismiss // 뒤로 가기 제스처를 수동으로 제어하기 위한 환경 변수 추가
+    @Environment(\.dismiss) private var dismiss
     @StateObject private var viewModel: PushSettingViewModel = PushSettingViewModel(context: PersistenceController.shared.viewContext(for: "AlarmSetting"))
     @Environment(\.managedObjectContext) private var viewContext
     @State private var showDatePicker: Bool = false
@@ -31,7 +31,7 @@ struct PushSettingView: View {
                         }
                         .padding(.trailing, 10)
                         
-                        Button(action: { dismiss() }) { // 뒤로 가기 버튼을 직접 추가
+                        Button(action: { dismiss() }) {
                             Image(systemName: "chevron.left")
                                 .font(.title2)
                                 .foregroundColor(.black)
