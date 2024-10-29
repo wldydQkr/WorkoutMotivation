@@ -38,9 +38,7 @@ struct MotivationView: View {
                 
                 if showMotivationCardView {
                     if viewModel.isLoading {
-                        LottieView("skeletonView")
-                            .frame(width: 400, height: 400)
-                        LottieView("skeletonView")
+                        LottieView("skeletonView_horizontal")
                             .frame(width: 400, height: 400)
                     } else {
                         MotivationCardView(
