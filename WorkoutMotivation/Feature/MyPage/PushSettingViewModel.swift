@@ -12,32 +12,34 @@ import CoreData
 final class PushSettingViewModel: ObservableObject {
     @Published var alarmSettings: [AlarmSettingEntity] = []
     private var context: NSManagedObjectContext
-    private let motivationViewModel = MotivationViewModel() // MotivationViewModel 인스턴스 생성
-    @Published var isNotificationEnabled: Bool = false // 알림 활성화 여부 변수 추가
+    private let motivationViewModel = MotivationViewModel()
+    private var timer: Timer? // 타이머를 추가
+    @Published var isNotificationEnabled: Bool = false
     
     init(context: NSManagedObjectContext = PersistenceController.shared.viewContext(for: "AlarmSetting")) {
         self.context = context
         loadAlarmSettings()
-        requestNotificationAuthorization() // 알림 권한 요청
+        requestNotificationAuthorization()
+//        startTimer() // 타이머 시작
     }
     
+    // 알림 권한 요청
     private func requestNotificationAuthorization() {
         let center = UNUserNotificationCenter.current()
         center.requestAuthorization(options: [.alert, .sound]) { [weak self] granted, error in
             if let error = error {
                 print("알림 권한 요청 실패: \(error.localizedDescription)")
             }
-            self?.isNotificationEnabled = granted // 알림 권한 상태 업데이트
+            self?.isNotificationEnabled = granted
         }
     }
     
-    func createAlarm(time: Date, isEnabled: Bool = true, isRepeated: Bool = false) {
+    func createAlarm(time: Date, isEnabled: Bool = true) {
         let newAlarm = AlarmSettingEntity(context: context) // CoreData Entity 생성
         newAlarm.id = UUID() // UUID 생성
         newAlarm.time = time // 알람 시간 설정
         newAlarm.isEnabled = isEnabled // 기본적으로 활성화
-        newAlarm.isRepeated = isRepeated // 기본적으로 반복 안 함
-        
+
         saveContext() // CoreData 저장
         scheduleNotification(for: newAlarm) // 알람에 대한 푸시 예약
         loadAlarmSettings() // 알람 설정 갱신
@@ -57,7 +59,7 @@ final class PushSettingViewModel: ObservableObject {
         DispatchQueue.main.async {
             do {
                 try self.context.save()
-                self.loadAlarmSettings() // 업데이트된 설정 불러오기
+                self.loadAlarmSettings()
             } catch {
                 print("알람 설정 저장 실패: \(error)")
             }
@@ -66,8 +68,8 @@ final class PushSettingViewModel: ObservableObject {
     
     func deleteAlarmSetting(alarm: AlarmSettingEntity) {
         context.delete(alarm)
-        saveContext() // 컨텍스트 저장
-        loadAlarmSettings() // 업데이트된 설정 불러오기
+        saveContext()
+        loadAlarmSettings()
     }
     
     func scheduleNotification(for alarm: AlarmSettingEntity) {
@@ -90,8 +92,8 @@ final class PushSettingViewModel: ObservableObject {
             return
         }
 
-        let triggerDate = Calendar.current.dateComponents([.hour, .minute], from: alarmTime)
-        let trigger = UNCalendarNotificationTrigger(dateMatching: triggerDate, repeats: true) // 반복 설정을 true로 변경
+        let triggerDate = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute], from: alarmTime)
+        let trigger = UNCalendarNotificationTrigger(dateMatching: triggerDate, repeats: false)
 
         // 랜덤 모티베이션 예약
         scheduleRandomMotivation(content: content, trigger: trigger, alarm: alarm)
@@ -133,47 +135,29 @@ final class PushSettingViewModel: ObservableObject {
             }
         }
     }
+    
+    // 타이머 시작
+    private func startTimer() {
+        timer?.invalidate() // 기존 타이머가 있다면 종료
+        timer = Timer.scheduledTimer(withTimeInterval: 60, repeats: true) { [weak self] _ in
+            self?.reloadRandomAlarms()
+        }
+    }
+    
+    // 랜덤 알림 재예약
+    private func reloadRandomAlarms() {
+        alarmSettings.forEach { alarm in
+            cancelNotification(for: alarm)
+            scheduleNotification(for: alarm)
+        }
+    }
+    
+    deinit {
+        timer?.invalidate() // 뷰 모델 해제 시 타이머도 종료
+    }
 }
 
-//    func scheduleNotification(for alarm: AlarmSettingEntity) {
-//        guard isNotificationEnabled else {
-//            print("알림 권한이 없습니다.")
-//            return
-//        }
-//
-//        guard let randomMotivation = motivationViewModel.getRandomMotivation() else {
-//            print("모티베이션 목록이 비어 있습니다.")
-//            return
-//        }
-//
-//        let content = UNMutableNotificationContent()
-//        content.title = "Workout Motivation"
-//        content.body = "\(randomMotivation.title) \n- \(randomMotivation.name)"
-//        content.sound = .default
-//
-//        // 알림을 보낼 시간 설정
-//        let triggerDate = Calendar.current.dateComponents([.hour, .minute], from: alarm.time ?? Date())
-//        let trigger = UNCalendarNotificationTrigger(dateMatching: triggerDate, repeats: alarm.isRepeated)
-//
-//        // 알림 요청 만들기
-//        let request = UNNotificationRequest(identifier: alarm.id!.uuidString, content: content, trigger: trigger)
-//
-//        // 알림 요청을 UNUserNotificationCenter에 추가
-//        UNUserNotificationCenter.current().add(request) { error in
-//            if let error = error {
-//                print("알림 요청 추가 실패: \(error.localizedDescription)")
-//            } else {
-//                print("알림이 성공적으로 예약되었습니다.")
-//            }
-//        }
-//    }
-
-//    func cancelNotification(for alarm: AlarmSettingEntity) {
-//        UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [alarm.id!.uuidString])
-//    }
-
-
-
+//MARK: 백그라운드 처리 로직
 //final class PushSettingViewModel: ObservableObject {
 //    @Published var interval: TimeInterval = 3600 // 기본 1시간
 //    @Published var isNotificationEnabled: Bool = false // 기본값은 false로 설정

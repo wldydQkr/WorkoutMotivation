@@ -45,7 +45,7 @@ struct DiaryCreateView: View {
                 }
                 Section(header: Text("내용")) {
                     ResizableTextEditor(text: $content)
-                        .frame(minHeight: 100) // 최소 높이 설정
+                        .frame(minHeight: 100)
                 }
                 Section(header: Text("날짜")) {
                     Text(date.formatted())
@@ -85,11 +85,21 @@ struct DiaryCreateView: View {
             Task {
                 if let newItem = newItem {
                     if let data = try? await newItem.loadTransferable(type: Data.self) {
-                        selectedImage = data // Update selected image
+                        selectedImage = data
                     }
                 }
             }
         }
+        .onTapGesture {
+            hideKeyboard()
+        }
+    }
+}
+
+// Helper function to hide keyboard
+extension View {
+    func hideKeyboard() {
+        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
     }
 }
 

@@ -95,6 +95,9 @@ struct DiaryDetailView: View {
         }
         .navigationBarHidden(true)
         .photosPicker(isPresented: $showImagePicker, selection: $selectedItem, matching: .images, photoLibrary: .shared())
+        .onTapGesture {
+            hideKeyboard()
+        }
         .onChange(of: selectedItem) { newItem in
             Task {
                 if let newItem = newItem {
