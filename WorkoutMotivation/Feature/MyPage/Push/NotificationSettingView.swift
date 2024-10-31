@@ -1,19 +1,23 @@
 //
-//  PushSettingView.swift
+//  NotificationSettingView.swift
 //  WorkoutMotivation
 //
-//  Created by 박지용 on 8/27/24.
+//  Created by 박지용 on 10/31/24.
 //
 
 import SwiftUI
-import CoreData
 
-struct PushSettingView: View {
+struct NotificationSettingView: View {
     @Environment(\.dismiss) private var dismiss
-    @StateObject private var viewModel: PushSettingViewModel = PushSettingViewModel(context: PersistenceController.shared.viewContext(for: "AlarmSetting"))
+    @StateObject private var viewModel: NotificationSettingViewModel
     @Environment(\.managedObjectContext) private var viewContext
     @State private var showDatePicker: Bool = false
     @State private var selectedTime: Date = Date()
+    
+    init() {
+        let motivationViewModel = MotivationViewModel()
+        _viewModel = StateObject(wrappedValue: NotificationSettingViewModel(context: PersistenceController.shared.viewContext(for: "AlarmSetting"), motivationViewModel: motivationViewModel))
+    }
 
     var body: some View {
         NavigationView {
@@ -103,54 +107,6 @@ struct PushSettingView: View {
     }
 }
 
-// DatePicker를 플로팅 형식으로 분리한 뷰
-struct DatePickerFloatingView: View {
-    @Binding var selectedTime: Date
-    var onSave: () -> Void
-    var onCancel: () -> Void
-
-    var body: some View {
-        VStack {
-            Spacer()
-            VStack(spacing: 20) {
-                Text("알림 시간 설정")
-                    .padding(.top, 20)
-                    .font(.headline)
-
-                DatePicker("", selection: $selectedTime, displayedComponents: .hourAndMinute)
-                    .datePickerStyle(WheelDatePickerStyle())
-                    .labelsHidden()
-
-                HStack {
-                    Button(action: onCancel) {
-                        Text("취소")
-                            .foregroundColor(.red)
-                    }
-                    Spacer()
-                    Button(action: onSave) {
-                        Text("저장")
-                            .foregroundColor(.blue)
-                    }
-                }
-                .padding()
-            }
-            .background(RoundedRectangle(cornerRadius: 20).fill(Color.white.opacity(0.9))) // 배경 투명도 설정
-            .shadow(radius: 20)
-            .padding(.horizontal)
-        }
-        .padding(.bottom, 20)
-        .background(Color.clear.opacity(0.0))
-    }
+#Preview {
+    NotificationSettingView()
 }
-
-extension DateFormatter {
-    static var shortTime: DateFormatter {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "hh:mm a"
-        return formatter
-    }
-}
-
-//#Preview {
-//    PushSettingView(context: <#NSManagedObjectContext#>)
-//}

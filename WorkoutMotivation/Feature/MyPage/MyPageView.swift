@@ -26,7 +26,7 @@ struct MyPageView: View {
                             Text(item.title)
                         }
                     case "알림 설정":
-                        NavigationLink(destination: PushSettingView()) {
+                        NavigationLink(destination: NotificationSettingView()) {
                             Text(item.title)
                         }
                     case "앱 공유":

@@ -10,6 +10,8 @@ import FirebaseDatabaseInternal
 import Combine
 
 final class MotivationViewModel: ObservableObject {
+    static let shared = MotivationViewModel() // 싱글톤 인스턴스
+    
     @Published var motivations: [Motivation] = []
     @Published var errorMessage: String?
     @Published var likedStatus: [Int: Bool] = [:]

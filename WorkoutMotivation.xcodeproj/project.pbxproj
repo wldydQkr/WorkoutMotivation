@@ -79,6 +79,9 @@
 		C0A01EE22C770BE3001923E8 /* MailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A01EE12C770BE3001923E8 /* MailView.swift */; };
 		C0A01EE42C7DEEE6001923E8 /* PushSettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A01EE32C7DEEE6001923E8 /* PushSettingView.swift */; };
 		C0A01EE62C7DEF3D001923E8 /* PushSettingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A01EE52C7DEF3D001923E8 /* PushSettingViewModel.swift */; };
+		C0A50E942CD3AB870064A373 /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = C0A50E932CD3AB870064A373 /* FirebaseMessaging */; };
+		C0A50E992CD3B80E0064A373 /* NotificationSettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A50E982CD3B80E0064A373 /* NotificationSettingView.swift */; };
+		C0A50E9B2CD3B84E0064A373 /* NotificationSettingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A50E9A2CD3B8480064A373 /* NotificationSettingViewModel.swift */; };
 		C0AD14112CB67B8D00A1FCE4 /* NavigationBarModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0AD14102CB67B8000A1FCE4 /* NavigationBarModifier.swift */; };
 		C0AD14142CB67CE900A1FCE4 /* AddDiaryButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0AD14132CB67CE900A1FCE4 /* AddDiaryButton.swift */; };
 		C0AD14172CBB78D800A1FCE4 /* MasonryVStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0AD14162CBB78D800A1FCE4 /* MasonryVStack.swift */; };
@@ -187,6 +190,8 @@
 		C0A01EE12C770BE3001923E8 /* MailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MailView.swift; sourceTree = "<group>"; };
 		C0A01EE32C7DEEE6001923E8 /* PushSettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushSettingView.swift; sourceTree = "<group>"; };
 		C0A01EE52C7DEF3D001923E8 /* PushSettingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushSettingViewModel.swift; sourceTree = "<group>"; };
+		C0A50E982CD3B80E0064A373 /* NotificationSettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationSettingView.swift; sourceTree = "<group>"; };
+		C0A50E9A2CD3B8480064A373 /* NotificationSettingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationSettingViewModel.swift; sourceTree = "<group>"; };
 		C0AD14102CB67B8000A1FCE4 /* NavigationBarModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationBarModifier.swift; sourceTree = "<group>"; };
 		C0AD14132CB67CE900A1FCE4 /* AddDiaryButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddDiaryButton.swift; sourceTree = "<group>"; };
 		C0AD14162CBB78D800A1FCE4 /* MasonryVStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MasonryVStack.swift; sourceTree = "<group>"; };
@@ -217,6 +222,7 @@
 			files = (
 				C04A4F852CCA7581006288AA /* FirebaseAnalytics in Frameworks */,
 				C08DC3032C0B63D300CCB2BE /* Lottie in Frameworks */,
+				C0A50E942CD3AB870064A373 /* FirebaseMessaging in Frameworks */,
 				C04A4F8B2CCA78B4006288AA /* FirebaseDatabase in Frameworks */,
 				C04A4F872CCA7581006288AA /* FirebaseStorage in Frameworks */,
 			);
@@ -332,8 +338,7 @@
 				C04405572C157FE100E4C764 /* MyPageViewModel.swift */,
 				C0A01EDF2C75AFC2001923E8 /* AppVersionView.swift */,
 				C0A01EE12C770BE3001923E8 /* MailView.swift */,
-				C0A01EE32C7DEEE6001923E8 /* PushSettingView.swift */,
-				C0A01EE52C7DEF3D001923E8 /* PushSettingViewModel.swift */,
+				C0A50E952CD3B7BC0064A373 /* Push */,
 			);
 			path = MyPage;
 			sourceTree = "<group>";
@@ -608,6 +613,17 @@
 			path = ImagePicker;
 			sourceTree = "<group>";
 		};
+		C0A50E952CD3B7BC0064A373 /* Push */ = {
+			isa = PBXGroup;
+			children = (
+				C0A01EE32C7DEEE6001923E8 /* PushSettingView.swift */,
+				C0A01EE52C7DEF3D001923E8 /* PushSettingViewModel.swift */,
+				C0A50E982CD3B80E0064A373 /* NotificationSettingView.swift */,
+				C0A50E9A2CD3B8480064A373 /* NotificationSettingViewModel.swift */,
+			);
+			path = Push;
+			sourceTree = "<group>";
+		};
 		C0AD140F2CB67B6E00A1FCE4 /* NavigationBar */ = {
 			isa = PBXGroup;
 			children = (
@@ -689,6 +705,7 @@
 				C04A4F842CCA7581006288AA /* FirebaseAnalytics */,
 				C04A4F862CCA7581006288AA /* FirebaseStorage */,
 				C04A4F8A2CCA78B4006288AA /* FirebaseDatabase */,
+				C0A50E932CD3AB870064A373 /* FirebaseMessaging */,
 			);
 			productName = WorkoutMotivation;
 			productReference = C08DC2DE2C0AD3DE00CCB2BE /* WorkoutMotivation.app */;
@@ -788,6 +805,7 @@
 				C0A01EE62C7DEF3D001923E8 /* PushSettingViewModel.swift in Sources */,
 				C044054D2C134DC800E4C764 /* View+.swift in Sources */,
 				C0A01EE22C770BE3001923E8 /* MailView.swift in Sources */,
+				C0A50E9B2CD3B84E0064A373 /* NotificationSettingViewModel.swift in Sources */,
 				C08DC3152C0C9F6F00CCB2BE /* Motivation.swift in Sources */,
 				C044053B2C12B97A00E4C764 /* NotificationService.swift in Sources */,
 				C044052A2C120E3900E4C764 /* IsLikedView.swift in Sources */,
@@ -808,6 +826,7 @@
 				C044053E2C12B9CF00E4C764 /* Time.swift in Sources */,
 				C061B4D52C1C988700FFD7C5 /* Date+.swift in Sources */,
 				C044055A2C176AD200E4C764 /* MotivationDetailViewModel.swift in Sources */,
+				C0A50E992CD3B80E0064A373 /* NotificationSettingView.swift in Sources */,
 				C0A01EE42C7DEEE6001923E8 /* PushSettingView.swift in Sources */,
 				C061B4C02C1C6F7500FFD7C5 /* DiaryViewModel.swift in Sources */,
 				C08DC30B2C0B65C000CCB2BE /* Path.swift in Sources */,
@@ -1164,6 +1183,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = C08DC3012C0B63D300CCB2BE /* XCRemoteSwiftPackageReference "lottie-ios" */;
 			productName = Lottie;
+		};
+		C0A50E932CD3AB870064A373 /* FirebaseMessaging */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C04A4F832CCA7581006288AA /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseMessaging;
 		};
 /* End XCSwiftPackageProductDependency section */
 
