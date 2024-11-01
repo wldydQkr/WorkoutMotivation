@@ -6,103 +6,45 @@
 //
 
 import SwiftUI
+import UserNotifications
 
 struct NotificationSettingView: View {
-    @Environment(\.dismiss) private var dismiss
-    @StateObject private var viewModel: NotificationSettingViewModel
-    @Environment(\.managedObjectContext) private var viewContext
-    @State private var showDatePicker: Bool = false
-    @State private var selectedTime: Date = Date()
-    
-    init() {
-        let motivationViewModel = MotivationViewModel()
-        _viewModel = StateObject(wrappedValue: NotificationSettingViewModel(context: PersistenceController.shared.viewContext(for: "AlarmSetting"), motivationViewModel: motivationViewModel))
-    }
+    @StateObject private var viewModel = NotificationSettingViewModel()
+    @Environment(\.presentationMode) var presentationMode // 이전 뷰로 돌아가기 위한 환경 변수
 
     var body: some View {
         NavigationView {
-            VStack {
-                CustomHeaderView(title: "알림 설정") {
+            List {
+                ForEach(viewModel.notifications.indices, id: \.self) { index in
                     HStack {
-                        Button(action: {
-                            withAnimation(.easeInOut) {
-                                showDatePicker.toggle()
-                            }
-                        }) {
-                            Image(systemName: "plus")
-                                .font(.title)
-                                .foregroundColor(.black)
-                        }
-                        .padding(.trailing, 10)
-                        
-                        Button(action: { dismiss() }) {
-                            Image(systemName: "chevron.left")
-                                .font(.title2)
-                                .foregroundColor(.black)
-                            Text("back")
-                        }
+                        DatePicker("알림 시간", selection: $viewModel.notifications[index].date, displayedComponents: .hourAndMinute)
+                            .labelsHidden()
+                        Text(viewModel.notifications[index].motivation?.title ?? "동기부여 제목 없음")
+                            .foregroundColor(.gray)
                     }
                 }
+                .onDelete(perform: viewModel.removeNotification)
                 
-                List {
-                    ForEach(viewModel.alarmSettings, id: \.id) { alarm in
-                        if let alarmSetting = alarm as? AlarmSettingEntity {
-                            HStack {
-                                Text("\(alarmSetting.time ?? Date(), formatter: DateFormatter.shortTime)")
-                                    .foregroundColor(.black)
-
-                                Toggle(alarmSetting.isEnabled ? "활성" : "해제", isOn: Binding<Bool>(
-                                    get: { alarmSetting.isEnabled },
-                                    set: { newValue in
-                                        alarmSetting.isEnabled = newValue
-                                        viewModel.saveAlarmSetting(alarm: alarmSetting)
-                                        if newValue {
-                                            viewModel.scheduleNotification(for: alarmSetting)
-                                        } else {
-                                            viewModel.cancelNotification(for: alarmSetting)
-                                        }
-                                    }
-                                ))
-                                .toggleStyle(SwitchToggleStyle(tint: CustomColor.SwiftUI.customBlack))
-                            }
-                        }
-                    }
-                    .onDelete(perform: deleteAlarms)
+                Button(action: {
+                    viewModel.addNotification()
+                }) {
+                    Text("알림 추가")
+                        .foregroundColor(.blue)
                 }
-                .background(CustomColor.SwiftUI.customBackgrond)
-                .listStyle(.plain)
-                .scrollIndicators(.hidden)
-
-                if showDatePicker {
-                    DatePickerFloatingView(
-                        selectedTime: $selectedTime,
-                        onSave: {
-                            viewModel.createAlarm(time: selectedTime)
-                            withAnimation(.easeInOut) {
-                                showDatePicker = false
-                            }
-                        },
-                        onCancel: {
-                            withAnimation(.easeInOut) {
-                                showDatePicker = false
-                            }
-                        }
-                    )
-                    .transition(.move(edge: .bottom))
+                .disabled(viewModel.notifications.count >= 12) // 최대 12개까지 제한
+            }
+            .navigationTitle("알림 설정")
+            .navigationBarItems(trailing: HStack {
+                Button("설정 완료") {
+                    viewModel.scheduleNotifications()
+                    presentationMode.wrappedValue.dismiss() // 이전 뷰로 돌아감
                 }
+                .foregroundStyle(CustomColor.SwiftUI.customBlack)
+                .disabled(viewModel.notifications.isEmpty) // 알림이 없으면 비활성화
+            })
+            .alert(isPresented: $viewModel.showAlert) {
+                Alert(title: Text("알림 추가 불가"), message: Text("최대 12개의 알림만 추가할 수 있습니다."), dismissButton: .default(Text("확인")))
             }
-            .navigationBarHidden(true)
-            .onAppear {
-                viewModel.loadAlarmSettings()
-            }
-        }
-        .navigationBarHidden(true)
-    }
-
-    private func deleteAlarms(at offsets: IndexSet) {
-        for index in offsets {
-            let alarm = viewModel.alarmSettings[index]
-            viewModel.deleteAlarmSetting(alarm: alarm)
         }
     }
 }

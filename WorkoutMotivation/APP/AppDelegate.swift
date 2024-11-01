@@ -10,14 +10,14 @@ import BackgroundTasks
 import FirebaseCore
 import UserNotifications
 
-class AppDelegate: NSObject, UIApplicationDelegate {
-    var pushSettingViewModel: PushSettingViewModel!
-    var motivationViewModel = MotivationViewModel()
+class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDelegate {
+//    var pushSettingViewModel: PushSettingViewModel!
+//    var motivationViewModel = MotivationViewModel()
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {
         FirebaseApp.configure()
         
-//        UNUserNotificationCenter.current().delegate = self
+        UNUserNotificationCenter.current().delegate = self
         
         // 알림 권한 요청
         let center = UNUserNotificationCenter.current()
@@ -26,7 +26,7 @@ class AppDelegate: NSObject, UIApplicationDelegate {
         }
         
         // PushSettingViewModel 초기화
-        pushSettingViewModel = PushSettingViewModel(context: PersistenceController.shared.viewContext(for: "AlarmSetting"))
+//        pushSettingViewModel = PushSettingViewModel(context: PersistenceController.shared.viewContext(for: "AlarmSetting"))
         
         return true
     }
