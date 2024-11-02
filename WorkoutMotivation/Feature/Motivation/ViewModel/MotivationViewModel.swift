@@ -71,6 +71,7 @@ final class MotivationViewModel: ObservableObject {
 
     // 랜덤으로 Motivation을 반환하는 함수
     func getRandomMotivation() -> Motivation? {
+        guard !motivations.isEmpty else { return nil }
         return motivations.randomElement()
     }
 
