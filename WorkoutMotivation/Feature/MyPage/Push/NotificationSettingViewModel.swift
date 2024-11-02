@@ -7,33 +7,47 @@
 
 import Foundation
 import UserNotifications
+import Combine
 
 final class NotificationSettingViewModel: ObservableObject {
     @Published var notifications: [NotificationItem] = [] {
         didSet {
-            saveNotifications() // notifications가 변경될 때마다 저장
+            saveNotifications()
         }
     }
-    @Published var showAlert: Bool = false // 알림 추가 불가 시 알림 표시
-
+    @Published var showAlert: Bool = false
+    @Published var showDeleteAlert: Bool = false // 삭제 확인 알럿 표시 여부
+    @Published var likedMotivations: [Motivation] = [] // 좋아요한 명언 리스트
+    private var indexToDelete: Int? // 삭제할 알림의 인덱스
+    
     private let userDefaultsKey = "notifications"
+    private var subscriptions = Set<AnyCancellable>() // Combine 구독 저장
 
     init() {
-        loadNotifications() // 초기 로드
+        loadNotifications()
+        loadLikedMotivations()
     }
     
     func addNotification() {
         guard notifications.count < 12 else {
-            showAlert = true // 최대 개수 초과 시 알림 표시
+            showAlert = true
             return
         }
         
-        let newNotification = NotificationItem(date: Date(), motivation: MotivationViewModel.shared.getRandomMotivation())
+        let newNotification = NotificationItem(date: Date(), motivation: likedMotivations.first)
         notifications.append(newNotification)
     }
     
-    func removeNotification(at offsets: IndexSet) {
-        notifications.remove(atOffsets: offsets)
+    func showDeleteConfirmation(for index: Int) {
+        indexToDelete = index
+        showDeleteAlert = true // 삭제 알럿 표시
+    }
+    
+    func confirmDelete() {
+        if let index = indexToDelete {
+            notifications.remove(at: index)
+            indexToDelete = nil
+        }
     }
     
     func scheduleNotifications() {
@@ -49,7 +63,7 @@ final class NotificationSettingViewModel: ObservableObject {
             let trigger: UNNotificationTrigger
             
             if notification.repeats {
-                trigger = UNCalendarNotificationTrigger(dateMatching: triggerDate, repeats: true) // 하루마다 반복
+                trigger = UNCalendarNotificationTrigger(dateMatching: triggerDate, repeats: true)
             } else {
                 trigger = UNCalendarNotificationTrigger(dateMatching: triggerDate, repeats: false)
             }
@@ -63,7 +77,14 @@ final class NotificationSettingViewModel: ObservableObject {
         }
     }
     
-    // UserDefaults에 notifications 저장
+    private func loadLikedMotivations() {
+        if let savedLikes = UserDefaults.standard.array(forKey: "likedMotivations") as? [Int] {
+            likedMotivations = savedLikes.compactMap { id in
+                MotivationViewModel.shared.motivations.first(where: { $0.id == id })
+            }
+        }
+    }
+    
     private func saveNotifications() {
         let encoder = JSONEncoder()
         if let encoded = try? encoder.encode(notifications) {
@@ -71,7 +92,6 @@ final class NotificationSettingViewModel: ObservableObject {
         }
     }
     
-    // UserDefaults에서 notifications 로드
     private func loadNotifications() {
         let decoder = JSONDecoder()
         if let savedNotificationsData = UserDefaults.standard.data(forKey: userDefaultsKey) {
@@ -80,6 +100,11 @@ final class NotificationSettingViewModel: ObservableObject {
             }
         }
     }
+    
+    func reloadLikedMotivations() {
+        loadLikedMotivations() // 좋아요한 명언 리스트 업데이트
+    }
+    
 }
 
 struct NotificationItem: Codable {
