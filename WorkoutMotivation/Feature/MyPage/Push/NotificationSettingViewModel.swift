@@ -16,12 +16,12 @@ final class NotificationSettingViewModel: ObservableObject {
         }
     }
     @Published var showAlert: Bool = false
-    @Published var showDeleteAlert: Bool = false // 삭제 확인 알럿 표시 여부
-    @Published var likedMotivations: [Motivation] = [] // 좋아요한 명언 리스트
-    private var indexToDelete: Int? // 삭제할 알림의 인덱스
+    @Published var showDeleteAlert: Bool = false
+    @Published var likedMotivations: [Motivation] = []
     
+    private var indexToDelete: Int?
     private let userDefaultsKey = "notifications"
-    private var subscriptions = Set<AnyCancellable>() // Combine 구독 저장
+    private var subscriptions = Set<AnyCancellable>()
 
     init() {
         loadNotifications()
@@ -40,40 +40,55 @@ final class NotificationSettingViewModel: ObservableObject {
     
     func showDeleteConfirmation(for index: Int) {
         indexToDelete = index
-        showDeleteAlert = true // 삭제 알럿 표시
+        showDeleteAlert = true
     }
     
     func confirmDelete() {
         if let index = indexToDelete {
+            let item = notifications[index]
+            cancelNotification(for: item) // 삭제할 알림을 먼저 취소
             notifications.remove(at: index)
             indexToDelete = nil
         }
     }
     
+    func updateNotification(for item: NotificationItem) {
+        cancelNotification(for: item)
+        scheduleNotification(for: item)
+    }
+    
+    func rescheduleNotification(for item: NotificationItem, with motivation: Motivation) {
+        cancelNotification(for: item)
+        var updatedItem = item
+        updatedItem.motivation = motivation
+        scheduleNotification(for: updatedItem)
+    }
+    
+    private func cancelNotification(for item: NotificationItem) {
+        UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [item.id.uuidString])
+    }
+
+    private func scheduleNotification(for item: NotificationItem) {
+        let content = UNMutableNotificationContent()
+        content.title = "WorkoutMotivation"
+        content.body = "\(item.motivation?.title ?? "알림")\n-\(item.motivation?.name ?? "내용 없음")"
+        content.sound = .default
+
+        let triggerDate = Calendar.current.dateComponents([.hour, .minute], from: item.date)
+        let trigger = UNCalendarNotificationTrigger(dateMatching: triggerDate, repeats: item.repeats)
+
+        let request = UNNotificationRequest(identifier: item.id.uuidString, content: content, trigger: trigger)
+        UNUserNotificationCenter.current().add(request) { error in
+            if let error = error {
+                print("알림 예약 오류: \(error.localizedDescription)")
+            }
+            print("알림 예약 완료.")
+        }
+    }
+    
     func scheduleNotifications() {
-        let center = UNUserNotificationCenter.current()
-        
         for notification in notifications {
-            let content = UNMutableNotificationContent()
-            content.title = "WorkoutMotivation"
-            content.body = "\(notification.motivation?.title ?? "알림")\n-\(notification.motivation?.name ?? "내용 없음")"
-            content.sound = .default
-            
-            let triggerDate = Calendar.current.dateComponents([.year, .month, .day, .hour, .minute], from: notification.date)
-            let trigger: UNNotificationTrigger
-            
-            if notification.repeats {
-                trigger = UNCalendarNotificationTrigger(dateMatching: triggerDate, repeats: true)
-            } else {
-                trigger = UNCalendarNotificationTrigger(dateMatching: triggerDate, repeats: false)
-            }
-            
-            let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
-            center.add(request) { error in
-                if let error = error {
-                    print("알림 예약 오류: \(error.localizedDescription)")
-                }
-            }
+            scheduleNotification(for: notification)
         }
     }
     
@@ -102,12 +117,12 @@ final class NotificationSettingViewModel: ObservableObject {
     }
     
     func reloadLikedMotivations() {
-        loadLikedMotivations() // 좋아요한 명언 리스트 업데이트
+        loadLikedMotivations()
     }
-    
 }
 
 struct NotificationItem: Codable {
+    var id = UUID()
     var date: Date
     var motivation: Motivation?
     var repeats: Bool = false
