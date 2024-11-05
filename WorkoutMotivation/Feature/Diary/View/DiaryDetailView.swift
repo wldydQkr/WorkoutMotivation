@@ -11,17 +11,17 @@ import PhotosUI
 struct DiaryDetailView: View {
     @ObservedObject var viewModel: DiaryViewModel
     var diary: Diary
-
+    
     @State private var title: String
     @State private var content: String
     @State private var image: Data
     @State private var date: Date
-
+    
     @State private var showImagePicker: Bool = false
     @State private var selectedItem: PhotosPickerItem? = nil
-
+    
     @Environment(\.presentationMode) var presentationMode
-
+    
     init(viewModel: DiaryViewModel, diary: Diary) {
         self.viewModel = viewModel
         self.diary = diary
@@ -30,7 +30,7 @@ struct DiaryDetailView: View {
         _image = State(initialValue: diary.image ?? Data())
         _date = State(initialValue: diary.date)
     }
-
+    
     var body: some View {
         VStack {
             HStack {
@@ -48,7 +48,7 @@ struct DiaryDetailView: View {
                 .foregroundStyle(CustomColor.SwiftUI.customBlack)
             }
             .padding()
-
+            
             Form {
                 Section(header: Text("제목")) {
                     TextField("제목을 입력해주세요", text: $title)
@@ -65,7 +65,12 @@ struct DiaryDetailView: View {
                         showImagePicker = true
                     }) {
                         Text("이미지 선택하기")
+                            .padding()
+                            .background(CustomColor.SwiftUI.customBlack.opacity(0.1))
+                            .cornerRadius(8)
                     }
+                    .buttonStyle(.plain)
+                    
                     if let uiImage = UIImage(data: image) {
                         Image(uiImage: uiImage)
                             .resizable()
@@ -76,7 +81,7 @@ struct DiaryDetailView: View {
                     }
                 }
             }
-
+            
             Button("저장") {
                 // Save the diary with updated details
                 viewModel.updateDiary(id: Int64(diary.id), title: title, content: content, image: image)
@@ -85,7 +90,7 @@ struct DiaryDetailView: View {
             .foregroundStyle(title.isEmpty || content.isEmpty ? .gray : CustomColor.SwiftUI.customBlack)
             .disabled(title.isEmpty || content.isEmpty)
             .padding()
-
+            
             Button("삭제") {
                 viewModel.deleteDiary(id: Int64(diary.id))
                 presentationMode.wrappedValue.dismiss() // 삭제 후 화면 닫기

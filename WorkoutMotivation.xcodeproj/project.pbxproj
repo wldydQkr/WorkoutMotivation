@@ -73,6 +73,7 @@
 		C08DC3172C0CA07700CCB2BE /* Tab.swift in Sources */ = {isa = PBXBuildFile; fileRef = C08DC3162C0CA07700CCB2BE /* Tab.swift */; };
 		C08DC3192C0CA0FE00CCB2BE /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C08DC3182C0CA0FE00CCB2BE /* HomeViewModel.swift */; };
 		C08DC31B2C0CA4F700CCB2BE /* MotivationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C08DC31A2C0CA4F700CCB2BE /* MotivationView.swift */; };
+		C091001D2CD50C14006394C4 /* FirebaseDatabase in Frameworks */ = {isa = PBXBuildFile; productRef = C04A4F8A2CCA78B4006288AA /* FirebaseDatabase */; };
 		C095CDE72CA91C6D00E83305 /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = C095CDE62CA91C6D00E83305 /* ImagePicker.swift */; };
 		C0A01EE02C75AFC2001923E8 /* AppVersionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A01EDF2C75AFC2001923E8 /* AppVersionView.swift */; };
 		C0A01EE22C770BE3001923E8 /* MailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A01EE12C770BE3001923E8 /* MailView.swift */; };
@@ -217,6 +218,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C091001D2CD50C14006394C4 /* FirebaseDatabase in Frameworks */,
 				C04A4F852CCA7581006288AA /* FirebaseAnalytics in Frameworks */,
 				C08DC3032C0B63D300CCB2BE /* Lottie in Frameworks */,
 				C0A50E942CD3AB870064A373 /* FirebaseMessaging in Frameworks */,
@@ -246,11 +248,9 @@
 		C04405282C120DC600E4C764 /* Like */ = {
 			isa = PBXGroup;
 			children = (
+				C09100212CDA10B1006394C4 /* ViewModel */,
+				C09100202CDA10AB006394C4 /* View */,
 				C061B4C12C1C70A400FFD7C5 /* Button */,
-				C04405292C120E3900E4C764 /* IsLikedView.swift */,
-				C061B4CB2C1C72B500FFD7C5 /* IsLikedMotivationItemView.swift */,
-				C061B4C92C1C71EA00FFD7C5 /* EmptyIsLikedView.swift */,
-				C061B4C22C1C70E200FFD7C5 /* IsLikedViewModel.swift */,
 			);
 			path = Like;
 			sourceTree = "<group>";
@@ -288,8 +288,8 @@
 		C04405302C12B5BF00E4C764 /* Timer */ = {
 			isa = PBXGroup;
 			children = (
-				C04405312C12B5DC00E4C764 /* TimerView.swift */,
-				C04405372C12B95B00E4C764 /* TimerViewModel.swift */,
+				C09100232CDA10D6006394C4 /* View */,
+				C09100222CDA10D0006394C4 /* ViewModel */,
 			);
 			path = Timer;
 			sourceTree = "<group>";
@@ -381,12 +381,9 @@
 		C061B4BC2C1C6F2B00FFD7C5 /* Diary */ = {
 			isa = PBXGroup;
 			children = (
+				C09100252CDA10E8006394C4 /* View */,
+				C09100242CDA10E2006394C4 /* ViewModel */,
 				C0AD14122CB67CD200A1FCE4 /* Button */,
-				C061B4BD2C1C6F6500FFD7C5 /* DiaryView.swift */,
-				C061B4DE2C20772E00FFD7C5 /* DiaryCardView.swift */,
-				C061B4D02C1C973A00FFD7C5 /* DiaryDetailView.swift */,
-				C061B4D22C1C979800FFD7C5 /* DiaryCreateView.swift */,
-				C061B4BF2C1C6F7500FFD7C5 /* DiaryViewModel.swift */,
 			);
 			path = Diary;
 			sourceTree = "<group>";
@@ -499,7 +496,6 @@
 				C0DA0A262CB2C91D00804BC1 /* Header */,
 				C08DC2FD2C0B62EF00CCB2BE /* Onboarding */,
 				C08DC31D2C0CA5C700CCB2BE /* Home */,
-				C08DC3182C0CA0FE00CCB2BE /* HomeViewModel.swift */,
 				C08DC31C2C0CA51600CCB2BE /* Motivation */,
 				C04405282C120DC600E4C764 /* Like */,
 				C04405302C12B5BF00E4C764 /* Timer */,
@@ -578,9 +574,8 @@
 		C08DC31D2C0CA5C700CCB2BE /* Home */ = {
 			isa = PBXGroup;
 			children = (
-				C08DC30E2C0B671400CCB2BE /* HomeView.swift */,
-				C037DD262C7EEE3100C4EDF1 /* CustomTabBar.swift */,
-				C037DD282C81D64C00C4EDF1 /* TabItem.swift */,
+				C091001F2CDA1084006394C4 /* View */,
+				C091001E2CDA107D006394C4 /* ViewModel */,
 			);
 			path = Home;
 			sourceTree = "<group>";
@@ -599,6 +594,77 @@
 				C08DC3142C0C9F6F00CCB2BE /* Motivation.swift */,
 			);
 			path = Motivation;
+			sourceTree = "<group>";
+		};
+		C091001E2CDA107D006394C4 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				C08DC3182C0CA0FE00CCB2BE /* HomeViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		C091001F2CDA1084006394C4 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				C08DC30E2C0B671400CCB2BE /* HomeView.swift */,
+				C037DD262C7EEE3100C4EDF1 /* CustomTabBar.swift */,
+				C037DD282C81D64C00C4EDF1 /* TabItem.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		C09100202CDA10AB006394C4 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				C04405292C120E3900E4C764 /* IsLikedView.swift */,
+				C061B4CB2C1C72B500FFD7C5 /* IsLikedMotivationItemView.swift */,
+				C061B4C92C1C71EA00FFD7C5 /* EmptyIsLikedView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		C09100212CDA10B1006394C4 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				C061B4C22C1C70E200FFD7C5 /* IsLikedViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		C09100222CDA10D0006394C4 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				C04405372C12B95B00E4C764 /* TimerViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		C09100232CDA10D6006394C4 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				C04405312C12B5DC00E4C764 /* TimerView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		C09100242CDA10E2006394C4 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				C061B4BF2C1C6F7500FFD7C5 /* DiaryViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		C09100252CDA10E8006394C4 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				C061B4BD2C1C6F6500FFD7C5 /* DiaryView.swift */,
+				C061B4DE2C20772E00FFD7C5 /* DiaryCardView.swift */,
+				C061B4D02C1C973A00FFD7C5 /* DiaryDetailView.swift */,
+				C061B4D22C1C979800FFD7C5 /* DiaryCreateView.swift */,
+			);
+			path = View;
 			sourceTree = "<group>";
 		};
 		C095CDE32CA91C2F00E83305 /* ImagePicker */ = {

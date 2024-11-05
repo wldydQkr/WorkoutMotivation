@@ -44,8 +44,10 @@ struct DiaryCreateView: View {
                         .padding(.vertical, 8)
                 }
                 Section(header: Text("내용")) {
-                    ResizableTextEditor(text: $content)
-                        .frame(minHeight: 100)
+                    TextField("내용을 입력해주세요", text: $content)
+                        .padding(.vertical, 8)
+//                    ResizableTextEditor(text: $content)
+//                        .frame(minHeight: 100)
                 }
                 Section(header: Text("날짜")) {
                     Text(date.formatted())
@@ -56,7 +58,11 @@ struct DiaryCreateView: View {
                         showImagePicker = true
                     }) {
                         Text("이미지 선택하기")
+                            .padding()
+                            .background(CustomColor.SwiftUI.customBlack.opacity(0.1))
+                            .cornerRadius(8)
                     }
+                    .buttonStyle(.plain)
                     
                     if let imageData = selectedImage, let uiImage = UIImage(data: imageData) {
                         Image(uiImage: uiImage)
@@ -93,13 +99,6 @@ struct DiaryCreateView: View {
         .onTapGesture {
             hideKeyboard()
         }
-    }
-}
-
-// Helper function to hide keyboard
-extension View {
-    func hideKeyboard() {
-        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
     }
 }
 
