@@ -21,65 +21,72 @@ struct DiaryCreateView: View {
     @State private var selectedItem: PhotosPickerItem? = nil
 
     var body: some View {
-        VStack {
-            HStack {
-                Text("새로운 다짐")
-                    .foregroundStyle(CustomColor.SwiftUI.customBlack)
-                    .font(.largeTitle)
-                    .bold()
-                Spacer()
-                Button(action: {
-                    presentationMode.wrappedValue.dismiss()
-                }) {
-                    Image(systemName: "chevron.left")
-                    Text("Back")
-                }
-            }
-            .foregroundStyle(CustomColor.SwiftUI.customBlack)
-            .padding()
-            
-            Form {
-                Section(header: Text("제목")) {
-                    TextField("제목을 입력해주세요", text: $title)
-                        .padding(.vertical, 8)
-                }
-                Section(header: Text("내용")) {
-                    TextField("내용을 입력해주세요", text: $content)
-                        .padding(.vertical, 8)
-//                    ResizableTextEditor(text: $content)
-//                        .frame(minHeight: 100)
-                }
-                Section(header: Text("날짜")) {
-                    Text(date.formatted())
-                        .foregroundColor(.gray)
-                }
-                Section(header: Text("이미지")) {
+        ZStack(alignment: .bottomTrailing) {
+            VStack {
+                HStack {
+                    Text("새로운 다짐")
+                        .foregroundStyle(CustomColor.SwiftUI.customBlack)
+                        .font(.largeTitle)
+                        .bold()
+                    Spacer()
                     Button(action: {
-                        showImagePicker = true
+                        presentationMode.wrappedValue.dismiss()
                     }) {
-                        Text("이미지 선택하기")
-                            .padding()
-                            .background(CustomColor.SwiftUI.customBlack.opacity(0.1))
-                            .cornerRadius(8)
-                    }
-                    .buttonStyle(.plain)
-                    
-                    if let imageData = selectedImage, let uiImage = UIImage(data: imageData) {
-                        Image(uiImage: uiImage)
-                            .resizable()
-                            .scaledToFit()
-                            .frame(height: 200)
-                            .cornerRadius(10)
+                        Image(systemName: "chevron.left")
+                        Text("Back")
                     }
                 }
+                .foregroundStyle(CustomColor.SwiftUI.customBlack)
+                .padding()
+                
+                Form {
+                    Section(header: Text("제목")) {
+                        TextField("제목을 입력해주세요", text: $title)
+                            .padding(.vertical, 8)
+                    }
+                    Section(header: Text("내용")) {
+                        TextField("내용을 입력해주세요", text: $content)
+                            .padding(.vertical, 8)
+                    }
+                    Section(header: Text("날짜")) {
+                        Text(date.formatted())
+                            .foregroundColor(.gray)
+                    }
+                    Section(header: Text("이미지")) {
+                        Button(action: {
+                            showImagePicker = true
+                        }) {
+                            Text("이미지 선택하기")
+                                .padding()
+                                .background(CustomColor.SwiftUI.customBlack.opacity(0.1))
+                                .cornerRadius(8)
+                        }
+                        .buttonStyle(.plain)
+                        
+                        if let imageData = selectedImage, let uiImage = UIImage(data: imageData) {
+                            Image(uiImage: uiImage)
+                                .resizable()
+                                .scaledToFit()
+                                .frame(height: 200)
+                                .cornerRadius(10)
+                        }
+                    }
+                }
+                .foregroundStyle(CustomColor.SwiftUI.customBlack)
             }
-            .foregroundStyle(CustomColor.SwiftUI.customBlack)
+            .padding(.bottom, 80)
             
-            Button("저장") {
+            Button(action: {
                 viewModel.createDiary(title: title, content: content, image: selectedImage)
                 presentationMode.wrappedValue.dismiss()
+            }) {
+                Image(systemName: "checkmark")
+                    .foregroundColor(.white)
+                    .padding()
+                    .background(title.isEmpty || content.isEmpty ? Color.gray : CustomColor.SwiftUI.customBlack)
+                    .clipShape(Circle())
+                    .shadow(radius: 10)
             }
-            .foregroundStyle(title.isEmpty || content.isEmpty ? .gray : CustomColor.SwiftUI.customBlack)
             .padding()
             .disabled(title.isEmpty || content.isEmpty)
         }
@@ -87,7 +94,7 @@ struct DiaryCreateView: View {
         .background(CustomColor.SwiftUI.customBackgrond)
         .navigationBarHidden(true)
         .photosPicker(isPresented: $showImagePicker, selection: $selectedItem, matching: .images, photoLibrary: .shared())
-        .onChange(of: selectedItem) { newItem in
+        .onChange(of: selectedItem) { oldItem, newItem in
             Task {
                 if let newItem = newItem {
                     if let data = try? await newItem.loadTransferable(type: Data.self) {

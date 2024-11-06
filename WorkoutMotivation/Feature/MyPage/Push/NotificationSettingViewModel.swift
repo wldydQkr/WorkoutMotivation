@@ -24,7 +24,7 @@ final class NotificationSettingViewModel: ObservableObject {
     private var subscriptions = Set<AnyCancellable>()
 
     init() {
-        loadNotifications()
+        loadNotifications() // 같이 좋아요한 명언 업데이트 될 수 있도록 업데이트 할거임
         loadLikedMotivations()
     }
     
@@ -34,7 +34,7 @@ final class NotificationSettingViewModel: ObservableObject {
             return
         }
         
-        let newNotification = NotificationItem(date: Date(), motivation: likedMotivations.first)
+        let newNotification = NotificationItem(date: Date(), motivation: likedMotivations.first, repeats: true)
         notifications.append(newNotification)
     }
     
@@ -54,7 +54,9 @@ final class NotificationSettingViewModel: ObservableObject {
     
     func updateNotification(for item: NotificationItem) {
         cancelNotification(for: item)
-        scheduleNotification(for: item)
+        if item.repeats {
+            scheduleNotification(for: item)
+        }
     }
     
     func rescheduleNotification(for item: NotificationItem, with motivation: Motivation) {
@@ -69,6 +71,8 @@ final class NotificationSettingViewModel: ObservableObject {
     }
 
     private func scheduleNotification(for item: NotificationItem) {
+        guard item.repeats else { return } // 반복 토글이 활성화 되어 있지 않으면 알림 예약 x
+        
         let content = UNMutableNotificationContent()
         content.title = "WorkoutMotivation"
         content.body = "\(item.motivation?.title ?? "알림")\n-\(item.motivation?.name ?? "내용 없음")"

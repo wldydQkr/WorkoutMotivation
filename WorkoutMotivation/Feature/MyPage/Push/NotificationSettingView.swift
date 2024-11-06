@@ -18,7 +18,6 @@ struct NotificationSettingView: View {
         VStack {
             CustomHeaderView(title: "알림 설정") {
                 Button("뒤로가기") {
-//                    viewModel.scheduleNotifications()
                     presentationMode.wrappedValue.dismiss()
                 }
                 .foregroundColor(.black)
@@ -70,10 +69,13 @@ struct NotificationSettingView: View {
                 FloatingMotivationListView(
                     selectedMotivation: $viewModel.notifications[index].motivation,
                     isPresented: $isFloatingListPresented,
-                    notification: viewModel.notifications[index], // 선택된 알림 전달
-                    viewModel: viewModel // ViewModel 전달
+                    notification: viewModel.notifications[index],
+                    viewModel: viewModel
                 )
             }
+        }
+        .onAppear {
+            viewModel.reloadLikedMotivations()
         }
     }
 }
@@ -90,7 +92,7 @@ struct NotificationRow: View {
                 DatePicker("알림 시간", selection: $notification.date, displayedComponents: .hourAndMinute)
                     .labelsHidden()
                     .frame(width: 120)
-                    .onChange(of: notification.date) { newDate in
+                    .onChange(of: notification.date) { oldData, newDate in
                         viewModel.updateNotification(for: notification) // 시간 변경 즉시 알림 업데이트
                     }
 

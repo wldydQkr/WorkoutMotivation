@@ -19,7 +19,8 @@ struct DiaryDetailView: View {
     
     @State private var showImagePicker: Bool = false
     @State private var selectedItem: PhotosPickerItem? = nil
-    
+    @State private var showDeleteAlert: Bool = false // 삭제 확인 알럿 표시 여부
+
     @Environment(\.presentationMode) var presentationMode
     
     init(viewModel: DiaryViewModel, diary: Diary) {
@@ -82,20 +83,33 @@ struct DiaryDetailView: View {
                 }
             }
             
-            Button("저장") {
-                // Save the diary with updated details
-                viewModel.updateDiary(id: Int64(diary.id), title: title, content: content, image: image)
-                presentationMode.wrappedValue.dismiss()
+            HStack {
+                Button(action: {
+                    showDeleteAlert = true // 삭제 버튼 누르면 알럿 표시
+                }) {
+                    Image(systemName: "trash")
+                        .foregroundColor(.white)
+//                        .font(.title)
+                        .padding()
+                        .background(Color.red)
+                        .clipShape(Circle())
+                }
+                
+                Spacer()
+                
+                Button(action: {
+                    viewModel.updateDiary(id: Int64(diary.id), title: title, content: content, image: image)
+                    presentationMode.wrappedValue.dismiss()
+                }) {
+                    Image(systemName: "checkmark")
+                        .foregroundColor(.white)
+//                        .font(.title)
+                        .padding()
+                        .background(CustomColor.SwiftUI.customBlack)
+                        .clipShape(Circle())
+                }
+                .disabled(title.isEmpty || content.isEmpty)
             }
-            .foregroundStyle(title.isEmpty || content.isEmpty ? .gray : CustomColor.SwiftUI.customBlack)
-            .disabled(title.isEmpty || content.isEmpty)
-            .padding()
-            
-            Button("삭제") {
-                viewModel.deleteDiary(id: Int64(diary.id))
-                presentationMode.wrappedValue.dismiss() // 삭제 후 화면 닫기
-            }
-            .foregroundColor(.red)
             .padding()
         }
         .navigationBarHidden(true)
@@ -103,14 +117,28 @@ struct DiaryDetailView: View {
         .onTapGesture {
             hideKeyboard()
         }
+//        .onDisappear {
+//            viewModel.fetchDiaries() // 삭제 후 목록이 즉시 업데이트되도록 호출
+//        }
         .onChange(of: selectedItem) { newItem in
             Task {
                 if let newItem = newItem {
                     if let data = try? await newItem.loadTransferable(type: Data.self) {
-                        image = data // Update image
+                        image = data
                     }
                 }
             }
+        }
+        .alert(isPresented: $showDeleteAlert) {
+            Alert(
+                title: Text("삭제 확인"),
+                message: Text("이 다짐을 정말 삭제하시겠습니까?"),
+                primaryButton: .destructive(Text("삭제")) {
+                    viewModel.deleteDiary(id: Int64(diary.id))
+                    presentationMode.wrappedValue.dismiss()
+                },
+                secondaryButton: .cancel(Text("취소"))
+            )
         }
     }
 }

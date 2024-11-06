@@ -36,7 +36,6 @@ struct DiaryView: View {
                                     selectedDiaries: $selectedDiaries,
                                     onDelete: {
                                         viewModel.deleteDiary(id: Int64(diary.id))
-                                        viewModel.fetchDiaries() // 삭제 후 리스트 갱신
                                     }
                                 )
                                 .contentShape(Rectangle()) // 전체 영역이 탭 가능하도록 설정
@@ -58,11 +57,12 @@ struct DiaryView: View {
                         DiaryDetailView(viewModel: viewModel, diary: selectedDiary)
                     }
                 }
-                
-//                AddDiaryButton(viewModel: viewModel)
             }
             .onAppear {
                 viewModel.fetchDiaries() // 뷰가 나타날 때 다이어리 로드
+            }
+            .onChange(of: viewModel.diaries) { _ in
+                viewModel.fetchDiaries() // diaries가 변경될 때마다 로드
             }
         }
     }
