@@ -63,7 +63,7 @@ private struct StartBtnView: View {
                         .frame(width: 180, height: 80)
                         .font(.system(size: 26, weight: .bold))
                         .foregroundColor(CustomColor.SwiftUI.customBackgrond)
-                        .background(CustomColor.SwiftUI.customGreen)
+                        .background(CustomColor.SwiftUI.customBlack)
                         .cornerRadius(40)
                 }
             }
@@ -133,23 +133,25 @@ private struct OnboardingCellView: View {
     fileprivate var body: some View {
         VStack {
             LottieView(onboardingContent.imageFileName)
-                .frame(width: 150.0, height: 150)
+                .frame(width: 150.0, height: 150, alignment: .center)
                 .shadow(radius: 2)
             HStack {
-                Spacer()
-                    .frame(width: 36)
+//                Spacer()
+//                    .frame(width: 36)
                 VStack {
                     Spacer()
-                        .frame(height: 60)
+                        .frame(height: 50)
                     
                     Text(onboardingContent.content)
                         .font(.system(size: 26, weight: .bold))
-                        .foregroundColor(CustomColor.SwiftUI.customGreen)
+                        .foregroundColor(CustomColor.SwiftUI.customBlack)
+                        .multilineTextAlignment(.center)
+                        .frame(maxWidth: .infinity, alignment: .center)
 //                    Spacer()
 //                        .frame(height: 0)
                 }
                 
-                Spacer()
+//                Spacer()
             }
             .background(CustomColor.SwiftUI.customBackgrond)
         }
