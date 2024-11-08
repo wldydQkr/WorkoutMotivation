@@ -7,8 +7,6 @@
 
 import SwiftUI
 
-import SwiftUI
-
 struct OnboardingView: View {
     @StateObject private var pathModel = PathModel()
     @StateObject private var onboardingViewModel = OnboardingViewModel()
@@ -16,11 +14,9 @@ struct OnboardingView: View {
     
     var body: some View {
         if hasSeenOnboarding {
-            // 온보딩을 이미 본 경우 메인 화면으로 이동
             HomeView()
                 .navigationBarBackButtonHidden(true)
         } else {
-            // 온보딩을 아직 보지 않은 경우 온보딩 화면 표시
             NavigationStack(path: $pathModel.paths) {
                 OnboardingContentView(onboardingViewModel: onboardingViewModel)
                     .background(CustomColor.SwiftUI.customBackgrond)
@@ -30,11 +26,10 @@ struct OnboardingView: View {
                             switch pathType {
                             case .homeView:
                                 HomeView()
-                                    .navigationBarBackButtonHidden()
+                                    .navigationBarBackButtonHidden(true)
                                 
-                            case .todoView:
-                                HomeView()
-                                    .navigationBarBackButtonHidden()
+                            default:
+                                EmptyView()
                             }
                         }
                     )
@@ -45,17 +40,21 @@ struct OnboardingView: View {
 }
 
 // MARK: - 시작하기 버튼 뷰
-private struct StartBtnView: View {
+struct StartBtnView: View {
     @EnvironmentObject private var pathModel: PathModel
     @AppStorage("hasSeenOnboarding") private var hasSeenOnboarding: Bool = false
+    @Binding var selectedIndex: Int
+    @ObservedObject var onboardingViewModel: OnboardingViewModel
     
-    fileprivate var body: some View {
+    var body: some View {
         Button(
             action: {
-                // 온보딩 완료 상태를 저장
-                hasSeenOnboarding = true
-                // 홈 화면으로 이동
-                pathModel.paths.append(.homeView)
+                if selectedIndex < onboardingViewModel.onboardingContents.count - 1 {
+                    selectedIndex += 1
+                } else {
+                    hasSeenOnboarding = true
+                    pathModel.paths.append(.homeView)
+                }
             },
             label: {
                 HStack {
@@ -73,23 +72,18 @@ private struct StartBtnView: View {
     }
 }
 
-
 // MARK: - 온보딩 컨텐츠 뷰
 private struct OnboardingContentView: View {
-    @ObservedObject private var onboardingViewModel: OnboardingViewModel
+    @ObservedObject var onboardingViewModel: OnboardingViewModel
+    @State private var selectedIndex = 0
     
-    fileprivate init(onboardingViewModel: OnboardingViewModel) {
-        self.onboardingViewModel = onboardingViewModel
-    }
-    
-    fileprivate var body: some View {
+    var body: some View {
         VStack {
-            // 온보딩 셀리스트 뷰
-            OnboardingCellListView(onboardingViewModel: onboardingViewModel)
+            OnboardingCellListView(onboardingViewModel: onboardingViewModel, selectedIndex: $selectedIndex)
             
             Spacer()
-            // 시작 버튼 뷰
-            StartBtnView()
+            
+            StartBtnView(selectedIndex: $selectedIndex, onboardingViewModel: onboardingViewModel)
         }
         .edgesIgnoringSafeArea(.top)
     }
@@ -97,61 +91,51 @@ private struct OnboardingContentView: View {
 
 // MARK: - 온보딩 셀 리스트 뷰
 private struct OnboardingCellListView: View {
-    @ObservedObject private var onboardingViewModel: OnboardingViewModel
-    @State private var selectedIndex = 0
+    @ObservedObject var onboardingViewModel: OnboardingViewModel
+    @Binding var selectedIndex: Int
     
-    init(
-        onboardingViewModel: OnboardingViewModel,
-        selectedIndex: Int = 0
-    ) {
-        self.onboardingViewModel = onboardingViewModel
-        self.selectedIndex = selectedIndex
-    }
-    
-    fileprivate var body: some View {
+    var body: some View {
         TabView(selection: $selectedIndex) {
             ForEach(Array(onboardingViewModel.onboardingContents.enumerated()), id: \.element) { index, onboardingContent in
-                OnboardingCellView(onboardingContent: onboardingContent)
+                OnboardingCellView(onboardingContent: onboardingContent, isLottie: index == 0)
                     .tag(index)
             }
         }
-        .tabViewStyle(.page(indexDisplayMode: .never))
+        .tabViewStyle(.page(indexDisplayMode: .always))
         .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height / 1.5)
-        .background(selectedIndex % 2 == 0 ? CustomColor.SwiftUI.customBackgrond : Color.green)
+        .background(selectedIndex % 2 == 0 ? CustomColor.SwiftUI.customBackgrond : CustomColor.SwiftUI.customBackgrond)
         .clipped()
     }
 }
 
 // MARK: - 온보딩 셀 뷰
 private struct OnboardingCellView: View {
-    private var onboardingContent: OnboardingContent
+    var onboardingContent: OnboardingContent
+    var isLottie: Bool
     
-    fileprivate init(onboardingContent: OnboardingContent) {
-        self.onboardingContent = onboardingContent
-    }
-    
-    fileprivate var body: some View {
+    var body: some View {
         VStack {
-            LottieView(onboardingContent.imageFileName)
-                .frame(width: 150.0, height: 150, alignment: .center)
-                .shadow(radius: 2)
+            if isLottie {
+                LottieView(onboardingContent.imageFileName)
+                    .frame(width: 150.0, height: 150, alignment: .center)
+                    .shadow(radius: 2)
+            } else {
+                Image(onboardingContent.imageFileName)
+                    .resizable()
+                    .frame(width: 150.0, height: 150.0, alignment: .center)
+                    .shadow(radius: 2)
+            }
+            
             HStack {
-//                Spacer()
-//                    .frame(width: 36)
                 VStack {
                     Spacer()
                         .frame(height: 50)
-                    
                     Text(onboardingContent.content)
                         .font(.system(size: 26, weight: .bold))
                         .foregroundColor(CustomColor.SwiftUI.customBlack)
                         .multilineTextAlignment(.center)
                         .frame(maxWidth: .infinity, alignment: .center)
-//                    Spacer()
-//                        .frame(height: 0)
                 }
-                
-//                Spacer()
             }
             .background(CustomColor.SwiftUI.customBackgrond)
         }

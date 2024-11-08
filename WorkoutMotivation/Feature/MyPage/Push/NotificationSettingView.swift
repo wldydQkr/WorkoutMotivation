@@ -17,10 +17,12 @@ struct NotificationSettingView: View {
     var body: some View {
         VStack {
             CustomHeaderView(title: "알림 설정") {
-                Button("뒤로가기") {
+                Button(action: {
                     presentationMode.wrappedValue.dismiss()
+                }) {
+                    Image(systemName: "chevron.left")
+                    Text("Back")
                 }
-                .foregroundColor(.black)
             }
             
             ScrollView {
@@ -97,6 +99,9 @@ struct NotificationRow: View {
                     }
 
                 Toggle("", isOn: $notification.repeats)
+                    .onChange(of: notification.repeats, { oldValue, newValue in
+                        viewModel.updateNotification(for: notification)
+                    })
                     .toggleStyle(SwitchToggleStyle(tint: CustomColor.SwiftUI.customBlack))
 
                 Spacer()

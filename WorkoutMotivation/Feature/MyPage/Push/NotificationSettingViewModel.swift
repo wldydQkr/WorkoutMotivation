@@ -28,6 +28,7 @@ final class NotificationSettingViewModel: ObservableObject {
         loadLikedMotivations()
     }
     
+    // 푸시 추가
     func addNotification() {
         guard notifications.count < 12 else {
             showAlert = true
@@ -38,11 +39,13 @@ final class NotificationSettingViewModel: ObservableObject {
         notifications.append(newNotification)
     }
     
+    // 삭제 알럿 표시
     func showDeleteConfirmation(for index: Int) {
         indexToDelete = index
         showDeleteAlert = true
     }
     
+    // 푸시 취소
     func confirmDelete() {
         if let index = indexToDelete {
             let item = notifications[index]
@@ -52,6 +55,7 @@ final class NotificationSettingViewModel: ObservableObject {
         }
     }
     
+    // 푸시 업데이트
     func updateNotification(for item: NotificationItem) {
         cancelNotification(for: item)
         if item.repeats {
@@ -59,6 +63,7 @@ final class NotificationSettingViewModel: ObservableObject {
         }
     }
     
+    // 푸시 재예약
     func rescheduleNotification(for item: NotificationItem, with motivation: Motivation) {
         cancelNotification(for: item)
         var updatedItem = item
@@ -66,8 +71,10 @@ final class NotificationSettingViewModel: ObservableObject {
         scheduleNotification(for: updatedItem)
     }
     
+    // 푸시 취소
     private func cancelNotification(for item: NotificationItem) {
         UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [item.id.uuidString])
+        print("알림이 취소되었습니다.")
     }
 
     private func scheduleNotification(for item: NotificationItem) {
@@ -123,11 +130,4 @@ final class NotificationSettingViewModel: ObservableObject {
     func reloadLikedMotivations() {
         loadLikedMotivations()
     }
-}
-
-struct NotificationItem: Codable {
-    var id = UUID()
-    var date: Date
-    var motivation: Motivation?
-    var repeats: Bool = false
 }

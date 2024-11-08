@@ -74,6 +74,7 @@
 		C08DC3192C0CA0FE00CCB2BE /* HomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C08DC3182C0CA0FE00CCB2BE /* HomeViewModel.swift */; };
 		C08DC31B2C0CA4F700CCB2BE /* MotivationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C08DC31A2C0CA4F700CCB2BE /* MotivationView.swift */; };
 		C091001D2CD50C14006394C4 /* FirebaseDatabase in Frameworks */ = {isa = PBXBuildFile; productRef = C04A4F8A2CCA78B4006288AA /* FirebaseDatabase */; };
+		C09100272CDDE8BB006394C4 /* NotificationItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = C09100262CDDE8B2006394C4 /* NotificationItem.swift */; };
 		C095CDE72CA91C6D00E83305 /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = C095CDE62CA91C6D00E83305 /* ImagePicker.swift */; };
 		C0A01EE02C75AFC2001923E8 /* AppVersionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A01EDF2C75AFC2001923E8 /* AppVersionView.swift */; };
 		C0A01EE22C770BE3001923E8 /* MailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A01EE12C770BE3001923E8 /* MailView.swift */; };
@@ -184,6 +185,7 @@
 		C08DC3162C0CA07700CCB2BE /* Tab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tab.swift; sourceTree = "<group>"; };
 		C08DC3182C0CA0FE00CCB2BE /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
 		C08DC31A2C0CA4F700CCB2BE /* MotivationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MotivationView.swift; sourceTree = "<group>"; };
+		C09100262CDDE8B2006394C4 /* NotificationItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationItem.swift; sourceTree = "<group>"; };
 		C095CDE62CA91C6D00E83305 /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
 		C0A01EDF2C75AFC2001923E8 /* AppVersionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppVersionView.swift; sourceTree = "<group>"; };
 		C0A01EE12C770BE3001923E8 /* MailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MailView.swift; sourceTree = "<group>"; };
@@ -342,6 +344,7 @@
 		C04405542C157FA600E4C764 /* MyPage */ = {
 			isa = PBXGroup;
 			children = (
+				C09100262CDDE8B2006394C4 /* NotificationItem.swift */,
 				C0AD142B2CC7C7D600A1FCE4 /* AlarmSetting.swift */,
 				C04405552C157FC400E4C764 /* MyPageItem.swift */,
 			);
@@ -855,6 +858,7 @@
 				C061B4CF2C1C95B600FFD7C5 /* Diary.swift in Sources */,
 				C04405452C1348C900E4C764 /* MotivationDetailView.swift in Sources */,
 				C0AD14172CBB78D800A1FCE4 /* MasonryVStack.swift in Sources */,
+				C09100272CDDE8BB006394C4 /* NotificationItem.swift in Sources */,
 				C061B4DF2C20772E00FFD7C5 /* DiaryCardView.swift in Sources */,
 				C04405322C12B5DC00E4C764 /* TimerView.swift in Sources */,
 				C061B4DA2C20620D00FFD7C5 /* DiaryModel.xcdatamodeld in Sources */,

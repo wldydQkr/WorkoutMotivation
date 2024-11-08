@@ -129,8 +129,8 @@ struct TimerView: View {
           Text("시작")
                 .frame(width: 140, height: 60)
                 .font(.system(size: 18, weight: .bold))
-                .foregroundColor(CustomColor.SwiftUI.customBlack)
-                .background(CustomColor.SwiftUI.customGreen)
+                .foregroundColor(CustomColor.SwiftUI.customWhite)
+                .background(CustomColor.SwiftUI.customBlack)
                 .cornerRadius(40)
         }
       )
@@ -186,7 +186,7 @@ struct TimerView: View {
                 .padding(.horizontal, 22)
                 .background(
                   Circle()
-                    .fill(CustomColor.SwiftUI.customGreen)
+                    .fill(CustomColor.SwiftUI.customBlack)
                 )
             }
           )
@@ -200,12 +200,12 @@ struct TimerView: View {
             label: {
               Text(timerViewModel.isPaused ? "계속진행" : "일시정지")
                 .font(.system(size: 14))
-                .foregroundColor(CustomColor.SwiftUI.customBlack)
+                .foregroundColor(CustomColor.SwiftUI.customWhite)
                 .padding(.vertical, 25)
                 .padding(.horizontal, 7)
                 .background(
                   Circle()
-                    .fill(CustomColor.SwiftUI.customGreen)
+                    .fill(CustomColor.SwiftUI.customBlack)
                 )
             }
           )
