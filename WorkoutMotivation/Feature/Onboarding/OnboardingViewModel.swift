@@ -27,7 +27,7 @@ final class OnboardingViewModel: ObservableObject {
             content: """
                      나만의 다짐을
                      기록하고
-                     기억해보세요!
+                     기억해 보세요!
                      """
         ),
         .init(
@@ -43,7 +43,7 @@ final class OnboardingViewModel: ObservableObject {
             content: """
                      좋아하는 명언을 골라
                      이제 원하는 시간에 
-                     동기부여를 받아 보세요!
+                     동기부여를 받아보세요!
                      """
         )
     ]) {
