@@ -12,8 +12,16 @@ struct MyPageView: View {
     @ObservedObject var viewModel = MyPageViewModel()
     @State private var isShareSheetPresented = false
     
+    var appVersion: String {
+        guard let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String else {
+            return "Unknown"
+        }
+        let build = Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "1"
+        return "\(version) (\(build))"
+    }
+    
     var body: some View {
-        NavigationView { // NavigationView를 NavigationStack으로 변경
+        NavigationView {
             VStack {
                 CustomHeaderView(title: "설정") {
                     EmptyView()
@@ -22,9 +30,14 @@ struct MyPageView: View {
                 List(viewModel.items) { item in
                     switch item.title {
                     case "앱 버전":
-                        NavigationLink(destination: AppVersionView()) {
+                        // NavigationLink(destination: AppVersionView()) {
+                        HStack {
                             Text(item.title)
+                            Spacer()
+                            Text(appVersion)
+                                .foregroundStyle(CustomColor.SwiftUI.customBlack3)
                         }
+                        // }
                     case "알림 설정":
                         NavigationLink(destination: NotificationSettingView()) {
                             Text(item.title)
@@ -58,6 +71,7 @@ struct MyPageView: View {
         }
     }
 }
+
 
 #Preview {
     MyPageView()
