@@ -29,7 +29,6 @@
 		C04405562C157FC400E4C764 /* MyPageItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = C04405552C157FC400E4C764 /* MyPageItem.swift */; };
 		C04405582C157FE100E4C764 /* MyPageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C04405572C157FE100E4C764 /* MyPageViewModel.swift */; };
 		C044055A2C176AD200E4C764 /* MotivationDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C04405592C176AD200E4C764 /* MotivationDetailViewModel.swift */; };
-		C044055D2C17705A00E4C764 /* UserDefaultsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = C044055C2C17705A00E4C764 /* UserDefaultsManager.swift */; };
 		C04A4F852CCA7581006288AA /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = C04A4F842CCA7581006288AA /* FirebaseAnalytics */; };
 		C04A4F872CCA7581006288AA /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = C04A4F862CCA7581006288AA /* FirebaseStorage */; };
 		C04A4F892CCA763E006288AA /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = C04A4F882CCA763D006288AA /* GoogleService-Info.plist */; };
@@ -88,7 +87,6 @@
 		C0AD14192CBB7A8800A1FCE4 /* Array+.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0AD14182CBB7A8400A1FCE4 /* Array+.swift */; };
 		C0AD141D2CC38EAF00A1FCE4 /* ParticleEffect.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0AD141C2CC38EA200A1FCE4 /* ParticleEffect.swift */; };
 		C0AD141F2CC38EEC00A1FCE4 /* Particle.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0AD141E2CC38EE900A1FCE4 /* Particle.swift */; };
-		C0AD14232CC7C3B500A1FCE4 /* ScheduledNotification.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0AD14222CC7C3AB00A1FCE4 /* ScheduledNotification.swift */; };
 		C0AD142A2CC7C67F00A1FCE4 /* AlarmSetting.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = C0AD14282CC7C67F00A1FCE4 /* AlarmSetting.xcdatamodeld */; };
 		C0AD142C2CC7C7DB00A1FCE4 /* AlarmSetting.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0AD142B2CC7C7D600A1FCE4 /* AlarmSetting.swift */; };
 		C0DA0A282CB2C93700804BC1 /* CustomHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0DA0A272CB2C93700804BC1 /* CustomHeaderView.swift */; };
@@ -142,7 +140,6 @@
 		C04405552C157FC400E4C764 /* MyPageItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageItem.swift; sourceTree = "<group>"; };
 		C04405572C157FE100E4C764 /* MyPageViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageViewModel.swift; sourceTree = "<group>"; };
 		C04405592C176AD200E4C764 /* MotivationDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MotivationDetailViewModel.swift; sourceTree = "<group>"; };
-		C044055C2C17705A00E4C764 /* UserDefaultsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsManager.swift; sourceTree = "<group>"; };
 		C04A4F882CCA763D006288AA /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		C04A4F8E2CCB7658006288AA /* ShareSheetManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareSheetManager.swift; sourceTree = "<group>"; };
 		C061B49F2C19C0F600FFD7C5 /* MotivationWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = MotivationWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -199,7 +196,6 @@
 		C0AD141A2CC2A17800A1FCE4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		C0AD141C2CC38EA200A1FCE4 /* ParticleEffect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParticleEffect.swift; sourceTree = "<group>"; };
 		C0AD141E2CC38EE900A1FCE4 /* Particle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Particle.swift; sourceTree = "<group>"; };
-		C0AD14222CC7C3AB00A1FCE4 /* ScheduledNotification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduledNotification.swift; sourceTree = "<group>"; };
 		C0AD14292CC7C67F00A1FCE4 /* AlarmSetting.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = AlarmSetting.xcdatamodel; sourceTree = "<group>"; };
 		C0AD142B2CC7C7D600A1FCE4 /* AlarmSetting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlarmSetting.swift; sourceTree = "<group>"; };
 		C0DA0A272CB2C93700804BC1 /* CustomHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomHeaderView.swift; sourceTree = "<group>"; };
@@ -354,7 +350,6 @@
 		C044055B2C17703E00E4C764 /* Manager */ = {
 			isa = PBXGroup;
 			children = (
-				C044055C2C17705A00E4C764 /* UserDefaultsManager.swift */,
 			);
 			path = Manager;
 			sourceTree = "<group>";
@@ -468,7 +463,6 @@
 		C08DC2F02C0AE5E500CCB2BE /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				C0AD14222CC7C3AB00A1FCE4 /* ScheduledNotification.swift */,
 				C037DD252C7EEDE000C4EDF1 /* Tab */,
 				C08DC31E2C0CD7A500CCB2BE /* Home */,
 				C08DC3092C0B65AF00CCB2BE /* Path */,
@@ -865,7 +859,6 @@
 				C061B4D32C1C979800FFD7C5 /* DiaryCreateView.swift in Sources */,
 				C0AD14112CB67B8D00A1FCE4 /* NavigationBarModifier.swift in Sources */,
 				C061B4C32C1C70E200FFD7C5 /* IsLikedViewModel.swift in Sources */,
-				C044055D2C17705A00E4C764 /* UserDefaultsManager.swift in Sources */,
 				C08DC30F2C0B671400CCB2BE /* HomeView.swift in Sources */,
 				C044054D2C134DC800E4C764 /* View+.swift in Sources */,
 				C0A01EE22C770BE3001923E8 /* MailView.swift in Sources */,
@@ -905,7 +898,6 @@
 				C037DD292C81D64C00C4EDF1 /* TabItem.swift in Sources */,
 				C044054B2C134CD600E4C764 /* MotivationItemView.swift in Sources */,
 				C08DC3192C0CA0FE00CCB2BE /* HomeViewModel.swift in Sources */,
-				C0AD14232CC7C3B500A1FCE4 /* ScheduledNotification.swift in Sources */,
 				C04405212C10BCC000E4C764 /* NetworkService.swift in Sources */,
 				C08DC2FF2C0B639D00CCB2BE /* LottieView.swift in Sources */,
 				C0A01EE02C75AFC2001923E8 /* AppVersionView.swift in Sources */,
