@@ -7,16 +7,10 @@
 
 import Foundation
 
-// YouTube API 응답 모델
-struct YoutubeVideo: Identifiable, Decodable {
-    var id: String
-    var title: String
-    var thumbnail: String
+struct YoutubeVideo: Identifiable {
+    let id: String
+    let title: String
+    let thumbnail: String
+    let channelTitle: String
     var url: String { "https://www.youtube.com/watch?v=\(id)" }
-    
-    enum CodingKeys: String, CodingKey {
-        case title = "snippet.title"
-        case thumbnail = "snippet.thumbnails.high.url"
-        case id = "id.videoId"
-    }
 }
