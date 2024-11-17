@@ -26,7 +26,10 @@ struct WorkoutClassView: View {
                 
                 // 섹션: 부위별 영상
                 SectionHeader(title: "부위별 운동 영상")
-                TagsScrollView(selectedTag: $selectedTag, tags: tags, onTagSelected: viewModel.fetchVideos)
+                TagsScrollView(selectedTag: $selectedTag, tags: tags, onTagSelected: {
+                    selectedTag = $0
+                    viewModel.fetchVideos(with: "\($0) 운동 루틴")
+                })
                 
                 // 영상 리스트
                 VideoListView(videos: viewModel.videos)
@@ -34,7 +37,7 @@ struct WorkoutClassView: View {
         }
         .navigationTitle("운동 영상 추천")
         .onAppear {
-            viewModel.fetchVideos(with: selectedTag)
+            viewModel.fetchVideos(with: "\(selectedTag) 운동 루틴")
         }
     }
 }
