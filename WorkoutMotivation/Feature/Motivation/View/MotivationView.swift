@@ -38,10 +38,15 @@ struct MotivationView: View {
                 
                 if showMotivationCardView {
                     if viewModel.isLoading {
-                        LottieView("skeletonView")
-                            .frame(width: 400, height: 400)
-                        LottieView("skeletonView")
-                            .frame(width: 400, height: 400)
+                        VStack(spacing: 0) {
+                            LottieView("skeletonView")
+                                .frame(width: 350, height: 350)
+                                .background(CustomColor.SwiftUI.customBackgrond)
+                            LottieView("skeletonView")
+                                .frame(width: 350, height: 350)
+                                .background(CustomColor.SwiftUI.customBackgrond)
+                        }
+                        
                     } else {
                         MotivationCardView(
                             motivations: viewModel.motivations,
@@ -98,10 +103,14 @@ struct MotivationView: View {
                         .frame(height: 0)
                         
                         if viewModel.isLoading {
-                            LottieView("skeletonView")
-                                .frame(width: 400, height: 400)
-                            LottieView("skeletonView")
-                                .frame(width: 400, height: 400)
+                            VStack(spacing: 0) {
+                                LottieView("skeletonView")
+                                    .frame(width: 350, height: 350)
+                                    .background(CustomColor.SwiftUI.customBackgrond)
+                                LottieView("skeletonView")
+                                    .frame(width: 350, height: 350)
+                                    .background(CustomColor.SwiftUI.customBackgrond)
+                            }
                         } else {
                             MasonryVStack(columns: 2, spacing: 10) {
                                 ForEach(viewModel.motivations, id: \.id) { motivation in
