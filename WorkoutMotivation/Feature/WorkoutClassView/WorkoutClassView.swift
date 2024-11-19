@@ -6,10 +6,11 @@
 //
 
 import SwiftUI
+import Combine
 
 struct WorkoutClassView: View {
     @StateObject private var viewModel = WorkoutClassViewModel()
-    @State private var selectedTag: String = "팔운동"
+    @State private var selectedTag: String = "팔"
     
     let tags = ["팔", "상체", "하체", "등", "가슴", "복근", "어깨"]
     
@@ -23,6 +24,7 @@ struct WorkoutClassView: View {
                 // 섹션: 루틴
                 SectionHeader(title: "루틴")
                 RoutineContentView()  // 루틴 섹션에 해당하는 뷰
+                    .environmentObject(viewModel)
                 
                 // 섹션: 부위별 영상
                 SectionHeader(title: "부위별 운동 영상")
@@ -158,27 +160,75 @@ struct MotivationalContentView: View {
 }
 
 // 루틴 섹션 뷰
+
 struct RoutineContentView: View {
+    @EnvironmentObject var viewModel: WorkoutClassViewModel
+    @State private var isLoading = false
+    
     var body: some View {
         VStack {
-            Text("오늘의 운동 루틴")
-                .font(.title)
-                .fontWeight(.bold)
-                .padding()
             
-            VStack(alignment: .leading) {
-                Text("1. 팔 굽혀 펴기 3세트 × 15회")
-                Text("2. 스쿼트 3세트 × 20회")
-                Text("3. 덤벨 숄더 프레스 3세트 × 12회")
-                Text("4. 플랭크 3세트 × 30초")
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: 16) {
+                    ForEach(viewModel.videos) { video in
+                        VStack(alignment: .leading) { // 뷰가 나왔다 사라짐
+                            AsyncImage(url: URL(string: video.thumbnail)) { phase in
+                                if let image = phase.image {
+                                    image.resizable()
+                                        .scaledToFill()
+                                        .frame(width: 200, height: 120)
+                                        .clipped()
+                                } else if phase.error != nil {
+                                    Color.red
+                                        .frame(width: 200, height: 120)
+                                } else {
+                                    Color.gray
+                                        .frame(width: 200, height: 120)
+                                }
+                            }
+                            .cornerRadius(8)
+                            
+                            Text(video.title)
+                                .font(.headline)
+                                .lineLimit(2)
+                            Text(video.channelTitle)
+                                .font(.subheadline)
+                                .foregroundColor(.secondary)
+                                .lineLimit(1)
+                        }
+                        .frame(width: 200)
+                    }
+                }
+                .background(GeometryReader { geometry in
+                    Color.clear.preference(key: ScrollViewPreferenceKey.self, value: [geometry.frame(in: .named("scrollView")).maxY])
+                })
+                .onPreferenceChange(ScrollViewPreferenceKey.self) { maxY in
+                    let scrollPosition = maxY.first ?? 0
+                    let scrollViewHeight = UIScreen.main.bounds.height // ScrollView 높이
+
+                    if scrollPosition > scrollViewHeight && !isLoading {
+                        isLoading = true
+                        viewModel.fetchVideos(with: "헬스 루틴 추천 영상", pageToken: viewModel.nextPageToken)
+                    }
+                }
+            .coordinateSpace(name: "scrollView") // ScrollView에 이름 지정
+                .padding(.horizontal)
+                .onAppear {
+                    viewModel.loadMoreContentIfNeeded(currentItem: viewModel.videos.last)
+                }
             }
-            .font(.body)
-            .foregroundColor(.secondary)
-            .padding([.leading, .trailing])
         }
-        .background(Color.blue.opacity(0.1))
-        .cornerRadius(8)
-        .padding()
+        .onAppear {
+            viewModel.fetchVideos(with: "헬스 루틴 추천 영상")
+        }
+    }
+}
+
+struct ScrollViewPreferenceKey: PreferenceKey {
+    static var defaultValue: [CGFloat] = []
+
+    static func reduce(value: inout [CGFloat], nextValue: () -> [CGFloat]) {
+        value.append(contentsOf: nextValue())
     }
 }
 

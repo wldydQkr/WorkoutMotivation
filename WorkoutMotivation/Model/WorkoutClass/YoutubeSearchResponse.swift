@@ -9,6 +9,7 @@ import Foundation
 
 struct YouTubeSearchResponse: Decodable {
     let items: [YouTubeSearchItem]
+    let nextPageToken: String?
 }
 
 struct YouTubeSearchItem: Decodable {
