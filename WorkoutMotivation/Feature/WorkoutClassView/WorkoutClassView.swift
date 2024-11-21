@@ -11,47 +11,48 @@ import Combine
 struct WorkoutClassView: View {
     @StateObject private var viewModel = WorkoutClassViewModel()
     @State private var selectedTag: String = "팔"
-    
+
     let tags = ["팔", "상체", "하체", "등", "가슴", "복근", "어깨"]
-    
+
     var body: some View {
         ScrollView {
             VStack {
                 // 섹션: 동기부여
-                SectionHeader(title: "동기부여")
-                MotivationalContentView()  // 동기부여 섹션에 해당하는 뷰
+                CustomHeaderView(title: "동기부여") {
+                    EmptyView()
+                }
+                MotivationalContentView()
                 
                 // 섹션: 루틴
-                SectionHeader(title: "루틴")
-                RoutineContentView()  // 루틴 섹션에 해당하는 뷰
-                    .environmentObject(viewModel)
-                
+                CustomHeaderView(title: "루틴") {
+                    EmptyView()
+                }
+                RoutineContentView()
+
                 // 섹션: 부위별 영상
-                SectionHeader(title: "부위별 운동 영상")
-                TagsScrollView(selectedTag: $selectedTag, tags: tags, onTagSelected: {
-                    selectedTag = $0
-                    viewModel.fetchVideos(with: "\($0) 운동 루틴")
+                CustomHeaderView(title: "부위별 운동 영상") {
+                    EmptyView()
+                }
+                TagsScrollView(selectedTag: $selectedTag, tags: tags, onTagSelected: { tag in
+                    selectedTag = tag
+                    viewModel.updateSelectedTag(tag)
                 })
-                
-                // 영상 리스트
-                VideoListView(videos: viewModel.videos)
+
+                // 비디오 리스트
+                VideoListView(
+                    videos: viewModel.videos,
+                    onScrolledToEnd: {
+                        viewModel.loadMoreContentIfNeeded(tag: selectedTag, currentItem: viewModel.videos.last)
+                    },
+                    isLoading: viewModel.isLoading
+                )
             }
         }
+        .background(CustomColor.SwiftUI.customBackgrond)
         .navigationTitle("운동 영상 추천")
         .onAppear {
-            viewModel.fetchVideos(with: "\(selectedTag) 운동 루틴")
+            viewModel.updateSelectedTag(selectedTag)
         }
-    }
-}
-
-struct SectionHeader: View {
-    let title: String
-    
-    var body: some View {
-        Text(title)
-            .font(.headline)
-            .padding(.vertical, 5)
-            .padding(.horizontal)
     }
 }
 
@@ -83,13 +84,24 @@ struct TagsScrollView: View {
 
 struct VideoListView: View {
     let videos: [YoutubeVideo]
-    
+    let onScrolledToEnd: () -> Void
+    let isLoading: Bool
+
     var body: some View {
         ScrollView {
-            VStack {
+            LazyVStack {
                 ForEach(videos) { video in
                     VideoItemView(video: video)
                 }
+
+                if isLoading {
+                    ProgressView("Loading...")
+                        .padding()
+                }
+            }
+            .onAppear {
+                print("VideoListView appeared with \(videos.count) videos")
+                onScrolledToEnd()
             }
         }
     }
@@ -132,7 +144,7 @@ struct VideoItemView: View {
         }
         .padding(.horizontal)
         .onTapGesture {
-            if let url = URL(string: video.url) {
+            if let url = URL(string: "https://www.youtube.com/watch?v=\(video.id)") {
                 UIApplication.shared.open(url)
             }
         }
@@ -156,79 +168,6 @@ struct MotivationalContentView: View {
         .background(Color.yellow.opacity(0.1))
         .cornerRadius(8)
         .padding()
-    }
-}
-
-// 루틴 섹션 뷰
-
-struct RoutineContentView: View {
-    @EnvironmentObject var viewModel: WorkoutClassViewModel
-    @State private var isLoading = false
-    
-    var body: some View {
-        VStack {
-            
-            ScrollView(.horizontal, showsIndicators: false) {
-                HStack(spacing: 16) {
-                    ForEach(viewModel.videos) { video in
-                        VStack(alignment: .leading) { // 뷰가 나왔다 사라짐
-                            AsyncImage(url: URL(string: video.thumbnail)) { phase in
-                                if let image = phase.image {
-                                    image.resizable()
-                                        .scaledToFill()
-                                        .frame(width: 200, height: 120)
-                                        .clipped()
-                                } else if phase.error != nil {
-                                    Color.red
-                                        .frame(width: 200, height: 120)
-                                } else {
-                                    Color.gray
-                                        .frame(width: 200, height: 120)
-                                }
-                            }
-                            .cornerRadius(8)
-                            
-                            Text(video.title)
-                                .font(.headline)
-                                .lineLimit(2)
-                            Text(video.channelTitle)
-                                .font(.subheadline)
-                                .foregroundColor(.secondary)
-                                .lineLimit(1)
-                        }
-                        .frame(width: 200)
-                    }
-                }
-                .background(GeometryReader { geometry in
-                    Color.clear.preference(key: ScrollViewPreferenceKey.self, value: [geometry.frame(in: .named("scrollView")).maxY])
-                })
-                .onPreferenceChange(ScrollViewPreferenceKey.self) { maxY in
-                    let scrollPosition = maxY.first ?? 0
-                    let scrollViewHeight = UIScreen.main.bounds.height // ScrollView 높이
-
-                    if scrollPosition > scrollViewHeight && !isLoading {
-                        isLoading = true
-                        viewModel.fetchVideos(with: "헬스 루틴 추천 영상", pageToken: viewModel.nextPageToken)
-                    }
-                }
-            .coordinateSpace(name: "scrollView") // ScrollView에 이름 지정
-                .padding(.horizontal)
-                .onAppear {
-                    viewModel.loadMoreContentIfNeeded(currentItem: viewModel.videos.last)
-                }
-            }
-        }
-        .onAppear {
-            viewModel.fetchVideos(with: "헬스 루틴 추천 영상")
-        }
-    }
-}
-
-struct ScrollViewPreferenceKey: PreferenceKey {
-    static var defaultValue: [CGFloat] = []
-
-    static func reduce(value: inout [CGFloat], nextValue: () -> [CGFloat]) {
-        value.append(contentsOf: nextValue())
     }
 }
 

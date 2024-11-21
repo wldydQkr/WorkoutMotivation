@@ -78,6 +78,8 @@
 		C09100332CE7A6EA006394C4 /* YoutubeSearchResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = C09100322CE7A6E0006394C4 /* YoutubeSearchResponse.swift */; };
 		C09100352CE7A753006394C4 /* YoutubeVideo.swift in Sources */ = {isa = PBXBuildFile; fileRef = C09100342CE7A74D006394C4 /* YoutubeVideo.swift */; };
 		C09100372CE7A790006394C4 /* WorkoutClassViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C09100362CE7A782006394C4 /* WorkoutClassViewModel.swift */; };
+		C091003A2CEF642B006394C4 /* RoutineContentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C09100392CEF6422006394C4 /* RoutineContentViewModel.swift */; };
+		C091003C2CEF6460006394C4 /* RoutineContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C091003B2CEF6453006394C4 /* RoutineContentView.swift */; };
 		C095CDE72CA91C6D00E83305 /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = C095CDE62CA91C6D00E83305 /* ImagePicker.swift */; };
 		C0A01EE02C75AFC2001923E8 /* AppVersionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A01EDF2C75AFC2001923E8 /* AppVersionView.swift */; };
 		C0A01EE22C770BE3001923E8 /* MailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A01EE12C770BE3001923E8 /* MailView.swift */; };
@@ -191,6 +193,8 @@
 		C09100322CE7A6E0006394C4 /* YoutubeSearchResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YoutubeSearchResponse.swift; sourceTree = "<group>"; };
 		C09100342CE7A74D006394C4 /* YoutubeVideo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YoutubeVideo.swift; sourceTree = "<group>"; };
 		C09100362CE7A782006394C4 /* WorkoutClassViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutClassViewModel.swift; sourceTree = "<group>"; };
+		C09100392CEF6422006394C4 /* RoutineContentViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoutineContentViewModel.swift; sourceTree = "<group>"; };
+		C091003B2CEF6453006394C4 /* RoutineContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoutineContentView.swift; sourceTree = "<group>"; };
 		C095CDE62CA91C6D00E83305 /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
 		C0A01EDF2C75AFC2001923E8 /* AppVersionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppVersionView.swift; sourceTree = "<group>"; };
 		C0A01EE12C770BE3001923E8 /* MailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MailView.swift; sourceTree = "<group>"; };
@@ -677,6 +681,8 @@
 		C091002C2CE78881006394C4 /* WorkoutClassView */ = {
 			isa = PBXGroup;
 			children = (
+				C091003B2CEF6453006394C4 /* RoutineContentView.swift */,
+				C09100392CEF6422006394C4 /* RoutineContentViewModel.swift */,
 				C09100362CE7A782006394C4 /* WorkoutClassViewModel.swift */,
 				C091002F2CE788B3006394C4 /* WorkoutClassView.swift */,
 			);
@@ -686,10 +692,18 @@
 		C09100312CE7A6D7006394C4 /* WorkoutClass */ = {
 			isa = PBXGroup;
 			children = (
+				C09100382CECD360006394C4 /* Routine */,
 				C09100342CE7A74D006394C4 /* YoutubeVideo.swift */,
 				C09100322CE7A6E0006394C4 /* YoutubeSearchResponse.swift */,
 			);
 			path = WorkoutClass;
+			sourceTree = "<group>";
+		};
+		C09100382CECD360006394C4 /* Routine */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Routine;
 			sourceTree = "<group>";
 		};
 		C095CDE32CA91C2F00E83305 /* ImagePicker */ = {
@@ -908,6 +922,7 @@
 				C061B4BE2C1C6F6500FFD7C5 /* DiaryView.swift in Sources */,
 				C09100332CE7A6EA006394C4 /* YoutubeSearchResponse.swift in Sources */,
 				C044051E2C10BC9000E4C764 /* HomeResponse.swift in Sources */,
+				C091003A2CEF642B006394C4 /* RoutineContentViewModel.swift in Sources */,
 				C08DC31B2C0CA4F700CCB2BE /* MotivationView.swift in Sources */,
 				C0A50E9D2CD508F00064A373 /* DatePickerFloatingView.swift in Sources */,
 				C04405562C157FC400E4C764 /* MyPageItem.swift in Sources */,
@@ -942,6 +957,7 @@
 				C061B4BB2C1B351E00FFD7C5 /* SampleView.swift in Sources */,
 				C061B4D12C1C973A00FFD7C5 /* DiaryDetailView.swift in Sources */,
 				C0DA0A282CB2C93700804BC1 /* CustomHeaderView.swift in Sources */,
+				C091003C2CEF6460006394C4 /* RoutineContentView.swift in Sources */,
 				C08DC2FC2C0B62EB00CCB2BE /* OnboardingViewModel.swift in Sources */,
 				C0AD142A2CC7C67F00A1FCE4 /* AlarmSetting.xcdatamodeld in Sources */,
 				C04405382C12B95B00E4C764 /* TimerViewModel.swift in Sources */,

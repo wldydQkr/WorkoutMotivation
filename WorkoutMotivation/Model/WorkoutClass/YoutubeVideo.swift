@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct YoutubeVideo: Identifiable {
+struct YoutubeVideo: Identifiable, Equatable {
     let id: String
     let title: String
     let thumbnail: String
