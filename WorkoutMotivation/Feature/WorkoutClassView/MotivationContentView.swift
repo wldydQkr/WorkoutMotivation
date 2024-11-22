@@ -1,21 +1,21 @@
 //
-//  Untitled.swift
+//  MotivationContentView.swift
 //  WorkoutMotivation
 //
-//  Created by 박지용 on 11/21/24.
+//  Created by 박지용 on 11/22/24.
 //
 
 import SwiftUI
 
-struct RoutineContentView: View {
-    @StateObject private var viewModel = RoutineContentViewModel()
+struct MotivationContentView: View {
+    @StateObject private var viewModel = MotivationCotentViewModel()
     let video: YoutubeVideo
     
     var body: some View {
         VStack {
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 16) {
-                    ForEach(viewModel.routineVideos) { video in
+                    ForEach(viewModel.motivationVideos) { video in
                         VStack(alignment: .leading) {
                             AsyncImage(url: URL(string: video.thumbnail)) { phase in
                                 if let image = phase.image {
@@ -47,7 +47,7 @@ struct RoutineContentView: View {
                 .padding(.horizontal)
             }
             .onAppear {
-                viewModel.fetchRoutine(with: "헬스 루틴 추천")
+                viewModel.fetchMotivation(with: "헬스 동기부여 영상")
             }
         }
         .onTapGesture {
@@ -56,4 +56,8 @@ struct RoutineContentView: View {
             }
         }
     }
+}
+
+#Preview {
+    MotivationContentView(video: YoutubeVideo(id: "1", title: "", thumbnail: "", channelTitle: ""))
 }

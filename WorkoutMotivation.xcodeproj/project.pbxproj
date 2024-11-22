@@ -80,6 +80,8 @@
 		C09100372CE7A790006394C4 /* WorkoutClassViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C09100362CE7A782006394C4 /* WorkoutClassViewModel.swift */; };
 		C091003A2CEF642B006394C4 /* RoutineContentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C09100392CEF6422006394C4 /* RoutineContentViewModel.swift */; };
 		C091003C2CEF6460006394C4 /* RoutineContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C091003B2CEF6453006394C4 /* RoutineContentView.swift */; };
+		C091003E2CF0D16D006394C4 /* MotivationContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C091003D2CF0D162006394C4 /* MotivationContentView.swift */; };
+		C09100402CF0D1A0006394C4 /* MotivationCotentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C091003F2CF0D198006394C4 /* MotivationCotentViewModel.swift */; };
 		C095CDE72CA91C6D00E83305 /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = C095CDE62CA91C6D00E83305 /* ImagePicker.swift */; };
 		C0A01EE02C75AFC2001923E8 /* AppVersionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A01EDF2C75AFC2001923E8 /* AppVersionView.swift */; };
 		C0A01EE22C770BE3001923E8 /* MailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A01EE12C770BE3001923E8 /* MailView.swift */; };
@@ -195,6 +197,8 @@
 		C09100362CE7A782006394C4 /* WorkoutClassViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutClassViewModel.swift; sourceTree = "<group>"; };
 		C09100392CEF6422006394C4 /* RoutineContentViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoutineContentViewModel.swift; sourceTree = "<group>"; };
 		C091003B2CEF6453006394C4 /* RoutineContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoutineContentView.swift; sourceTree = "<group>"; };
+		C091003D2CF0D162006394C4 /* MotivationContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MotivationContentView.swift; sourceTree = "<group>"; };
+		C091003F2CF0D198006394C4 /* MotivationCotentViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MotivationCotentViewModel.swift; sourceTree = "<group>"; };
 		C095CDE62CA91C6D00E83305 /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
 		C0A01EDF2C75AFC2001923E8 /* AppVersionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppVersionView.swift; sourceTree = "<group>"; };
 		C0A01EE12C770BE3001923E8 /* MailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MailView.swift; sourceTree = "<group>"; };
@@ -681,6 +685,8 @@
 		C091002C2CE78881006394C4 /* WorkoutClassView */ = {
 			isa = PBXGroup;
 			children = (
+				C091003F2CF0D198006394C4 /* MotivationCotentViewModel.swift */,
+				C091003D2CF0D162006394C4 /* MotivationContentView.swift */,
 				C091003B2CEF6453006394C4 /* RoutineContentView.swift */,
 				C09100392CEF6422006394C4 /* RoutineContentViewModel.swift */,
 				C09100362CE7A782006394C4 /* WorkoutClassViewModel.swift */,
@@ -908,6 +914,7 @@
 				C0A50E9B2CD3B84E0064A373 /* NotificationSettingViewModel.swift in Sources */,
 				C08DC3152C0C9F6F00CCB2BE /* Motivation.swift in Sources */,
 				C044053B2C12B97A00E4C764 /* NotificationService.swift in Sources */,
+				C091003E2CF0D16D006394C4 /* MotivationContentView.swift in Sources */,
 				C09100352CE7A753006394C4 /* YoutubeVideo.swift in Sources */,
 				C044052A2C120E3900E4C764 /* IsLikedView.swift in Sources */,
 				C08DC3112C0B692300CCB2BE /* Color+.swift in Sources */,
@@ -917,6 +924,7 @@
 				C04405422C12BB8400E4C764 /* AppDelegate.swift in Sources */,
 				C08DC3172C0CA07700CCB2BE /* Tab.swift in Sources */,
 				C0AD142C2CC7C7DB00A1FCE4 /* AlarmSetting.swift in Sources */,
+				C09100402CF0D1A0006394C4 /* MotivationCotentViewModel.swift in Sources */,
 				C08DC30D2C0B65D000CCB2BE /* PathType.swift in Sources */,
 				C04A4F8F2CCB7662006288AA /* ShareSheetManager.swift in Sources */,
 				C061B4BE2C1C6F6500FFD7C5 /* DiaryView.swift in Sources */,

@@ -21,7 +21,7 @@ struct WorkoutClassView: View {
                 CustomHeaderView(title: "동기부여") {
                     EmptyView()
                 }
-                MotivationalContentView()
+                MotivationContentView()
                 
                 // 섹션: 루틴
                 CustomHeaderView(title: "루틴") {
@@ -148,26 +148,6 @@ struct VideoItemView: View {
                 UIApplication.shared.open(url)
             }
         }
-    }
-}
-
-// 동기부여 섹션 뷰
-struct MotivationalContentView: View {
-    var body: some View {
-        VStack {
-            Text("오늘도 최선을 다하자!")
-                .font(.title)
-                .fontWeight(.bold)
-                .padding()
-            
-            Text("운동은 자기 자신을 위한 투자입니다. 꾸준한 노력은 분명히 좋은 결과를 가져옵니다.")
-                .font(.body)
-                .foregroundColor(.secondary)
-                .padding([.leading, .trailing])
-        }
-        .background(Color.yellow.opacity(0.1))
-        .cornerRadius(8)
-        .padding()
     }
 }
 
