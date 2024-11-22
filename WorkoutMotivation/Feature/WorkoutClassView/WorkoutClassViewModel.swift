@@ -14,7 +14,7 @@ final class WorkoutClassViewModel: ObservableObject {
     private var cancellable: AnyCancellable?
     var nextPageToken: String?
 
-    private let apiKey = "YOUR_API_KEY"
+    private let apiKey = "AIzaSyBl0WA5p710FDIgfvU5dl4P8t_io8tqYMs"
     
     private var selectedTag: String = "팔" // 기본 태그 설정
 
@@ -44,10 +44,10 @@ final class WorkoutClassViewModel: ObservableObject {
             .map(\.data)
             .decode(type: YouTubeSearchResponse.self, decoder: JSONDecoder())
             .map { response in
-                self.nextPageToken = response.nextPageToken // 페이지 토큰 업데이트
+//                self.nextPageToken = response.nextPageToken // 페이지 토큰 업데이트
                 return response.items.map { item in
                     YoutubeVideo(
-                        id: item.id.videoId ?? UUID().uuidString,
+                        id: item.id.videoId,
                         title: item.snippet.title,
                         thumbnail: item.snippet.thumbnails.high.url,
                         channelTitle: item.snippet.channelTitle

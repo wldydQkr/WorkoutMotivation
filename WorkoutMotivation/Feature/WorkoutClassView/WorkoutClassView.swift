@@ -35,7 +35,7 @@ struct WorkoutClassView: View {
                 }
                 TagsScrollView(selectedTag: $selectedTag, tags: tags, onTagSelected: { tag in
                     selectedTag = tag
-                    viewModel.updateSelectedTag(tag)
+                    viewModel.updateSelectedTag("\(tag) 운동 루틴")
                 })
 
                 // 비디오 리스트
@@ -51,7 +51,7 @@ struct WorkoutClassView: View {
         .background(CustomColor.SwiftUI.customBackgrond)
         .navigationTitle("운동 영상 추천")
         .onAppear {
-            viewModel.updateSelectedTag(selectedTag)
+            viewModel.updateSelectedTag("\(selectedTag) 운동 추천")
         }
     }
 }

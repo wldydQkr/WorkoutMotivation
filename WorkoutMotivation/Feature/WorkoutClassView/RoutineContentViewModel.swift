@@ -15,7 +15,7 @@ final class RoutineContentViewModel: ObservableObject {
     private var isLoading = false
     private var nextPageToken: String?
     
-    private let apiKey = "AIzaSyAyONZUg3Ibj4AiIkhE5XUY67GywvNMl88"
+    private let apiKey = "AIzaSyBl0WA5p710FDIgfvU5dl4P8t_io8tqYMs"
     
     func fetchRoutine(with query: String, pageToken: String? = nil) {
         guard !isLoading else { return }
