@@ -685,12 +685,12 @@
 		C091002C2CE78881006394C4 /* WorkoutClassView */ = {
 			isa = PBXGroup;
 			children = (
+				C09100362CE7A782006394C4 /* WorkoutClassViewModel.swift */,
+				C091002F2CE788B3006394C4 /* WorkoutClassView.swift */,
 				C091003F2CF0D198006394C4 /* MotivationCotentViewModel.swift */,
 				C091003D2CF0D162006394C4 /* MotivationContentView.swift */,
 				C091003B2CEF6453006394C4 /* RoutineContentView.swift */,
 				C09100392CEF6422006394C4 /* RoutineContentViewModel.swift */,
-				C09100362CE7A782006394C4 /* WorkoutClassViewModel.swift */,
-				C091002F2CE788B3006394C4 /* WorkoutClassView.swift */,
 			);
 			path = WorkoutClassView;
 			sourceTree = "<group>";

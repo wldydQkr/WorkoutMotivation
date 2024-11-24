@@ -20,7 +20,7 @@ final class MotivationCotentViewModel: ObservableObject {
         guard !isLoading else { return }
         isLoading = true
         
-        var urlString = "https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=10&q=\(query)&key=\(apiKey)"
+        var urlString = "https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=5&q=\(query)&key=\(apiKey)"
         if let pageToken = pageToken {
             urlString += "&pageToken=\(pageToken)"
         }

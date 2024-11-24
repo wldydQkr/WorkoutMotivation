@@ -11,7 +11,7 @@ enum Tab: String, CaseIterable {
     case motivation = "동기부여"
     case bookmark = "좋아요"
     case diary = "다짐"
-    case timer = "타이머"
+    case timer = "추천"
     case myPage = "설정"
     
     var systemImage: String {
@@ -23,7 +23,7 @@ enum Tab: String, CaseIterable {
         case .bookmark:
             return "heart"
         case .timer:
-            return "timer"
+            return "play"
         case .myPage:
             return "gearshape"
         }

@@ -30,7 +30,7 @@ struct WorkoutClassView: View {
                 RoutineContentView()
 
                 // 섹션: 부위별 영상
-                CustomHeaderView(title: "부위별 운동 영상") {
+                CustomHeaderView(title: "부위별 운동") {
                     EmptyView()
                 }
                 TagsScrollView(selectedTag: $selectedTag, tags: tags, onTagSelected: { tag in
@@ -71,7 +71,7 @@ struct TagsScrollView: View {
                     }) {
                         Text(tag)
                             .padding(8)
-                            .background(selectedTag == tag ? Color.blue : Color.gray)
+                            .background(selectedTag == tag ? CustomColor.SwiftUI.customBlack : CustomColor.SwiftUI.customGreen2)
                             .foregroundColor(.white)
                             .cornerRadius(8)
                     }
