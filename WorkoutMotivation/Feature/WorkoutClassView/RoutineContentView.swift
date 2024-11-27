@@ -10,7 +10,7 @@ import SafariServices
 
 struct RoutineContentView: View {
     @StateObject private var viewModel = RoutineContentViewModel()
-    @State private var selectedVideoURL: IdentifiableURL? // Identifiable URL로 변경
+    @State private var selectedVideoURL: IdentifiableURL?
     
     var body: some View {
         VStack {

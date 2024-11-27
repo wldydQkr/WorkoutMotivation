@@ -5,30 +5,29 @@
 //  Created by 박지용 on 11/22/24.
 //
 
-import SwiftUI
 import Combine
+import Foundation
 
-final class MotivationCotentViewModel: ObservableObject {
+final class MotivationContentViewModel: ObservableObject {
     @Published var motivationVideos: [YoutubeVideo] = []
-    private var cancellable: AnyCancellable?
-    private var isLoading = false
-    private var nextPageToken: String?
-    
+    private var cancellables = Set<AnyCancellable>() // 구독 취소를 위한 속성 추가
+    var nextPageToken: String? // 다음 페이지 토큰
     private let apiKey = "AIzaSyBl0WA5p710FDIgfvU5dl4P8t_io8tqYMs"
-    
-    func fetchMotivation(with query: String, pageToken: String? = nil) {
+    private var isLoading = false
+
+    func fetchMotivation(query: String, pageToken: String? = nil) {
         guard !isLoading else { return }
         isLoading = true
-        
+
         var urlString = "https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=5&q=\(query)&key=\(apiKey)"
         if let pageToken = pageToken {
             urlString += "&pageToken=\(pageToken)"
         }
-        
+
         guard let url = URL(string: urlString) else { return }
-        
-        cancellable = URLSession.shared.dataTaskPublisher(for: url)
-            .map { $0.data }
+
+        URLSession.shared.dataTaskPublisher(for: url)
+            .map(\.data)
             .decode(type: YouTubeSearchResponse.self, decoder: JSONDecoder())
             .map { response in
                 response.items.map { item in
@@ -40,12 +39,25 @@ final class MotivationCotentViewModel: ObservableObject {
                     )
                 }
             }
-            .replaceError(with: [])
             .receive(on: DispatchQueue.main)
-            .sink { [weak self] newVideos in
-                self?.motivationVideos.append(contentsOf: newVideos)
-                self?.nextPageToken = pageToken // 다음 페이지 토큰 저장
-                self?.isLoading = false
-            }
+            .sink(
+                receiveCompletion: { [weak self] completion in
+                    if case let .failure(error) = completion {
+                        print("Error fetching data: \(error)")
+                    }
+                    self?.isLoading = false
+                },
+                receiveValue: { [weak self] newVideos in
+                    self?.motivationVideos.append(contentsOf: newVideos)
+                    self?.nextPageToken = pageToken
+                    self?.isLoading = false
+                }
+            )
+            .store(in: &cancellables) // 구독 저장
+    }
+
+    func fetchNextPage() {
+        guard let nextPageToken = nextPageToken else { return }
+        fetchMotivation(query: "동기부여 영상", pageToken: nextPageToken)
     }
 }
