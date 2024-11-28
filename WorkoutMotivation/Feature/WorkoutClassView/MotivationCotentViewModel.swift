@@ -10,11 +10,12 @@ import Foundation
 
 final class MotivationContentViewModel: ObservableObject {
     @Published var motivationVideos: [YoutubeVideo] = []
-    private var cancellables = Set<AnyCancellable>() // 구독 취소를 위한 속성 추가
-    var nextPageToken: String? // 다음 페이지 토큰
+    @Published var isLoading = false // 로딩 상태를 Published로 관리
+    private var cancellables = Set<AnyCancellable>()
     private let apiKey = "AIzaSyBl0WA5p710FDIgfvU5dl4P8t_io8tqYMs"
-    private var isLoading = false
+    private var nextPageToken: String?
 
+    /// 동기부여 영상 데이터 가져오기
     func fetchMotivation(query: String, pageToken: String? = nil) {
         guard !isLoading else { return }
         isLoading = true
@@ -24,21 +25,14 @@ final class MotivationContentViewModel: ObservableObject {
             urlString += "&pageToken=\(pageToken)"
         }
 
-        guard let url = URL(string: urlString) else { return }
+        guard let url = URL(string: urlString) else {
+            isLoading = false
+            return
+        }
 
         URLSession.shared.dataTaskPublisher(for: url)
             .map(\.data)
             .decode(type: YouTubeSearchResponse.self, decoder: JSONDecoder())
-            .map { response in
-                response.items.map { item in
-                    YoutubeVideo(
-                        id: item.id.videoId,
-                        title: item.snippet.title,
-                        thumbnail: item.snippet.thumbnails.high.url,
-                        channelTitle: item.snippet.channelTitle
-                    )
-                }
-            }
             .receive(on: DispatchQueue.main)
             .sink(
                 receiveCompletion: { [weak self] completion in
@@ -47,17 +41,31 @@ final class MotivationContentViewModel: ObservableObject {
                     }
                     self?.isLoading = false
                 },
-                receiveValue: { [weak self] newVideos in
+                receiveValue: { [weak self] response in
+                    let newVideos = response.items.map {
+                        YoutubeVideo(
+                            id: $0.id.videoId,
+                            title: $0.snippet.title,
+                            thumbnail: $0.snippet.thumbnails.high.url,
+                            channelTitle: $0.snippet.channelTitle
+                        )
+                    }
                     self?.motivationVideos.append(contentsOf: newVideos)
-                    self?.nextPageToken = pageToken
+                    self?.nextPageToken = response.nextPageToken
                     self?.isLoading = false
                 }
             )
-            .store(in: &cancellables) // 구독 저장
+            .store(in: &cancellables)
     }
 
-    func fetchNextPage() {
-        guard let nextPageToken = nextPageToken else { return }
+    /// 다음 페이지의 동기부여 영상 데이터 가져오기
+    func fetchNextPage(completion: (() -> Void)? = nil) {
+        guard let nextPageToken = nextPageToken, !isLoading else {
+            completion?()
+            return
+        }
+
         fetchMotivation(query: "동기부여 영상", pageToken: nextPageToken)
+        completion?()
     }
 }

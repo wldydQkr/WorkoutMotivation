@@ -7,66 +7,67 @@
 
 import SwiftUI
 import SafariServices
+import Combine
 
 struct MotivationContentView: View {
     @StateObject private var viewModel = MotivationContentViewModel()
-    @State private var isLoading = false
 
     var body: some View {
         VStack {
-            ScrollView(.horizontal, showsIndicators: false) {
-                HStack(spacing: 16) {
-                    ForEach(viewModel.motivationVideos) { video in
-                        VStack(alignment: .leading) {
-                            AsyncImage(url: URL(string: video.thumbnail)) { phase in
-                                if let image = phase.image {
-                                    image.resizable()
-                                        .scaledToFill()
-                                        .frame(width: 200, height: 120)
-                                        .clipped()
-                                } else if phase.error != nil {
-                                    Color.red
-                                        .frame(width: 200, height: 120)
-                                } else {
-                                    Color.gray
-                                        .frame(width: 200, height: 120)
+            if viewModel.motivationVideos.isEmpty && viewModel.isLoading {
+                // 로딩 상태일 때
+                ProgressView("Loading videos...")
+                    .padding()
+            } else {
+                // 데이터가 있는 경우 가로 스크롤 뷰
+                ScrollView(.horizontal, showsIndicators: false) {
+                    LazyHStack(spacing: 16) {
+                        ForEach(viewModel.motivationVideos) { video in
+                            VStack(alignment: .leading) {
+                                AsyncImage(url: URL(string: video.thumbnail)) { phase in
+                                    switch phase {
+                                    case .success(let image):
+                                        image.resizable()
+                                            .scaledToFill()
+                                            .frame(width: 200, height: 120)
+                                            .clipped()
+                                    case .failure:
+                                        Color.red.frame(width: 200, height: 120)
+                                    default:
+                                        Color.gray.frame(width: 200, height: 120)
+                                    }
+                                }
+                                .cornerRadius(8)
+
+                                Text(video.title)
+                                    .font(.headline)
+                                    .lineLimit(2)
+                                    .multilineTextAlignment(.leading)
+
+                                Text(video.channelTitle)
+                                    .font(.subheadline)
+                                    .foregroundColor(.secondary)
+                                    .lineLimit(1)
+                            }
+                            .frame(width: 200)
+                            .onAppear {
+                                if video == viewModel.motivationVideos.last {
+                                    viewModel.fetchNextPage()
                                 }
                             }
-                            .cornerRadius(8)
-
-                            Text(video.title)
-                                .font(.headline)
-                                .lineLimit(2)
-                                .multilineTextAlignment(.leading)
-
-                            Text(video.channelTitle)
-                                .font(.subheadline)
-                                .foregroundColor(.secondary)
-                                .lineLimit(1)
                         }
-                        .frame(width: 200)
-                        .onAppear {
-                            if video == viewModel.motivationVideos.last {
-                                isLoading = true
-                                viewModel.fetchNextPage()
-                            }
+
+                        if viewModel.isLoading {
+                            ProgressView()
+                                .frame(width: 200, height: 120)
                         }
                     }
+                    .padding(.horizontal)
                 }
-                .padding(.horizontal)
-            }
-            
-            // 로딩 중이면 로딩 뷰 표시
-            if isLoading {
-                ProgressView()
-                    .padding(.top, 16)
-                    .onAppear {
-                        isLoading = false // 로딩이 완료되면 상태 업데이트
-                    }
             }
         }
         .onAppear {
-            viewModel.fetchMotivation(query: "Workout Motivation Videos")
+            viewModel.fetchMotivation(query: "동기부여 영상")
         }
     }
 }
