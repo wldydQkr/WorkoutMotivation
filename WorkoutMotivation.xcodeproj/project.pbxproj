@@ -74,6 +74,14 @@
 		C08DC31B2C0CA4F700CCB2BE /* MotivationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C08DC31A2C0CA4F700CCB2BE /* MotivationView.swift */; };
 		C091001D2CD50C14006394C4 /* FirebaseDatabase in Frameworks */ = {isa = PBXBuildFile; productRef = C04A4F8A2CCA78B4006288AA /* FirebaseDatabase */; };
 		C09100272CDDE8BB006394C4 /* NotificationItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = C09100262CDDE8B2006394C4 /* NotificationItem.swift */; };
+		C09100302CE788B3006394C4 /* WorkoutClassView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C091002F2CE788B3006394C4 /* WorkoutClassView.swift */; };
+		C09100332CE7A6EA006394C4 /* YoutubeSearchResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = C09100322CE7A6E0006394C4 /* YoutubeSearchResponse.swift */; };
+		C09100352CE7A753006394C4 /* YoutubeVideo.swift in Sources */ = {isa = PBXBuildFile; fileRef = C09100342CE7A74D006394C4 /* YoutubeVideo.swift */; };
+		C09100372CE7A790006394C4 /* WorkoutClassViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C09100362CE7A782006394C4 /* WorkoutClassViewModel.swift */; };
+		C091003A2CEF642B006394C4 /* RoutineContentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C09100392CEF6422006394C4 /* RoutineContentViewModel.swift */; };
+		C091003C2CEF6460006394C4 /* RoutineContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C091003B2CEF6453006394C4 /* RoutineContentView.swift */; };
+		C091003E2CF0D16D006394C4 /* MotivationContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C091003D2CF0D162006394C4 /* MotivationContentView.swift */; };
+		C09100402CF0D1A0006394C4 /* MotivationCotentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C091003F2CF0D198006394C4 /* MotivationCotentViewModel.swift */; };
 		C095CDE72CA91C6D00E83305 /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = C095CDE62CA91C6D00E83305 /* ImagePicker.swift */; };
 		C0A01EE02C75AFC2001923E8 /* AppVersionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A01EDF2C75AFC2001923E8 /* AppVersionView.swift */; };
 		C0A01EE22C770BE3001923E8 /* MailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A01EE12C770BE3001923E8 /* MailView.swift */; };
@@ -183,6 +191,14 @@
 		C08DC3182C0CA0FE00CCB2BE /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
 		C08DC31A2C0CA4F700CCB2BE /* MotivationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MotivationView.swift; sourceTree = "<group>"; };
 		C09100262CDDE8B2006394C4 /* NotificationItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationItem.swift; sourceTree = "<group>"; };
+		C091002F2CE788B3006394C4 /* WorkoutClassView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutClassView.swift; sourceTree = "<group>"; };
+		C09100322CE7A6E0006394C4 /* YoutubeSearchResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YoutubeSearchResponse.swift; sourceTree = "<group>"; };
+		C09100342CE7A74D006394C4 /* YoutubeVideo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YoutubeVideo.swift; sourceTree = "<group>"; };
+		C09100362CE7A782006394C4 /* WorkoutClassViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutClassViewModel.swift; sourceTree = "<group>"; };
+		C09100392CEF6422006394C4 /* RoutineContentViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoutineContentViewModel.swift; sourceTree = "<group>"; };
+		C091003B2CEF6453006394C4 /* RoutineContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoutineContentView.swift; sourceTree = "<group>"; };
+		C091003D2CF0D162006394C4 /* MotivationContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MotivationContentView.swift; sourceTree = "<group>"; };
+		C091003F2CF0D198006394C4 /* MotivationCotentViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MotivationCotentViewModel.swift; sourceTree = "<group>"; };
 		C095CDE62CA91C6D00E83305 /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
 		C0A01EDF2C75AFC2001923E8 /* AppVersionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppVersionView.swift; sourceTree = "<group>"; };
 		C0A01EE12C770BE3001923E8 /* MailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MailView.swift; sourceTree = "<group>"; };
@@ -463,6 +479,7 @@
 		C08DC2F02C0AE5E500CCB2BE /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				C09100312CE7A6D7006394C4 /* WorkoutClass */,
 				C037DD252C7EEDE000C4EDF1 /* Tab */,
 				C08DC31E2C0CD7A500CCB2BE /* Home */,
 				C08DC3092C0B65AF00CCB2BE /* Path */,
@@ -495,6 +512,7 @@
 				C08DC31D2C0CA5C700CCB2BE /* Home */,
 				C08DC31C2C0CA51600CCB2BE /* Motivation */,
 				C04405282C120DC600E4C764 /* Like */,
+				C091002C2CE78881006394C4 /* WorkoutClassView */,
 				C04405302C12B5BF00E4C764 /* Timer */,
 				C061B4BC2C1C6F2B00FFD7C5 /* Diary */,
 				C04405512C157ED200E4C764 /* MyPage */,
@@ -662,6 +680,36 @@
 				C061B4D22C1C979800FFD7C5 /* DiaryCreateView.swift */,
 			);
 			path = View;
+			sourceTree = "<group>";
+		};
+		C091002C2CE78881006394C4 /* WorkoutClassView */ = {
+			isa = PBXGroup;
+			children = (
+				C09100362CE7A782006394C4 /* WorkoutClassViewModel.swift */,
+				C091002F2CE788B3006394C4 /* WorkoutClassView.swift */,
+				C091003F2CF0D198006394C4 /* MotivationCotentViewModel.swift */,
+				C091003D2CF0D162006394C4 /* MotivationContentView.swift */,
+				C091003B2CEF6453006394C4 /* RoutineContentView.swift */,
+				C09100392CEF6422006394C4 /* RoutineContentViewModel.swift */,
+			);
+			path = WorkoutClassView;
+			sourceTree = "<group>";
+		};
+		C09100312CE7A6D7006394C4 /* WorkoutClass */ = {
+			isa = PBXGroup;
+			children = (
+				C09100382CECD360006394C4 /* Routine */,
+				C09100342CE7A74D006394C4 /* YoutubeVideo.swift */,
+				C09100322CE7A6E0006394C4 /* YoutubeSearchResponse.swift */,
+			);
+			path = WorkoutClass;
+			sourceTree = "<group>";
+		};
+		C09100382CECD360006394C4 /* Routine */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Routine;
 			sourceTree = "<group>";
 		};
 		C095CDE32CA91C2F00E83305 /* ImagePicker */ = {
@@ -853,6 +901,7 @@
 				C04405452C1348C900E4C764 /* MotivationDetailView.swift in Sources */,
 				C0AD14172CBB78D800A1FCE4 /* MasonryVStack.swift in Sources */,
 				C09100272CDDE8BB006394C4 /* NotificationItem.swift in Sources */,
+				C09100302CE788B3006394C4 /* WorkoutClassView.swift in Sources */,
 				C061B4DF2C20772E00FFD7C5 /* DiaryCardView.swift in Sources */,
 				C04405322C12B5DC00E4C764 /* TimerView.swift in Sources */,
 				C061B4DA2C20620D00FFD7C5 /* DiaryModel.xcdatamodeld in Sources */,
@@ -865,6 +914,8 @@
 				C0A50E9B2CD3B84E0064A373 /* NotificationSettingViewModel.swift in Sources */,
 				C08DC3152C0C9F6F00CCB2BE /* Motivation.swift in Sources */,
 				C044053B2C12B97A00E4C764 /* NotificationService.swift in Sources */,
+				C091003E2CF0D16D006394C4 /* MotivationContentView.swift in Sources */,
+				C09100352CE7A753006394C4 /* YoutubeVideo.swift in Sources */,
 				C044052A2C120E3900E4C764 /* IsLikedView.swift in Sources */,
 				C08DC3112C0B692300CCB2BE /* Color+.swift in Sources */,
 				C0AD14142CB67CE900A1FCE4 /* AddDiaryButton.swift in Sources */,
@@ -873,10 +924,13 @@
 				C04405422C12BB8400E4C764 /* AppDelegate.swift in Sources */,
 				C08DC3172C0CA07700CCB2BE /* Tab.swift in Sources */,
 				C0AD142C2CC7C7DB00A1FCE4 /* AlarmSetting.swift in Sources */,
+				C09100402CF0D1A0006394C4 /* MotivationCotentViewModel.swift in Sources */,
 				C08DC30D2C0B65D000CCB2BE /* PathType.swift in Sources */,
 				C04A4F8F2CCB7662006288AA /* ShareSheetManager.swift in Sources */,
 				C061B4BE2C1C6F6500FFD7C5 /* DiaryView.swift in Sources */,
+				C09100332CE7A6EA006394C4 /* YoutubeSearchResponse.swift in Sources */,
 				C044051E2C10BC9000E4C764 /* HomeResponse.swift in Sources */,
+				C091003A2CEF642B006394C4 /* RoutineContentViewModel.swift in Sources */,
 				C08DC31B2C0CA4F700CCB2BE /* MotivationView.swift in Sources */,
 				C0A50E9D2CD508F00064A373 /* DatePickerFloatingView.swift in Sources */,
 				C04405562C157FC400E4C764 /* MyPageItem.swift in Sources */,
@@ -889,6 +943,7 @@
 				C08DC30B2C0B65C000CCB2BE /* Path.swift in Sources */,
 				C04405532C157EEA00E4C764 /* MyPageView.swift in Sources */,
 				C0AD141D2CC38EAF00A1FCE4 /* ParticleEffect.swift in Sources */,
+				C09100372CE7A790006394C4 /* WorkoutClassViewModel.swift in Sources */,
 				C0AD141F2CC38EEC00A1FCE4 /* Particle.swift in Sources */,
 				C061B4DC2C20627000FFD7C5 /* PersistenceController.swift in Sources */,
 				C061B4CC2C1C72B500FFD7C5 /* IsLikedMotivationItemView.swift in Sources */,
@@ -910,6 +965,7 @@
 				C061B4BB2C1B351E00FFD7C5 /* SampleView.swift in Sources */,
 				C061B4D12C1C973A00FFD7C5 /* DiaryDetailView.swift in Sources */,
 				C0DA0A282CB2C93700804BC1 /* CustomHeaderView.swift in Sources */,
+				C091003C2CEF6460006394C4 /* RoutineContentView.swift in Sources */,
 				C08DC2FC2C0B62EB00CCB2BE /* OnboardingViewModel.swift in Sources */,
 				C0AD142A2CC7C67F00A1FCE4 /* AlarmSetting.xcdatamodeld in Sources */,
 				C04405382C12B95B00E4C764 /* TimerViewModel.swift in Sources */,

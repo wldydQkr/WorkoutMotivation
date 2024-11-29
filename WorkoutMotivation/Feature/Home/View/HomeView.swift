@@ -25,7 +25,7 @@ struct HomeView: View {
                 DiaryView()
                     .tag(Tab.diary)
                 
-                TimerView()
+                WorkoutClassView()
                     .tag(Tab.timer)
                 
                 MyPageView()
