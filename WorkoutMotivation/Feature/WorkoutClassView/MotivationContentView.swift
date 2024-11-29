@@ -15,11 +15,9 @@ struct MotivationContentView: View {
     var body: some View {
         VStack {
             if viewModel.motivationVideos.isEmpty && viewModel.isLoading {
-                // 로딩 상태일 때
                 ProgressView("Loading videos...")
                     .padding()
             } else {
-                // 데이터가 있는 경우 가로 스크롤 뷰
                 ScrollView(.horizontal, showsIndicators: false) {
                     LazyHStack(spacing: 16) {
                         ForEach(viewModel.motivationVideos) { video in
@@ -50,17 +48,17 @@ struct MotivationContentView: View {
                                     .lineLimit(1)
                             }
                             .frame(width: 200)
-                            .onAppear {
-                                if video == viewModel.motivationVideos.last {
-                                    viewModel.fetchNextPage()
-                                }
-                            }
+                            // .onAppear {
+                            //     if video == viewModel.motivationVideos.last {
+                            //         viewModel.fetchNextPage()
+                            //     }
+                            // }
                         }
 
-                        if viewModel.isLoading {
-                            ProgressView()
-                                .frame(width: 200, height: 120)
-                        }
+                        // if viewModel.isLoading {
+                        //     ProgressView()
+                        //         .frame(width: 200, height: 120)
+                        // }
                     }
                     .padding(.horizontal)
                 }
@@ -69,6 +67,9 @@ struct MotivationContentView: View {
         .onAppear {
             viewModel.fetchMotivation(query: "동기부여 영상")
         }
+        // .onChange(of: viewModel.isLoading) { _ in
+        //     // Handle loading state changes
+        // }
     }
 }
 

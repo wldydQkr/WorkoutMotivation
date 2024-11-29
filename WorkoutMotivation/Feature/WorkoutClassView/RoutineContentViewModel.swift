@@ -32,15 +32,25 @@ final class RoutineContentViewModel: ObservableObject {
             .decode(type: YouTubeSearchResponse.self, decoder: JSONDecoder())
             .map { response in
                 response.items.map { item in
-                    YoutubeVideo(id: item.id.videoId, title: item.snippet.title, thumbnail: item.snippet.thumbnails.high.url, channelTitle: item.snippet.channelTitle)
+                    YoutubeVideo(
+                        id: item.id.videoId,
+                        title: item.snippet.title,
+                        thumbnail: item.snippet.thumbnails.high.url,
+                        channelTitle: item.snippet.channelTitle
+                    )
                 }
             }
             .replaceError(with: [])
             .receive(on: DispatchQueue.main)
             .sink { [weak self] newVideos in
-                self?.routineVideos.append(contentsOf: newVideos)
-                self?.nextPageToken = pageToken // 다음 페이지 토큰 저장
-                self?.isLoading = false
+                guard let self = self else { return }
+                // 중복 제거: 기존 목록에 없는 새로운 동영상만 추가
+                let uniqueVideos = newVideos.filter { newVideo in
+                    !self.routineVideos.contains(where: { $0.id == newVideo.id })
+                }
+                self.routineVideos.append(contentsOf: uniqueVideos)
+                self.nextPageToken = pageToken // 다음 페이지 토큰 저장
+                self.isLoading = false
             }
     }
 }
