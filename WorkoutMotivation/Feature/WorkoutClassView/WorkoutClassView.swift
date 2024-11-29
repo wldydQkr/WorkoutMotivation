@@ -109,6 +109,7 @@ struct VideoListView: View {
 
 struct VideoItemView: View {
     let video: YoutubeVideo
+    @State private var selectedVideoURL: IdentifiableURL? // SafariView를 위한 URL 상태 관리
     
     var body: some View {
         VStack(alignment: .leading) {
@@ -145,8 +146,11 @@ struct VideoItemView: View {
         .padding(.horizontal)
         .onTapGesture {
             if let url = URL(string: "https://www.youtube.com/watch?v=\(video.id)") {
-                UIApplication.shared.open(url)
+                selectedVideoURL = IdentifiableURL(url: url)
             }
+        }
+        .sheet(item: $selectedVideoURL) { identifiableURL in
+            SafariView(url: identifiableURL.url)
         }
     }
 }

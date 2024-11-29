@@ -11,6 +11,7 @@ import Combine
 
 struct MotivationContentView: View {
     @StateObject private var viewModel = MotivationContentViewModel()
+    @State private var selectedVideoURL: IdentifiableURL?
 
     var body: some View {
         VStack {
@@ -21,44 +22,48 @@ struct MotivationContentView: View {
                 ScrollView(.horizontal, showsIndicators: false) {
                     LazyHStack(spacing: 16) {
                         ForEach(viewModel.motivationVideos) { video in
-                            VStack(alignment: .leading) {
-                                AsyncImage(url: URL(string: video.thumbnail)) { phase in
-                                    switch phase {
-                                    case .success(let image):
-                                        image.resizable()
-                                            .scaledToFill()
-                                            .frame(width: 200, height: 120)
-                                            .clipped()
-                                    case .failure:
-                                        Color.red.frame(width: 200, height: 120)
-                                    default:
-                                        Color.gray.frame(width: 200, height: 120)
+                            Button(action: {
+                                if let url = URL(string: "https://www.youtube.com/watch?v=\(video.id)") {
+                                    selectedVideoURL = IdentifiableURL(url: url)
+                                }
+                            }) {
+                                VStack(alignment: .leading, spacing: 8) {
+                                    AsyncImage(url: URL(string: video.thumbnail)) { phase in
+                                        switch phase {
+                                        case .success(let image):
+                                            image.resizable()
+                                                .scaledToFill()
+                                                .frame(width: 200, height: 120)
+                                                .clipped()
+                                        case .failure:
+                                            Color.red.frame(width: 200, height: 120)
+                                        default:
+                                            Color.gray.frame(width: 200, height: 120)
+                                        }
+                                    }
+                                    .cornerRadius(8)
+                                    
+                                    VStack(alignment: .leading, spacing: 4) {
+                                        Text(video.title)
+                                            .font(.headline)
+                                            .lineLimit(2)
+                                            .multilineTextAlignment(.leading)
+                                        
+                                        Text(video.channelTitle)
+                                            .font(.subheadline)
+                                            .foregroundColor(.secondary)
+                                            .lineLimit(1)
                                     }
                                 }
-                                .cornerRadius(8)
-
-                                Text(video.title)
-                                    .font(.headline)
-                                    .lineLimit(2)
-                                    .multilineTextAlignment(.leading)
-
-                                Text(video.channelTitle)
-                                    .font(.subheadline)
-                                    .foregroundColor(.secondary)
-                                    .lineLimit(1)
+                                .frame(width: 200)
                             }
-                            .frame(width: 200)
-                            // .onAppear {
-                            //     if video == viewModel.motivationVideos.last {
-                            //         viewModel.fetchNextPage()
-                            //     }
-                            // }
+                            .buttonStyle(PlainButtonStyle())
                         }
 
-                        // if viewModel.isLoading {
-                        //     ProgressView()
-                        //         .frame(width: 200, height: 120)
-                        // }
+                        if viewModel.isLoading {
+                            ProgressView()
+                                .frame(width: 200, height: 120)
+                        }
                     }
                     .padding(.horizontal)
                 }
@@ -67,9 +72,9 @@ struct MotivationContentView: View {
         .onAppear {
             viewModel.fetchMotivation(query: "동기부여 영상")
         }
-        // .onChange(of: viewModel.isLoading) { _ in
-        //     // Handle loading state changes
-        // }
+        .sheet(item: $selectedVideoURL) { identifiableURL in
+            SafariView(url: identifiableURL.url)
+        }
     }
 }
 
