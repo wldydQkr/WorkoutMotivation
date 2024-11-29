@@ -21,7 +21,7 @@ struct CustomTabBar: View {
                     .tag(Tab.bookmark)
                 Text("다짐")
                     .tag(Tab.diary)
-                Text("타이머")
+                Text("추천")
                     .tag(Tab.timer)
                 Text("설정")
                     .tag(Tab.myPage)
@@ -40,6 +40,7 @@ struct CustomTabBar: View {
         .padding(.horizontal, 15)
         .padding(.vertical, 10)
         .animation(.interactiveSpring(response: 0.6, dampingFraction: 0.6, blendDuration: 0.7), value: selectedTab)
+//        .symbolEffect(.scale)
         .background {
             Rectangle()
                 .fill(.white)
