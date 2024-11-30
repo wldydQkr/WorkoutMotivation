@@ -25,6 +25,7 @@ struct TimerView: View {
   // MARK: - 타이머 설정 뷰
   private struct SetTimerView: View {
     @ObservedObject private var timerViewModel: TimerViewModel
+    @Environment(\.presentationMode) var presentationMode
     
     fileprivate init(timerViewModel: TimerViewModel) {
       self.timerViewModel = timerViewModel
@@ -34,7 +35,12 @@ struct TimerView: View {
       VStack {
 //        TitleView()
           CustomHeaderView(title: "타이머") {
-              EmptyView()
+              Button(action: {
+                  presentationMode.wrappedValue.dismiss()
+              }) {
+                  Image(systemName: "chevron.left")
+                  Text("Back")
+              }
           }
           
 //        Spacer()
@@ -49,6 +55,7 @@ struct TimerView: View {
         
         Spacer()
       }
+      .navigationBarHidden(true)
     }
   }
 

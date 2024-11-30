@@ -42,6 +42,10 @@ struct MyPageView: View {
                         NavigationLink(destination: NotificationSettingView()) {
                             Text(item.title)
                         }
+                    case "타이머":
+                        NavigationLink(destination: TimerView()) {
+                            Text(item.title)
+                        }
                     case "앱 공유":
                         Button(action: {
                             viewModel.shareApp()

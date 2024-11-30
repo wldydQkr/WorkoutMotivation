@@ -14,6 +14,7 @@ final class MyPageViewModel: ObservableObject {
     @Published var isShowingPushSettingView = false
     @Published var isShowingAppVersionView = false
     @Published var isShowingMailView = false
+    @Published var isShowingTimerView = false
     @Published var isShowingShareSheet = false  // 공유 시트를 표시하는 상태
     @Published var mailResult: Result<MFMailComposeResult, Error>? = nil
     
@@ -22,6 +23,7 @@ final class MyPageViewModel: ObservableObject {
     init() {
         items = [
             MyPageItem(title: "알림 설정", action: pushSetting),
+            MyPageItem(title: "타이머", action: showTimerView),
             MyPageItem(title: "앱 평가하기", action: rateApp),
             MyPageItem(title: "앱 공유", action: shareApp),
             MyPageItem(title: "피드백", action: giveFeedback),
@@ -32,6 +34,10 @@ final class MyPageViewModel: ObservableObject {
     func pushSetting() {
         print("알림 설정")
         isShowingPushSettingView = true
+    }
+    
+    func showTimerView() {
+        isShowingTimerView = true
     }
     
     @objc func requestReview() {
