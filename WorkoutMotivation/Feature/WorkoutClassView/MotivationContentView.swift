@@ -16,7 +16,7 @@ struct MotivationContentView: View {
     var body: some View {
         VStack {
             if viewModel.motivationVideos.isEmpty && viewModel.isLoading {
-                ProgressView("Loading videos...")
+                ProgressView("Loading...")
                     .padding()
             } else {
                 ScrollView(.horizontal, showsIndicators: false) {
