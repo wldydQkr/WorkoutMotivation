@@ -23,7 +23,6 @@ WorkoutMotivation은 운동에 대한 동기부여와 정보를 제공하는 iOS
 
 ## 프로젝트 정보
 
-- **GitHub Repository**: [WorkoutMotivation](https://github.com/wldydQkr/WorkoutMotivation)
 - **개발 기간**: 2024.10 - 2024.12
 - **팀원**: 개인 프로젝트
 
