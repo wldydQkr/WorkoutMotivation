@@ -12,6 +12,11 @@ struct OnboardingView: View {
     @StateObject private var onboardingViewModel = OnboardingViewModel()
     @AppStorage("hasSeenOnboarding") private var hasSeenOnboarding: Bool = false
     
+    init() {
+        UIPageControl.appearance().currentPageIndicatorTintColor = .customBlack // 현재 페이지 색상
+        UIPageControl.appearance().pageIndicatorTintColor = .customBlack3.withAlphaComponent(0.5) // 기본 색상
+    }
+    
     var body: some View {
         if hasSeenOnboarding {
             HomeView()
